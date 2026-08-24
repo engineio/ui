@@ -157,7 +157,14 @@ The 35 primitives that are not in the package stay exactly where they are —
 `sportsbook`, `success` and `info`. Provider has 100+ button call sites, some on
 those variants. Extend rather than fork — see the recipe in the README — and
 put the extension in `$lib/components/ui/button-variants.ts`. `success` needs a
-decision, not a rename: it was `bg-green-700`, and there is no status palette.
+decision, not a rename: it was a stock Tailwind green, and there is no status
+palette to move it onto.
+
+(Class names are written descriptively rather than literally throughout this
+file on purpose. Tailwind 4's automatic source detection scans markdown as
+well as source, so a literal utility mentioned in prose gets generated into
+the package's CSS — which is how two unused green custom properties ended up
+shipping in the first build.)
 
 ## 4. rgs needs its peer dependencies
 

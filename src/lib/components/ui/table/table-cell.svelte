@@ -3,6 +3,9 @@
   import { cn } from "$lib/utils.js"
   import type { HTMLTdAttributes } from "svelte/elements"
 
+  // Dense by default — this is a business tool, not a marketing surface.
+  // Set numerics, IDs and keys in `font-mono` at the call site; the brand
+  // reserves the monospace face for them.
   let {
     ref = $bindable(null),
     class: className,
@@ -13,7 +16,10 @@
 
 <td
   bind:this={ref}
-  class={cn("p-4 align-middle [&:has([role=checkbox])]:pr-0", className)}
+  class={cn(
+    "h-11 px-4 align-middle text-[15px] [&:has([role=checkbox])]:pr-0",
+    className,
+  )}
   {...restProps}
 >
   {@render children?.()}

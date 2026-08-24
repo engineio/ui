@@ -33,6 +33,7 @@
     Table,
     TableBody,
     TableCell,
+    TableFooter,
     TableHead,
     TableHeader,
     TableRow,
@@ -458,7 +459,7 @@
     <Section
       eyebrow="Section 11"
       title="Table."
-      note="Dense by default — this is a business tool. Numerics set in JetBrains Mono, which is specified by the brand and not yet loaded; see Known gaps in the README."
+      note="Two surfaces and no third: the frame carries the page colour behind a hairline rule, the header and footer are filled on the grey ramp, and body rows stay transparent so the frame shows through. Depth comes from the rules, never a shadow. Dense by default — this is a business tool."
     >
       <Table>
         <TableHeader>
@@ -470,8 +471,8 @@
           </TableRow>
         </TableHeader>
         <TableBody>
-          {#each [["Turbine Rush", "Northwind", "96.42%", "Live"], ["Manifold", "Grayscale", "95.18%", "Draft"], ["Keycap Klondike", "Northwind", "96.01%", "Live"]] as row (row[0])}
-            <TableRow>
+          {#each [["Turbine Rush", "Northwind", "96.42%", "Live", false], ["Manifold", "Grayscale", "95.18%", "Draft", true], ["Keycap Klondike", "Northwind", "96.01%", "Live", false], ["Pipework", "Grayscale", "94.87%", "Draft", false]] as row (row[0])}
+            <TableRow data-state={row[4] ? "selected" : undefined}>
               <TableCell class="font-semibold">{row[0]}</TableCell>
               <TableCell class="text-grey-300">{row[1]}</TableCell>
               <TableCell class="font-mono">{row[2]}</TableCell>
@@ -485,7 +486,21 @@
             </TableRow>
           {/each}
         </TableBody>
+        <TableFooter>
+          <TableRow>
+            <TableCell>4 games</TableCell>
+            <TableCell class="text-grey-300">2 studios</TableCell>
+            <TableCell class="font-mono">95.87%</TableCell>
+            <TableCell></TableCell>
+          </TableRow>
+        </TableFooter>
       </Table>
+      <p class="text-[15px] leading-[1.45] text-grey-300">
+        Hover a row for the 6% white wash. The second row is
+        <span class="font-mono text-[13px]">data-state="selected"</span> — the
+        magenta tint at 12%, which is the one place the accent earns a place in
+        a dense grid.
+      </p>
     </Section>
 
     <Section

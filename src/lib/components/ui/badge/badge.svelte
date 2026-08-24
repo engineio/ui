@@ -9,9 +9,9 @@
   //
   // The upstream engine badge also carried `originals` and `sportsbook`
   // variants built on the retired sub-brand ramps, plus `success` and `info`
-  // (`bg-green-500`, `bg-sportsbook-blue`). All four are gone: the retired
-  // colours have no owner, and success/info are a status palette that does
-  // not exist. See styles/tokens.css.
+  // — a stock Tailwind green and a retired sub-brand blue. All four are gone:
+  // the retired ramps have no owner, and success/info are a status palette
+  // that does not exist. See styles/tokens.css.
   //
   // CONTRAST WARNING — an unresolved contradiction in the spec, not a bug
   // here. §6 of the design system specifies Badge as "11px Semibold" with a

@@ -31,8 +31,8 @@
   // Product variants live in the product. The upstream engine button carried
   // `tab`, `tab-active`, `drawer`, `play`, `filled` and `success` in this
   // file; they are app concerns and have been left to the apps. `success` was
-  // additionally off-palette (`bg-green-700`) — see the status-palette note
-  // in styles/tokens.css.
+  // additionally off-palette — a stock Tailwind green standing in for a status
+  // colour the brand has never defined. See the note in styles/tokens.css.
   export const buttonVariants = tv({
     base: [
       "inline-flex cursor-pointer items-center justify-center gap-2 whitespace-nowrap",

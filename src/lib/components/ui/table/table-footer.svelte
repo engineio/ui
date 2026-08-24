@@ -3,6 +3,8 @@
   import { cn } from "$lib/utils.js"
   import type { HTMLAttributes } from "svelte/elements"
 
+  // Totals row: the same lighter surface as the header, so a table reads as
+  // filled top and bottom with the body between them.
   let {
     ref = $bindable(null),
     class: className,
@@ -13,7 +15,10 @@
 
 <tfoot
   bind:this={ref}
-  class={cn("bg-muted/50 font-medium", className)}
+  class={cn(
+    "border-t border-grey-600 bg-grey-700 font-semibold [&_tr]:border-b-0",
+    className,
+  )}
   {...restProps}
 >
   {@render children?.()}
