@@ -21,7 +21,7 @@ so the shape is the same for each:
 `@engineio/ui` is private and org-scoped, so every place that runs
 `bun install` needs a credential. Four places do.
 
-**Local dev.** Each developer needs a PAT with `read:packages`, in
+**Local dev.** Each developer needs a **classic** PAT with `read:packages`, in
 `~/.npmrc` (not the repo — never commit a token):
 
 ```
@@ -29,12 +29,33 @@ so the shape is the same for each:
 //npm.pkg.github.com/:_authToken=ghp_xxxxxxxx
 ```
 
-Add a repo-level `.npmrc` with just the registry line, so resolution works
-without each person rediscovering it:
+It has to be a classic token. GitHub Packages' npm registry does not accept
+fine-grained PATs, and the failure looks identical to a wrong token, so this is
+the usual reason access stays broken after someone has "added a token".
+
+Add a repo-level `.npmrc` with **only** the registry line:
 
 ```
 @engineio:registry=https://npm.pkg.github.com
 ```
+
+Do not put an auth line in the repo `.npmrc`, not even as a
+`${NODE_AUTH_TOKEN}` placeholder. npm expands it, it is unset outside CI, and
+the empty result overrides the real token in `~/.npmrc` — so every developer
+gets `E401 unauthenticated` while holding a perfectly good credential. (This
+happened in the design system repo; that is why its `.npmrc` carries the
+registry line and nothing else.) CI does not need it either: `setup-node`
+writes its own authenticated user config from `NODE_AUTH_TOKEN`.
+
+**Check access before going further**, because everything below assumes it:
+
+```
+npm view @engineio/ui --registry=https://npm.pkg.github.com
+```
+
+`E401` means no token reached the registry — check `~/.npmrc` and that no
+project `.npmrc` is shadowing it. `E403 does not match expected scopes` means
+the token arrived but lacks `read:packages`, or is fine-grained.
 
 **CI.** `GITHUB_TOKEN` can read packages in the same org — add the permission to
 any job that installs:
@@ -135,7 +156,8 @@ check it before wondering why the tokens did not land.
 **Two visible changes** you should expect from the token layer, both deliberate:
 Proxima Nova Semibold now maps to weight 600 rather than 500, so
 `font-semibold` labels will render in the correct cut for the first time; and
-`--color-destructive` becomes magenta rather than the inherited oklch red.
+`--color-destructive` becomes the real danger red `#FF3B30` rather than the
+oklch value inherited from shadcn, which had no brand owner.
 
 ## 3. Migrate imports, one component at a time
 
