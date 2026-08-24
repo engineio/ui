@@ -19,6 +19,8 @@
     DialogHeader,
     DialogTitle,
     DialogTrigger,
+    EngineIcon,
+    EngineWordmark,
     Input,
     Label,
     Popover,
@@ -111,11 +113,15 @@
 <TooltipProvider>
   <div class="mx-auto max-w-[1480px] px-10 py-16">
     <header class="pb-14">
-      <p
-        class="mb-4 font-mono text-[11px] font-semibold tracking-[0.08em] text-grey-400 uppercase"
-      >
-        Engine · Design System · {__DS_VERSION__}
-      </p>
+      <div class="mb-6 flex items-center gap-4">
+        <EngineWordmark class="h-7" />
+        <span class="h-6 w-px bg-grey-700"></span>
+        <p
+          class="font-mono text-[11px] font-semibold tracking-[0.08em] text-grey-400 uppercase"
+        >
+          Design System · {__DS_VERSION__}
+        </p>
+      </div>
       <h1 class="max-w-[920px] text-[72px] leading-[0.94] font-bold tracking-[-0.02em]">
         One system. Every surface.
       </h1>
@@ -126,6 +132,42 @@
         package, so what renders here is what a product gets.
       </p>
     </header>
+
+    <Section
+      eyebrow="Section 00"
+      title="Marks."
+      note="Vector artwork from the brand team, in the only two colourways the brand sanctions — Pure White for dark surfaces, Off Black for print and inverted panels. The wordmark is a custom soft-rounded face, not Proxima Nova: it is artwork, never set in type and never approximated."
+    >
+      <Row label="Wordmark — master brand surfaces">
+        <EngineWordmark class="h-8" />
+      </Row>
+      <Row label="Figure mark">
+        <EngineIcon class="h-14" title="Engine" />
+      </Row>
+      <Row label="Secondary, on an inverted panel">
+        <div class="flex items-center gap-8 rounded-card bg-foreground px-8 py-6">
+          <EngineWordmark variant="secondary" class="h-8" />
+          <EngineIcon variant="secondary" class="h-10" />
+        </div>
+      </Row>
+      <Row label="Scale — height-only, never both dimensions">
+        <div class="flex items-end gap-8">
+          <EngineIcon class="h-6" />
+          <EngineIcon class="h-8" />
+          <EngineIcon class="h-12" />
+          <EngineIcon class="h-16" />
+        </div>
+      </Row>
+      <p class="max-w-[920px] text-[15px] leading-[1.45] text-grey-300">
+        Colour is a two-value <span class="font-mono text-[13px]">variant</span>
+        rather than <span class="font-mono text-[13px]">currentColor</span> on
+        purpose: with currentColor any ancestor's text colour silently becomes
+        brand colour, and a magenta wordmark is one careless
+        <span class="font-mono text-[13px]">text-primary</span> away. Size by
+        height alone — the brand forbids distortion, and neither the 810:1000
+        nor the 2000:449 ratio is one anybody reproduces by hand.
+      </p>
+    </Section>
 
     <Section
       eyebrow="Section 01"

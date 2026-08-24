@@ -96,6 +96,11 @@ shadows, three easings.
 your bundler fingerprints them out of `node_modules`. You do not need a copy in
 `static/fonts`.
 
+**Marks** — `EngineWordmark` and `EngineIcon`, vector, in the two sanctioned
+colourways (`variant="primary"` white, `variant="secondary"` Off Black). Size
+by height alone. The wordmark is artwork, not type — with the vector in the
+package there is no reason to typeset "engine" in Proxima Nova again.
+
 **Primitives** — Alert, Badge, Button, Card, Checkbox, Dialog, Input, Label,
 Popover, Progress, RadioGroup, Select, Separator, Skeleton, Switch, Table, Tabs,
 Textarea, Tooltip.

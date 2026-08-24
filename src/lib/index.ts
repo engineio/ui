@@ -31,6 +31,12 @@ export type {
 } from "./utils.js"
 
 export {
+  EngineIcon,
+  EngineWordmark,
+  type EngineMarkVariant,
+} from "./components/brand/index.js"
+
+export {
   Alert,
   AlertDescription,
   AlertTitle,
