@@ -44,10 +44,19 @@
   --color-primary-foreground: #ffffff;
   --color-primary-press: #d60059;
 
-  /* Tints, for washes on transparent controls. Not for fills — colour
-     appears in large flat shapes, never as a tint on a surface. */
+  /* Tints, for washes on transparent controls and for soft label fills. */
   --color-primary-tint-12: rgb(255 0 106 / 0.12);
   --color-primary-tint-24: rgb(255 0 106 / 0.24);
+
+  /* A lighter magenta, for ink on a magenta tint. Pure #FF006A on its own 12%
+     tint measures 4.37:1 — under AA — and the brand bans magenta text below
+     15px bold outright, which rules it out for a 13px label. This step gets
+     5.81:1 on the same fill.
+
+     Not invented here: it ships today as `--brand-300` in integration.css in
+     both the engine and rgs repos. Declared as a named step rather than left
+     as a one-off so a soft label has a legal ink. See the note in Tag. */
+  --color-primary-300: #ff5c9b;
 
   /* Engine Integration's reserved accent. NOT IN USE — the brand direction
      assigns it to Integration, but every shipped surface is magenta and was
@@ -57,6 +66,7 @@
      Partner Yellow carries Off Black ink only, never white. */
   --color-partner-yellow: #ffdd00;
   --color-partner-yellow-press: #e0c200;
+  --color-partner-yellow-tint-12: rgb(255 221 0 / 0.12);
 
   /* ── Neutral ramp — the only greys ─────────────────────────────────── */
   --color-grey-950: #0a0a0a;

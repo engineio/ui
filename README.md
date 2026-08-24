@@ -133,14 +133,24 @@ expected until it settles. Cut `1.0.0` when it stops.
 Stated rather than designed around. All five are inherited from the brand, not
 introduced here.
 
-1. **No status palette.** No success, warning or error colours are defined, so
-   `--color-destructive` resolves to magenta and a destructive control cannot be
-   distinguished from a primary one by colour. The `destructive` button variant
-   works around this with a magenta outline instead of a fill, per the design
-   document's Danger row. **This is the most consequential gap and it blocks any
-   surface with real states.** It needs a brand-team decision. Do not add status
-   colours to `tokens.css` without one; if a product needs them sooner, keep
-   them local and visible.
+1. **No status palette, and no categorical palette either.** No success,
+   warning or error colours are defined, so `--color-destructive` resolves to
+   magenta and a destructive control cannot be distinguished from a primary one
+   by colour. The `destructive` button variant works around this with a magenta
+   outline instead of a fill, per the design document's Danger row. **This is
+   the most consequential gap and it blocks any surface with real states.**
+
+   The same decision governs **label hues**. `Tag` ships the soft
+   repository-label treatment — tinted fill, matching ink — but only in three
+   variants, because the brand is three colours. A categorical palette (red,
+   orange, amber, lime, teal, indigo…) is a genuine product need and a genuine
+   brand decision: eighteen accents on one surface is the direct opposite of
+   "one accent per surface, never two". If it is granted, it wants declaring
+   once here as a named, documented group — not eighteen one-off fills
+   discovered in a diff later.
+
+   Either way it needs a brand-team decision. Do not add hues to `tokens.css`
+   without one; if a product needs them sooner, keep them local and visible.
 
 2. **Badge contrast contradicts itself.** §6 of the design document specifies
    Badge as 11px with a magenta fill and white text; §3 says to keep magenta

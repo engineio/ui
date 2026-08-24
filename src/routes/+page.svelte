@@ -242,20 +242,34 @@
     <Section
       eyebrow="Section 05"
       title="Badge and Tag."
-      note="A Badge is a solid pill that states status. A Tag is a 6px outline chip that labels a category. Never swap them. The retired sub-brand variants — originals, sportsbook — are gone."
+      note="A Badge is a solid pill that states status. A Tag is a soft 6px chip that labels a category — a tinted fill with matching ink, in the manner of a repository label. Never swap them. The retired sub-brand variants — originals, sportsbook — are gone."
     >
-      <Row label="Badge">
+      <Row label="Badge — status, solid">
         <Badge>Live</Badge>
         <Badge variant="partner">Partner</Badge>
         <Badge variant="secondary">Draft</Badge>
         <Badge variant="outline">Archived</Badge>
       </Row>
-      <Row label="Tag">
-        <Tag>Slots</Tag>
-        <Tag variant="brand">Featured</Tag>
-        <Tag variant="partner">Integration</Tag>
-        <Tag variant="solid">Live Casino</Tag>
+      <Row label="Tag — category, soft">
+        <Tag>documentation</Tag>
+        <Tag variant="brand">featured</Tag>
+        <Tag variant="partner">integration</Tag>
+        <Tag variant="solid">live casino</Tag>
       </Row>
+      <Alert>
+        <AlertTitle>Three tags, because the brand has three colours.</AlertTitle>
+        <AlertDescription>
+          A repository-label system usually arrives with a wide categorical
+          palette — red, orange, amber, lime, teal, indigo. That palette is the
+          same unmade decision as the status colours, and eighteen accents on
+          one surface is the opposite of one accent per surface. The soft
+          treatment is here; the hues need a brand-team call. Note also that
+          the brand chip's ink is
+          <span class="font-mono">primary-300</span> rather than pure magenta:
+          magenta on its own tint is 4.37:1, and the brand forbids magenta text
+          below 15px bold.
+        </AlertDescription>
+      </Alert>
     </Section>
 
     <Section
@@ -459,7 +473,7 @@
     <Section
       eyebrow="Section 11"
       title="Table."
-      note="A grid of tiles, not a grid of lines. The page colour is the ground; every cell is its own panel on the grey ramp, gapped on both axes, headings included. Dense by default — the gaps do the work padding would otherwise do. No frame, no rules, no dividers anywhere."
+      note="A grid of tiles, not a grid of lines. The page colour is the ground; every cell is its own panel, gapped on both axes. Body tiles sit on the card surface with the headings a step lighter, and the totals row carries no fill at all — weight alone. No frame, no rules, no dividers anywhere."
     >
       <Table>
         <TableHeader>
@@ -480,13 +494,7 @@
                 {#if row[3] === "Live"}
                   <Badge>Live</Badge>
                 {:else}
-                  <!--
-                    `outline`, not `secondary`. A secondary badge is filled
-                    grey-700 — the same step as the tile it would sit on, so it
-                    disappears. On a filled surface, reach for the outline
-                    variant.
-                  -->
-                  <Badge variant="outline">Draft</Badge>
+                  <Badge variant="secondary">Draft</Badge>
                 {/if}
               </TableCell>
             </TableRow>

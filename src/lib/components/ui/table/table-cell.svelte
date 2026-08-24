@@ -10,6 +10,11 @@
   // The gap between tiles does the work padding would otherwise do, so the
   // padding only has to hold the text off its own tile edge.
   //
+  // Body tiles are `--color-card` #161616; headings and totals are grey-700
+  // #242424. Two surfaces, so the header reads as a header. Hover lifts a
+  // body tile to the header's step, which is why the transition is on colour
+  // only — nothing moves.
+  //
   // 10px is `--radius-field`, the system's role for fields and INNER panels —
   // the correct step for a tile this size. An 18px card radius on a tile this
   // small reads as a lozenge.
@@ -18,17 +23,18 @@
   // hovered lights the whole row, because a row is still the unit a person
   // reads and clicks.
   //
-  // WATCH THE FILL COLLISION. The tile is grey-700, and four other things in
-  // this package are filled grey-700 too — put any of them in a cell and it
-  // disappears into the tile:
+  // WATCH THE FILL COLLISION. The tile is `--color-card` #161616, and one
+  // thing in this package sits 2/255 away from it: the `field` surface
+  // (grey-850 #141414) that Input, Textarea and SelectTrigger share. A field
+  // dropped into a cell reads as flat — it is only delineated by its own 1px
+  // grey-700 border, so it survives, but the fill does no work. Prefer
+  // grey-850 tiles for a table you intend to put inputs in, or accept that
+  // the field reads as an outline.
   //
-  //   Badge variant="secondary"   -> use variant="outline"
-  //   Tag variant="solid"         -> use the default (outline) variant
-  //   Separator                   -> pass class="bg-grey-500"
-  //   Switch, unchecked track     -> pass class="data-[state=unchecked]:bg-grey-500"
-  //
-  // Safe as they are: Button (its secondary is grey-800), Tag's default and
-  // brand variants, Input and Textarea (grey-850), and any outline treatment.
+  // Everything else is clear at this fill: Badge, Tag, Separator and the
+  // unchecked Switch track are all grey-700, a comfortable 14 steps lighter.
+  // (They collided when the tile itself was grey-700 — if you change the tile
+  // fill again, re-check this list rather than trusting it.)
   let {
     ref = $bindable(null),
     class: className,
@@ -40,9 +46,9 @@
 <td
   bind:this={ref}
   class={cn(
-    "h-11 rounded-field bg-grey-700 px-3 align-middle text-[15px]",
+    "h-11 rounded-field bg-card px-3 align-middle text-[15px]",
     "transition-colors duration-140 ease-brand",
-    "group-hover/row:bg-grey-600",
+    "group-hover/row:bg-grey-700",
     "group-data-[state=selected]/row:bg-primary-tint-24",
     "[&:has([role=checkbox])]:pr-0",
     className,
