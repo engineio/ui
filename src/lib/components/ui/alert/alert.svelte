@@ -22,11 +22,10 @@
     base: [
       "relative w-full rounded-media",
       "border border-grey-700 bg-card",
-      // pl-9 clears the inset bar and then some: 14px to the bar, 3px of bar,
-      // then a 19px gap before the text. The gap is deliberately wider than
-      // the bar's own inset — the bar has to read as a marker beside the
-      // message, and at a tighter gap it starts to read as part of the first
-      // word. py matches the bar's vertical inset exactly.
+      // Left geometry: 20px to the bar, 3px of bar, then 13px before the text.
+      // The border gap is wider than the text gap on purpose — proximity is
+      // what groups the bar with the message it marks rather than with the
+      // panel edge it sits near. py-3.5 matches the bar's vertical inset.
       "py-3.5 pr-4 pl-9",
     ],
     variants: {
@@ -91,7 +90,7 @@
   -->
   <span
     aria-hidden="true"
-    class="absolute inset-y-3.5 left-3.5 w-[3px] rounded-control"
+    class="absolute inset-y-3.5 left-5 w-[3px] rounded-control"
     style="background-color: var(--alert-bar)"
   ></span>
 
