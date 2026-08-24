@@ -1,7 +1,10 @@
 name: pages
 
-# Deploys the gallery to https://engineio.github.io/ui — the surface the brand
-# team reviews. Every primitive, every variant, every state, rendered by the
+# Deploys the gallery — the surface the brand team reviews.
+#
+# With access control on, the URL is a generated *.pages.github.io subdomain
+# rather than engineio.github.io/ui; `gh api repos/engineio/ui/pages --jq
+# .html_url` prints the current one. Every primitive, every variant, every state, rendered by the
 # package itself rather than by a copy of it.
 #
 # SETUP IS DELIBERATELY MANUAL, AND THIS WORKFLOW FAILS UNTIL IT IS DONE.
@@ -57,17 +60,22 @@ jobs:
 
       - run: bun install --frozen-lockfile
 
-      # PAGES_BASE: a project Pages site is served from /<repo>, so the base
-      # path has to be baked in at build time or every internal link resolves
-      # off-site. Assets are emitted as relative URLs by the static adapter, so
-      # they survive either way — links do not.
+      # No PAGES_BASE. This site has ACCESS CONTROL enabled, and a private
+      # Pages site is served from its own generated subdomain at the root
+      # (https://<generated>.pages.github.io/) rather than as a project site
+      # under /<repo>. Setting a base of /ui here was harmless only by luck —
+      # the static adapter emits relative asset URLs and the gallery is a
+      # single page whose only links are same-page anchors — but it would break
+      # every internal link the moment the gallery gains a second route.
+      #
+      # If access control is ever turned off, the URL becomes
+      # engineio.github.io/ui and this needs `PAGES_BASE: /ui` back.
       #
       # DS_VERSION labels the gallery with the release it was built from, which
       # is why the checkout above is unshallow: `git describe` needs the tags.
       - name: Build gallery
         run: bun run build:gallery
         env:
-          PAGES_BASE: /ui
           DS_VERSION: ${{ steps.tag.outputs.version }}
 
       # No `enablement: true` — see the note at the top of this file. This step
