@@ -3,26 +3,16 @@
   import { cn } from "$lib/utils.js"
   import type { HTMLTableAttributes } from "svelte/elements"
 
-  // A grid of tiles. The page colour is the ground and every cell is its own
-  // panel on the grey ramp, gapped on both axes — no frame, no rules, no
-  // dividers anywhere.
+  // A ruled table: no frame, no fills, no gaps. The surface behind it shows
+  // through and the only structure is a hairline under each row — which is the
+  // system's rule that depth comes from rules and nested panels, with the
+  // rules doing all of the work.
   //
-  // `border-separate` plus `border-spacing` is the only way to space table
-  // cells: margin does nothing on a `td` and a gap cannot cross a table's
-  // internal layout. `border-spacing-2` sets 8px on both axes, where the
-  // row-block treatment pinned the x axis to 0.
-  //
-  // Two trade-offs, both inherent to `border-separate` rather than to this
-  // styling:
-  //
-  //   1. It disables the sticky-header technique that relies on collapsed
-  //      borders. A long table needing a pinned header wants a ruled variant.
-  //   2. `border-spacing` also applies around the table's perimeter, so the
-  //      outermost tiles sit 8px in from the container on every side. Column
-  //      headings take the same inset, so everything inside the table stays
-  //      aligned — but the table's content edge is 8px inboard of whatever
-  //      sits above it on the page. If that matters where you are using it,
-  //      pass `class="-mx-2"` to pull the tiles back out to flush.
+  // `border-collapse: collapse` (Tailwind's `border-collapse`) is deliberate
+  // and is what makes the dividers meet cleanly: under `separate` each cell
+  // paints its own bottom edge and adjacent cells double them up. It also
+  // restores the sticky-header technique, which the gapped-tile treatment this
+  // replaces had ruled out.
 
   let {
     ref = $bindable(null),
@@ -36,7 +26,7 @@
   <table
     bind:this={ref}
     class={cn(
-      "w-full caption-bottom border-separate border-spacing-2 text-[15px]",
+      "w-full caption-bottom border-collapse text-[13px]",
       className,
     )}
     {...restProps}

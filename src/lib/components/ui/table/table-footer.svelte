@@ -3,14 +3,10 @@
   import { cn } from "$lib/utils.js"
   import type { HTMLAttributes } from "svelte/elements"
 
-  // No fill. Totals sit directly on the page colour, so the row reads as a
-  // summary of the grid rather than as one more tile in it — the weight alone
-  // carries it.
-  //
-  // `!` on the transparent fill is doing real work: the cells set their own
-  // `bg-card` and a `group-hover/row:` lift, and a totals row is neither a
-  // tile nor interactive. Without the override the footer would paint like a
-  // body row and light up on hover like a selectable one.
+  // Totals: no fill, a stronger rule above to close the grid, and Bold to
+  // separate the summary from the rows it sums. The row's own bottom hairline
+  // is suppressed so the table ends on the top rule rather than trailing a
+  // second line under it. Hover is off — a totals row is not interactive.
   let {
     ref = $bindable(null),
     class: className,
@@ -22,7 +18,9 @@
 <tfoot
   bind:this={ref}
   class={cn(
-    "font-semibold [&_td]:bg-transparent! [&_th]:bg-transparent!",
+    "font-bold",
+    "[&>tr]:border-t [&>tr]:border-grey-600 [&>tr]:border-b-0",
+    "[&>tr]:hover:bg-transparent",
     className,
   )}
   {...restProps}

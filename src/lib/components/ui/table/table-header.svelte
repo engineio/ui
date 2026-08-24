@@ -3,9 +3,9 @@
   import { cn } from "$lib/utils.js"
   import type { HTMLAttributes } from "svelte/elements"
 
-  // Transparent. With the rows as blocks, a filled header bar would read as
-  // one more block rather than as the labels for the ones below it — so the
-  // headings sit directly on the page colour and the blocks start beneath.
+  // Transparent, separated from the body by a rule one step stronger than the
+  // row dividers. That single difference in weight is what makes the header
+  // read as a header without needing a fill.
   let {
     ref = $bindable(null),
     class: className,
@@ -14,6 +14,10 @@
   }: WithElementRef<HTMLAttributes<HTMLTableSectionElement>> = $props()
 </script>
 
-<thead bind:this={ref} class={cn("bg-transparent", className)} {...restProps}>
+<thead
+  bind:this={ref}
+  class={cn("[&_tr]:border-b [&_tr]:border-grey-600", className)}
+  {...restProps}
+>
   {@render children?.()}
 </thead>

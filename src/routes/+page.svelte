@@ -526,7 +526,7 @@
     <Section
       eyebrow="Section 11"
       title="Table."
-      note="A grid of tiles, not a grid of lines. The page colour is the ground; every cell is its own panel, gapped on both axes. Body tiles sit on the card surface with the headings a step lighter, and the totals row carries no fill at all — weight alone. No frame, no rules, no dividers anywhere."
+      note="Ruled, not tiled. No frame, no fills, no gaps — the surface behind shows through and a hairline under each row does all the structural work. Headings are Bold 13px in Pure White, Title Case, separated from the body by a rule one step stronger than the dividers."
     >
       <Table>
         <TableHeader>
@@ -563,13 +563,12 @@
         </TableFooter>
       </Table>
       <p class="max-w-[920px] text-[15px] leading-[1.45] text-grey-300">
-        Hover any tile and the whole row lifts a ramp step — a row is still the
-        unit a person reads, so the cells take their state from it through a
-        named group. The second row is
-        <span class="font-mono text-[13px]">data-state="selected"</span>: the
-        fill swaps for the magenta tint rather than taking a coloured border,
-        which the brand rules out. Tiles use the 10px inner-panel radius, not
-        the 18px card radius — at cell size, 18px reads as a lozenge.
+        Hover a row for the 6% white wash. The second row is
+        <span class="font-mono text-[13px]">data-state="selected"</span> — the
+        magenta tint, never a coloured border or an edge accent, both of which
+        the brand rules out. Because the cells carry no fill there are no fill
+        collisions: a Badge, a Separator or an unchecked Switch reads correctly
+        in any column, which the gapped-tile treatment could not promise.
       </p>
     </Section>
 
