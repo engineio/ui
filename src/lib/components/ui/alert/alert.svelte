@@ -1,11 +1,11 @@
 <script lang="ts" module>
   import { type VariantProps, tv } from "tailwind-variants"
 
-  // The panel is always neutral. A 3px bar down the left edge is the ONLY
-  // thing that says whether this is good, bad or a warning — the fill, the
-  // rule and the type never change, so a wall of alerts reads as one surface
-  // with a column of state down the side rather than as four different
-  // components.
+  // The panel is always neutral. A 3px bar inset down the left, with rounded
+  // ends, is the ONLY thing that says whether this is good, bad or a warning —
+  // the fill, the rule and the type never change, so a wall of alerts reads as
+  // one surface with a column of state down the side rather than as four
+  // different components.
   //
   // ON THE BRAND RULE. The brand prohibits "a coloured left-edge accent",
   // twice, and it is worth being precise about what it prohibits: both
@@ -20,9 +20,11 @@
   // `tv({ extend: … })` recipe.
   export const alertVariants = tv({
     base: [
-      "relative w-full overflow-hidden rounded-media",
+      "relative w-full rounded-media",
       "border border-grey-700 bg-card",
-      "py-3.5 pr-4 pl-5",
+      // pl-7 clears the inset bar: 14px to the bar, 3px of bar, then a 11px
+      // gap before the text. py matches the bar's vertical inset exactly.
+      "py-3.5 pr-4 pl-7",
     ],
     variants: {
       // Applied to the bar, not the panel.
@@ -72,15 +74,21 @@
   role="alert"
 >
   <!--
-    A real element rather than a `before:` pseudo — the panel's `overflow-hidden`
-    clips it to the corner radius either way, but a real element cannot be
-    knocked out by a consumer passing their own `before:` utility, and it needs
-    no `content-['']`. `aria-hidden` because the colour is decoration: the text
-    has to say what happened on its own.
+    Inset on all three sides with rounded ends, not flush to the edge. Two
+    reasons beyond the look: a flush bar has to be clipped by the panel's
+    radius, which meant `overflow-hidden` on the panel and a bar whose top and
+    bottom were shaved by the corners; and `inset-y-3.5` matches the panel's
+    `py-3.5` exactly, so the bar spans the content box and tracks the text
+    rather than the panel. A one-line alert gets a short bar, as it should.
+
+    A real element rather than a `before:` pseudo: it needs no `content-['']`
+    and cannot be knocked out by a consumer passing their own `before:`
+    utility. `aria-hidden` because the colour is decoration — the text has to
+    say what happened on its own.
   -->
   <span
     aria-hidden="true"
-    class="absolute inset-y-0 left-0 w-[3px]"
+    class="absolute inset-y-3.5 left-3.5 w-[3px] rounded-control"
     style="background-color: var(--alert-bar)"
   ></span>
 
