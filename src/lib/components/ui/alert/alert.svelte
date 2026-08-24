@@ -22,9 +22,12 @@
     base: [
       "relative w-full rounded-media",
       "border border-grey-700 bg-card",
-      // pl-7 clears the inset bar: 14px to the bar, 3px of bar, then a 11px
-      // gap before the text. py matches the bar's vertical inset exactly.
-      "py-3.5 pr-4 pl-7",
+      // pl-9 clears the inset bar and then some: 14px to the bar, 3px of bar,
+      // then a 19px gap before the text. The gap is deliberately wider than
+      // the bar's own inset — the bar has to read as a marker beside the
+      // message, and at a tighter gap it starts to read as part of the first
+      // word. py matches the bar's vertical inset exactly.
+      "py-3.5 pr-4 pl-9",
     ],
     variants: {
       // Applied to the bar, not the panel.
