@@ -1,0 +1,57 @@
+name: pages
+
+# Deploys the gallery to https://engineio.github.io/engine-ui — the surface the
+# brand team reviews. Every primitive, every variant, every state, rendered by
+# the package itself rather than by a copy of it.
+#
+# Requires Pages to be enabled on the repo with "GitHub Actions" as the source
+# (Settings → Pages → Build and deployment → Source).
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.3.14
+
+      - run: bun install --frozen-lockfile
+
+      # A project Pages site is served from /<repo>, so the base path has to be
+      # baked in at build time or every asset URL 404s.
+      - name: Build gallery
+        run: bun run build:gallery
+        env:
+          PAGES_BASE: /engine-ui
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: build
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - id: deploy
+        uses: actions/deploy-pages@v4

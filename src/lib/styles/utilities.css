@@ -1,0 +1,124 @@
+/*
+  Engine design system — base layer and shared utilities.
+
+  Everything the primitives need beyond raw tokens. Import order matters:
+  this must come after `tailwindcss` so `@utility` and `@layer base` resolve.
+*/
+
+@layer base {
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-brand);
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Native chrome follows the page, not the OS. Without `color-scheme` the
+     browser paints light scrollbars, form controls, spinners and autofill
+     over a dark UI — this is what makes a default scrollbar read as a light
+     strip down the right-hand edge. */
+  :root {
+    color-scheme: dark;
+  }
+
+  /* The scrollbar on the grey ramp: a thumb that reads as part of the page
+     and a track that stays out of the way. Firefox takes the two-value
+     `scrollbar-color`; WebKit needs the pseudo-elements. The thumb's
+     transparent border plus `background-clip` is what insets it from the
+     edge — WebKit has no padding on the thumb. */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-grey-600) transparent;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  ::-webkit-scrollbar-track,
+  ::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-grey-600);
+    background-clip: padding-box;
+    border: 2px solid transparent;
+    border-radius: 999px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-grey-500);
+    background-clip: padding-box;
+  }
+
+  /* Motion is fast and mechanical, but it is never mandatory.
+     `prefers-reduced-motion` drops everything to fades. */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+/*
+  The system's field surface, defined once. Height, width and text size stay
+  at the call site — this is only the skin, so an `h-9` search box and a
+  `min-h-20` textarea can share it without fighting over utilities.
+
+  Input, Textarea and SelectTrigger all consume this. If you are building a
+  new field-shaped control, use it rather than restating the border and focus
+  ring: it is the one place the 2px magenta focus ring is defined.
+*/
+@utility field {
+  border-radius: var(--radius-field);
+  border: 1px solid var(--color-grey-700);
+  background-color: var(--color-grey-850);
+  color: var(--color-foreground);
+  transition:
+    border-color 140ms var(--ease-brand),
+    box-shadow 140ms var(--ease-brand);
+
+  &::placeholder {
+    color: var(--color-grey-400);
+  }
+
+  /* 2px magenta ring, offset by the page colour, per the system's focus
+     rule. Always visible on keyboard focus — never removed. */
+  &:focus,
+  &:focus-visible {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow:
+      0 0 0 2px var(--color-background),
+      0 0 0 4px var(--color-ring);
+  }
+
+  &[aria-invalid="true"] {
+    border-color: var(--color-destructive);
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.38;
+  }
+}
+
+@layer utilities {
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}

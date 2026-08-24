@@ -1,0 +1,28 @@
+/*
+  Engine design system — the single stylesheet a consumer imports.
+
+      @import "tailwindcss";
+      @import "@engineio/ui/styles";
+      @source "../node_modules/@engineio/ui/dist";
+
+  That third line is not optional. Tailwind 4 does not scan `node_modules`, so
+  without an explicit `@source` pointing at this package the utility classes
+  the primitives are written against never get generated. It resolves relative
+  to the CSS file declaring it, so adjust the path to wherever your
+  `node_modules` sits.
+
+  Expect a HALF-styled page rather than an obviously broken one: the tokens
+  below still apply (they are plain declarations), and any class that also
+  appears in your own source still works. Measured on a test consumer, leaving
+  the line out took the built stylesheet from 30KB to 6KB and raised no error.
+
+  Import the parts individually if you need finer control:
+
+      @import "@engineio/ui/styles/fonts";
+      @import "@engineio/ui/styles/tokens";
+      @import "@engineio/ui/styles/utilities";
+*/
+
+@import "./fonts.css";
+@import "./tokens.css";
+@import "./utilities.css";

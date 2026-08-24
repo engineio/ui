@@ -1,0 +1,184 @@
+/*
+  Engine design system — tokens.
+
+  Source of truth: docs/brand/ENGINE-DESIGN-SYSTEM.md in the engine repo.
+  Everything here traces back to that document; nothing here was invented.
+
+  The brand is three colours:
+
+    #0E0E0E  Off Black   — the page, and ink on any accent
+    #FFFFFF  Pure White  — text
+    #FF006A  Magenta     — the primary, and the only accent
+
+  Everything else is a neutral step between the outer two. There is no light
+  theme and no `dark` variant — this is the whole palette, so it lives at the
+  root.
+
+  Token names follow Tailwind 4's `@theme` namespaces rather than the design
+  document's bare names (`--color-primary`, not `--magenta`). That is
+  deliberate: it is what generates the `bg-primary` / `rounded-card` /
+  `ease-brand` utilities the primitives are written against. The document's
+  names are the spec; these are its implementation.
+*/
+
+@theme {
+  --tw-border-style: solid;
+
+  /* ── Page and text ─────────────────────────────────────────────────── */
+  --color-background: #0e0e0e;
+  --color-foreground: #ffffff;
+
+  /* Surfaces lift away from the page rather than relying on borders alone. */
+  --color-card: #161616;
+  --color-card-foreground: #ffffff;
+  --color-popover: #1c1c1c;
+  --color-popover-foreground: #ffffff;
+
+  /* ── The accent ────────────────────────────────────────────────────── */
+  /* White on magenta lands at 3.9:1 — under the 4.5:1 AA threshold for
+     normal text. Keep magenta fills to labels at 15px bold or larger, where
+     the 3:1 large-text threshold applies. Off Black on magenta is always
+     safe. The primitives honour this: every magenta fill in this package
+     sets 15px/700 or above. */
+  --color-primary: #ff006a;
+  --color-primary-foreground: #ffffff;
+  --color-primary-press: #d60059;
+
+  /* Tints, for washes on transparent controls. Not for fills — colour
+     appears in large flat shapes, never as a tint on a surface. */
+  --color-primary-tint-12: rgb(255 0 106 / 0.12);
+  --color-primary-tint-24: rgb(255 0 106 / 0.24);
+
+  /* Engine Integration's reserved accent. NOT IN USE — the brand direction
+     assigns it to Integration, but every shipped surface is magenta and was
+     deliberately migrated there. Build Integration in magenta; a
+     half-migrated accent is worse than a consistent one. Declared because it
+     is a real brand colour with a real owner, unlike the retired ramps.
+     Partner Yellow carries Off Black ink only, never white. */
+  --color-partner-yellow: #ffdd00;
+  --color-partner-yellow-press: #e0c200;
+
+  /* ── Neutral ramp — the only greys ─────────────────────────────────── */
+  --color-grey-950: #0a0a0a;
+  --color-grey-900: #0e0e0e;
+  --color-grey-850: #141414;
+  --color-grey-800: #1a1a1a;
+  --color-grey-700: #242424;
+  --color-grey-600: #2e2e2e;
+  --color-grey-500: #3d3d3d;
+  --color-grey-400: #6b6b6b;
+  --color-grey-300: #8c8c8c;
+  --color-grey-200: #b4b4b4;
+  --color-grey-100: #d9d9d9;
+  --color-grey-050: #f2f2f2;
+
+  /* ── Semantic neutrals ─────────────────────────────────────────────── */
+  --color-secondary: #232323;
+  --color-secondary-foreground: #ffffff;
+  --color-muted: #232323;
+  --color-muted-foreground: #a1a1a1;
+  --color-accent: #2a2a2a;
+  --color-accent-foreground: #ffffff;
+
+  --color-border: #2a2a2a;
+  --color-input: #2a2a2a;
+  --color-ring: #ff006a;
+
+  /*
+    THERE IS NO STATUS PALETTE. The brand defines no success / warning /
+    error colours — see §12 of the design system document. This is the
+    system's single most consequential gap and it is NOT resolved here.
+
+    `destructive` maps to magenta because that is what the document
+    specifies (§6, Input): "Error state: --magenta border and message — this
+    is a consequence of having no status palette, and worth flagging in
+    review." So it is flagged. The shadcn default this replaces was an oklch
+    value inherited from upstream with no brand owner at all, which was
+    worse: it looked like a decision.
+
+    Consequence you will notice immediately: a destructive control cannot be
+    distinguished from a primary one by colour alone. The `destructive`
+    button variant therefore uses magenta as an OUTLINE, not a fill, per the
+    document's Danger row. That is a workaround, not a solution.
+
+    Do not add success / warning / error colours to this file without a
+    brand-team decision. If a product needs them before then, it needs them
+    locally and visibly, not quietly upstreamed here.
+  */
+  --color-destructive: #ff006a;
+  --color-destructive-foreground: #ffffff;
+
+  /* ── Radii, by role ───────────────────────────────────────────────── */
+  /* Never mixed arbitrarily on one surface — the outer frame is always
+     larger than the inner panel (18px card → 10px inner). */
+  --radius-tag: 6px;
+  --radius-field: 10px;
+  --radius-card-inner: 10px;
+  --radius-media: 14px;
+  --radius-card: 18px;
+  --radius-frame: 26px;
+  --radius-control: 999px;
+
+  /* The generic scale, for shadcn primitives that predate the role-based
+     radii above. Prefer the named roles in new work. */
+  --radius: 0.5rem;
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  /* ── Depth ────────────────────────────────────────────────────────── */
+  /* Depth comes from rules and nested panels, not shadow. These two exist
+     for product chrome and modals only — never on a brand surface. */
+  --shadow-panel: 0 12px 32px rgb(0 0 0 / 0.55);
+  --shadow-modal: 0 24px 64px rgb(0 0 0 / 0.7);
+
+  /* ── Motion ───────────────────────────────────────────────────────── */
+  /* Fast and mechanical: 140ms control states, 220ms surfaces, 360–640ms
+     reveals. Never bounce, spring, or parallax. */
+  --ease-brand: cubic-bezier(0.2, 0, 0.2, 1);
+  --ease-brand-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-brand-accelerate: cubic-bezier(0.6, 0, 0.3, 1);
+
+  /* ── Type ─────────────────────────────────────────────────────────── */
+  /* Proxima Nova is the brand face and ships with this package. Inter is the
+     documented substitute where the licence does not reach. */
+  --font-brand:
+    "ProximaNova", "Inter", "Helvetica Neue", Arial, sans-serif;
+  --font-sans: var(--font-brand);
+  --font-condensed:
+    "ProximaNovaCondensed", "ProximaNova", Arial, sans-serif;
+  --font-extra-condensed:
+    "ProximaNovaExtraCondensed", "ProximaNovaCondensed", Arial, sans-serif;
+  /* JetBrains Mono is specified for numerics, keys, IDs, code and eyebrow
+     labels. No binary ships with this package yet — see README, Known gaps —
+     so this currently resolves to the platform monospace. */
+  --font-mono:
+    "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --breakpoint-2xl: 1400px;
+
+  /* ── Sidebar ──────────────────────────────────────────────────────── */
+  /* Left-nav hover and active states: magenta at very low lightness, so the
+     wash reads as brand-tinted rather than plain grey. */
+  --color-sidebar-background: #131313;
+  --color-sidebar-foreground: #ffffff;
+  --color-sidebar-primary: #ff006a;
+  --color-sidebar-primary-foreground: #ffffff;
+  --color-sidebar-accent: #291319;
+  --color-sidebar-accent-foreground: #ffffff;
+  --color-sidebar-border: #2a2a2a;
+  --color-sidebar-ring: #ff006a;
+}
+
+/*
+  RETIRED COLOURS ARE NOT DECLARED HERE, AND THAT IS DELIBERATE.
+
+  Originals Orange #FF6200 and Sportsbook Blue #00CCFF belonged to sub-brands
+  that no longer exist. They have no owner, so per the brand's
+  conditional-colour rule they are not available — no accents, no charts, no
+  status. The engine repo still declares them in app.css for historical
+  reasons; this package does not, because you cannot misuse a token that does
+  not exist. The `originals` / `sportsbook` variants that shipped on Badge and
+  Tag upstream are gone for the same reason.
+*/

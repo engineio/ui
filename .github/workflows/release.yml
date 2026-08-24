@@ -1,0 +1,100 @@
+name: release
+
+# release-please maintains a release PR from conventional commits. Merging it
+# tags ui/vX.Y.Z, cuts a GitHub release, and — in this same main-branch run,
+# because tags created with GITHUB_TOKEN never trigger their own workflows —
+# publishes the package to GitHub Packages.
+#
+# Consumers are NEVER auto-upgraded. A release only makes a new version
+# available; engine and rgs pick it up when someone bumps the dependency and
+# opens a PR. That is the whole point of publishing rather than sharing source:
+# the upgrade is a reviewable diff on the consumer's schedule.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Existing release tag to re-publish, e.g. ui/v0.2.0"
+        required: true
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+permissions:
+  contents: write # release-please: tags + GitHub releases
+  pull-requests: write # release-please: open/update its release PR
+
+jobs:
+  release-please:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    outputs:
+      released: ${{ steps.rp.outputs.release_created }}
+      tag: ${{ steps.rp.outputs.tag_name }}
+      version: ${{ steps.rp.outputs.version }}
+    steps:
+      - uses: googleapis/release-please-action@v5
+        id: rp
+
+  publish:
+    needs: release-please
+    if: >-
+      !cancelled() && (
+        github.event_name == 'workflow_dispatch' ||
+        needs.release-please.outputs.released == 'true'
+      )
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write # push to npm.pkg.github.com
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          # Publish the tagged tree, not whatever main happens to be. On the
+          # push path release-please has already committed the version bump,
+          # so the tag is the only ref guaranteed to carry it.
+          ref: ${{ github.event_name == 'workflow_dispatch' && inputs.tag || needs.release-please.outputs.tag }}
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.3.14
+
+      # Writes the .npmrc that `npm publish` reads, pointed at GitHub
+      # Packages and scoped to this org. The repo's own .npmrc covers local
+      # and bun-side resolution; this one carries the credential.
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          registry-url: https://npm.pkg.github.com
+          scope: "@engineio"
+
+      - run: bun install --frozen-lockfile
+
+      - name: Verify before publishing
+        run: |
+          bun run check
+          bun run build
+
+      - name: Guard the version against the tag
+        env:
+          TAG: ${{ github.event_name == 'workflow_dispatch' && inputs.tag || needs.release-please.outputs.tag }}
+        run: |
+          set -euo pipefail
+          pkg=$(node -p "require('./package.json').version")
+          want="${TAG#ui/v}"
+          [ "$pkg" = "$want" ] || {
+            echo "::error::package.json is $pkg but the tag says $want — refusing to publish a mislabelled version"
+            exit 1
+          }
+          echo "publishing @engineio/ui@$pkg"
+
+      # --provenance is off: it requires a public registry. Idempotent by
+      # construction — republishing an existing version is refused by the
+      # registry, which is what makes a re-run of a failed job safe.
+      - name: Publish to GitHub Packages
+        run: npm publish --access restricted
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
