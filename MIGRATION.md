@@ -156,7 +156,8 @@ check it before wondering why the tokens did not land.
 **Two visible changes** you should expect from the token layer, both deliberate:
 Proxima Nova Semibold now maps to weight 600 rather than 500, so
 `font-semibold` labels will render in the correct cut for the first time; and
-`--color-destructive` becomes magenta rather than the inherited oklch red.
+`--color-destructive` becomes the real danger red `#FF3B30` rather than the
+oklch value inherited from shadcn, which had no brand owner.
 
 ## 3. Migrate imports, one component at a time
 
