@@ -3,7 +3,7 @@
 The Engine design system: tokens, the brand face, and twenty Svelte primitives,
 published once and consumed by every Engine product.
 
-Gallery — <https://engineio.github.io/engine-ui>
+Gallery — <https://engineio.github.io/ui>
 
 ```bash
 bun add @engineio/ui

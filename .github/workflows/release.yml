@@ -78,15 +78,29 @@ jobs:
           bun run check
           bun run build
 
-      - name: Guard the version against the tag
+      # Refuses to publish a version that does not match what was released.
+      # On the push path the version comes from release-please directly rather
+      # than from parsing the tag — the tag's shape is config (component
+      # prefix, separator, leading v) and parsing it here means this guard
+      # breaks silently the next time that config changes, which is exactly
+      # what happened before `include-component-in-tag: false` was set.
+      - name: Guard the version against the release
         env:
-          TAG: ${{ github.event_name == 'workflow_dispatch' && inputs.tag || needs.release-please.outputs.tag }}
+          RP_VERSION: ${{ needs.release-please.outputs.version }}
+          INPUT_TAG: ${{ inputs.tag }}
         run: |
           set -euo pipefail
           pkg=$(node -p "require('./package.json').version")
-          want="${TAG#ui/v}"
+          if [ "$GITHUB_EVENT_NAME" = "workflow_dispatch" ]; then
+            # Only the manual path has to parse: strip up to and including the
+            # first "v" (v0.2.0, ui/v0.2.0 and ui-v0.2.0 all yield 0.2.0).
+            want="${INPUT_TAG#*v}"
+          else
+            want="$RP_VERSION"
+          fi
+          [ -n "$want" ] || { echo "::error::could not determine the released version"; exit 1; }
           [ "$pkg" = "$want" ] || {
-            echo "::error::package.json is $pkg but the tag says $want — refusing to publish a mislabelled version"
+            echo "::error::package.json is $pkg but the release says $want — refusing to publish a mislabelled version"
             exit 1
           }
           echo "publishing @engineio/ui@$pkg"

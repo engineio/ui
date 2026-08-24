@@ -1,11 +1,23 @@
 name: pages
 
-# Deploys the gallery to https://engineio.github.io/engine-ui — the surface the
-# brand team reviews. Every primitive, every variant, every state, rendered by
-# the package itself rather than by a copy of it.
+# Deploys the gallery to https://engineio.github.io/ui — the surface the brand
+# team reviews. Every primitive, every variant, every state, rendered by the
+# package itself rather than by a copy of it.
 #
-# Requires Pages to be enabled on the repo with "GitHub Actions" as the source
-# (Settings → Pages → Build and deployment → Source).
+# SETUP IS DELIBERATELY MANUAL, AND THIS WORKFLOW FAILS UNTIL IT IS DONE.
+#
+# Settings -> Pages -> Build and deployment -> Source: GitHub Actions, and then
+# Visibility: Private. The repo is internal and the org is on Enterprise, so
+# access control is available — without it a Pages site is PUBLIC even from a
+# private or internal repo, and this one serves the brand system, the marks and
+# the licensed Proxima Nova webfonts.
+#
+# `configure-pages` takes an `enablement: true` option that would create the
+# site on first run and turn this red job green with no human involved. It is
+# deliberately not used: the default visibility is public, so auto-enabling
+# would publish the brand system to anyone with the URL as a side-effect of a
+# push. A failing job until someone chooses the visibility is the safer
+# failure.
 
 on:
   push:
@@ -22,6 +34,14 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+    # configure-pages reads (and with enablement, writes) the repo's Pages
+    # config, so this job needs pages:write — the top-level contents:read is
+    # not enough and the failure it gives is an opaque "Resource not accessible
+    # by integration".
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
     steps:
       - uses: actions/checkout@v7
 
@@ -32,13 +52,19 @@ jobs:
       - run: bun install --frozen-lockfile
 
       # A project Pages site is served from /<repo>, so the base path has to be
-      # baked in at build time or every asset URL 404s.
+      # baked in at build time or every internal link resolves off-site. Assets
+      # are emitted as relative URLs by the static adapter, so they survive
+      # either way — links do not.
       - name: Build gallery
         run: bun run build:gallery
         env:
-          PAGES_BASE: /engine-ui
+          PAGES_BASE: /ui
 
+      # No `enablement: true` — see the note at the top of this file. This step
+      # fails with "Resource not accessible by integration" until Pages is
+      # enabled by hand with its visibility chosen.
       - uses: actions/configure-pages@v5
+
       - uses: actions/upload-pages-artifact@v4
         with:
           path: build
