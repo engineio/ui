@@ -143,9 +143,31 @@ Then **delete** from `app.css`:
   `.otf` files in `static/fonts/` (the package references its own by relative
   path). Keep `LeagueGothic*` if a product still uses it.
 
-Keep in `app.css`: `--gradient-brand*`, the `@keyframes`, `.floating`,
-`.markdown-body`, the `input[aria-hidden]` fix, `carta.css` and
-`container.css` — product-specific, not brand.
+**Exactly what to keep, measured against engine's stylesheet.** Its `@theme`
+declares 81 custom properties; the package declares 79, and 20 of engine's are
+not in it. Sixteen of those are real and must stay — they are product concerns
+the package deliberately does not own:
+
+| Keep in `app.css` | Source uses | Why the package does not own it |
+| --- | --- | --- |
+| `--color-chart-1` … `-5` | 17 | Data-viz palette, not brand |
+| `--shiki-*` (9 tokens) | 9 | Syntax highlighting for Carta / code blocks |
+| `--gradient-brand`, `--gradient-brand-full` | 7 | Product gradients; the brand bans gradients |
+
+The other four — `--color-originals-orange(-press)` and
+`--color-sportsbook-blue(-press)` — can go. They have **no application-code
+consumers**: their only references are their own declarations plus the three
+components the package supersedes (`badge`, `tag`) and `sonner`. Retired ramps
+with no owner, exactly as the brand says.
+
+`sonner` is the one thing that needs a real edit rather than a deletion. It
+currently paints success and info toasts with `border-l-sportsbook-blue` — a
+retired sub-brand colour standing in for a status colour that did not exist.
+Point it at `--color-success` and `--color-danger` instead; that is a fix, not
+a port.
+
+Also keep the `@keyframes`, `.floating`, `.markdown-body`, the
+`input[aria-hidden]` fix, and the `carta.css` / `container.css` imports.
 
 `@source` resolves relative to the CSS file that declares it. From
 `front/packages/shared/src/app.css` the workspace `node_modules` is three levels
