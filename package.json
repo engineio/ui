@@ -1,6 +1,6 @@
 {
   "name": "@engineio/ui",
-  "version": "0.2.0",
+  "version": "0.0.0-development",
   "description": "The Engine design system — tokens, fonts and Svelte primitives.",
   "license": "UNLICENSED",
   "private": false,
@@ -67,7 +67,9 @@
     "@sveltejs/vite-plugin-svelte": "7.1.2",
     "@tailwindcss/vite": "^4.3.0",
     "@types/node": "^26.2.0",
+    "conventional-changelog-conventionalcommits": "9",
     "publint": "^0.3.15",
+    "semantic-release": "^25.0.9",
     "svelte": "5.56.1",
     "svelte-check": "4.5.0",
     "tailwindcss": "^4.3.0",

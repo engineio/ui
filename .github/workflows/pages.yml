@@ -44,6 +44,12 @@ jobs:
       id-token: write
     steps:
       - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Resolve the latest release tag
+        id: tag
+        run: echo "version=$(git describe --tags --abbrev=0 2>/dev/null || echo dev)" >> "$GITHUB_OUTPUT"
 
       - uses: oven-sh/setup-bun@v2
         with:
@@ -51,14 +57,18 @@ jobs:
 
       - run: bun install --frozen-lockfile
 
-      # A project Pages site is served from /<repo>, so the base path has to be
-      # baked in at build time or every internal link resolves off-site. Assets
-      # are emitted as relative URLs by the static adapter, so they survive
-      # either way — links do not.
+      # PAGES_BASE: a project Pages site is served from /<repo>, so the base
+      # path has to be baked in at build time or every internal link resolves
+      # off-site. Assets are emitted as relative URLs by the static adapter, so
+      # they survive either way — links do not.
+      #
+      # DS_VERSION labels the gallery with the release it was built from, which
+      # is why the checkout above is unshallow: `git describe` needs the tags.
       - name: Build gallery
         run: bun run build:gallery
         env:
           PAGES_BASE: /ui
+          DS_VERSION: ${{ steps.tag.outputs.version }}
 
       # No `enablement: true` — see the note at the top of this file. This step
       # fails with "Resource not accessible by integration" until Pages is

@@ -114,7 +114,7 @@
       <p
         class="mb-4 font-mono text-[11px] font-semibold tracking-[0.08em] text-grey-400 uppercase"
       >
-        Engine · Design System · v0.1.0
+        Engine · Design System · {__DS_VERSION__}
       </p>
       <h1 class="max-w-[920px] text-[72px] leading-[0.94] font-bold tracking-[-0.02em]">
         One system. Every surface.

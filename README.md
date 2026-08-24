@@ -127,13 +127,35 @@ happened in the products.
 
 ## Releasing
 
-Conventional commits on `main`; release-please maintains a release PR. Merging
-it tags `ui/vX.Y.Z` and publishes to GitHub Packages. Use `tokens:` as a commit
-type for token changes so they land in their own changelog section.
+**Every push to `main` releases.** semantic-release reads the conventional
+commits since the last tag, works out the version, tags it, writes the GitHub
+release notes and publishes to GitHub Packages — one run, no release PR, no
+approval step. A push with nothing releasable in it (`docs:`, `chore:`, `ci:`)
+is a no-op rather than a failure.
+
+| Commit type | Bump |
+| --- | --- |
+| `feat:`, `tokens:` | minor |
+| `fix:`, `perf:`, `style:`, `refactor:` | patch |
+| `docs:`, `test:`, `build:`, `ci:`, `chore:` | none |
+| any `!` / `BREAKING CHANGE:` | minor, while under 1.0.0 |
+
+Use `tokens:` for token changes so they land in their own release-notes
+section.
+
+**Two things are deliberately not tracked in git.** `package.json`'s version is
+the placeholder `0.0.0-development` — tags are the source of truth, and
+semantic-release writes the real version in the runner just before publishing.
+And there is no `CHANGELOG.md`; the release notes are the changelog, generated
+from the same commits. Both follow from `main` requiring pull requests: the
+usual setup commits the bump and changelog back to the release branch, which
+would need a bypass no CI job should hold.
 
 We are on `0.x` on purpose. Semver means something the moment two repos depend
 on you, and the token layer is still moving — breaking changes are cheap and
-expected until it settles. Cut `1.0.0` when it stops.
+expected until it settles. That is enforced by `breaking → minor` in
+`.releaserc.json`; deleting that rule is the deliberate act that cuts `1.0.0`
+and starts the promises.
 
 ## Known gaps
 
