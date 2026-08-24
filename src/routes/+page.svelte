@@ -459,7 +459,7 @@
     <Section
       eyebrow="Section 11"
       title="Table."
-      note="A list of blocks, not a grid of lines. The page colour is the ground; each row is its own panel on the grey ramp with a gap above and below, and the headings sit directly on the page rather than in a filled bar. No frame, no rules, no dividers."
+      note="A grid of tiles, not a grid of lines. The page colour is the ground; every cell is its own panel on the grey ramp, gapped on both axes, and the headings sit directly on the page rather than in a filled bar. No frame, no rules, no dividers anywhere."
     >
       <Table>
         <TableHeader>
@@ -480,7 +480,13 @@
                 {#if row[3] === "Live"}
                   <Badge>Live</Badge>
                 {:else}
-                  <Badge variant="secondary">Draft</Badge>
+                  <!--
+                    `outline`, not `secondary`. A secondary badge is filled
+                    grey-700 — the same step as the tile it would sit on, so it
+                    disappears. On a filled surface, reach for the outline
+                    variant.
+                  -->
+                  <Badge variant="outline">Draft</Badge>
                 {/if}
               </TableCell>
             </TableRow>
@@ -496,12 +502,13 @@
         </TableFooter>
       </Table>
       <p class="max-w-[920px] text-[15px] leading-[1.45] text-grey-300">
-        Hover a block and its fill lifts to the next ramp step. The second row
-        is <span class="font-mono text-[13px]">data-state="selected"</span> —
-        the fill swaps for the magenta tint rather than taking a coloured
-        border, which the brand rules out. The corner radius sits on the first
-        and last cells, because a row is not a painted box under
-        <span class="font-mono text-[13px]">border-separate</span>.
+        Hover any tile and the whole row lifts a ramp step — a row is still the
+        unit a person reads, so the cells take their state from it through a
+        named group. The second row is
+        <span class="font-mono text-[13px]">data-state="selected"</span>: the
+        fill swaps for the magenta tint rather than taking a coloured border,
+        which the brand rules out. Tiles use the 10px inner-panel radius, not
+        the 18px card radius — at cell size, 18px reads as a lozenge.
       </p>
     </Section>
 

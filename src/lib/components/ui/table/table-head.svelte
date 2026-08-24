@@ -5,8 +5,11 @@
 
   // The system's label: 11px Semibold, uppercase, +0.08em tracking. Column
   // headings are structural labels, which is the one place UPPERCASE is
-  // sanctioned. Padding matches the cells so a heading lines up with the
-  // column it names.
+  // sanctioned.
+  //
+  // Transparent, and padded to match the cells (px-4) so a heading lines up
+  // with the left edge of the text in the tiles below it rather than with the
+  // tile itself.
   let {
     ref = $bindable(null),
     class: className,
@@ -18,7 +21,7 @@
 <th
   bind:this={ref}
   class={cn(
-    "h-8 px-5 text-left align-middle whitespace-nowrap",
+    "h-8 px-4 text-left align-middle whitespace-nowrap",
     "text-[11px] font-semibold tracking-[0.08em] text-grey-400 uppercase",
     "[&:has([role=checkbox])]:pr-0",
     className,

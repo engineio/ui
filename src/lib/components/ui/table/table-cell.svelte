@@ -3,12 +3,29 @@
   import { cn } from "$lib/utils.js"
   import type { HTMLTdAttributes } from "svelte/elements"
 
-  // 56px tall with 20px side padding: the block needs room to read as a panel
-  // rather than a stripe, and this is the density the system's card padding
-  // implies at row scale.
+  // The tile. Each cell is a panel in its own right: filled on the grey ramp,
+  // 10px radius, gapped from its neighbours by the table's border-spacing.
   //
-  // Set numerics, IDs and keys in `font-mono` at the call site; the brand
-  // reserves the monospace face for them.
+  // 10px is `--radius-field`, the system's role for fields and INNER panels —
+  // the correct step for a tile this size. The row-block treatment used 18px
+  // because a whole row is a card; a single cell is not, and 18px on a 56px
+  // tile reads as a lozenge.
+  //
+  // Hover and selection come from the row via `group-hover/row:` — one tile
+  // hovered lights the whole row, because a row is still the unit a person
+  // reads and clicks.
+  //
+  // WATCH THE FILL COLLISION. The tile is grey-700, and four other things in
+  // this package are filled grey-700 too — put any of them in a cell and it
+  // disappears into the tile:
+  //
+  //   Badge variant="secondary"   -> use variant="outline"
+  //   Tag variant="solid"         -> use the default (outline) variant
+  //   Separator                   -> pass class="bg-grey-500"
+  //   Switch, unchecked track     -> pass class="data-[state=unchecked]:bg-grey-500"
+  //
+  // Safe as they are: Button (its secondary is grey-800), Tag's default and
+  // brand variants, Input and Textarea (grey-850), and any outline treatment.
   let {
     ref = $bindable(null),
     class: className,
@@ -20,7 +37,11 @@
 <td
   bind:this={ref}
   class={cn(
-    "h-14 px-5 align-middle text-[15px] [&:has([role=checkbox])]:pr-0",
+    "h-14 rounded-field bg-grey-700 px-4 align-middle text-[15px]",
+    "transition-colors duration-140 ease-brand",
+    "group-hover/row:bg-grey-600",
+    "group-data-[state=selected]/row:bg-primary-tint-24",
+    "[&:has([role=checkbox])]:pr-0",
     className,
   )}
   {...restProps}

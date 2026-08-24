@@ -3,21 +3,26 @@
   import { cn } from "$lib/utils.js"
   import type { HTMLTableAttributes } from "svelte/elements"
 
-  // A list of blocks, not a grid of lines. The page colour is the ground and
-  // each row is its own card floating on it, separated by a gap — no frame,
-  // no rules, no dividers. Depth comes from the panels themselves, which is
-  // the system's rule ("depth comes from rules and nested panels, not
-  // shadow") taken to its other end.
+  // A grid of tiles. The page colour is the ground and every cell is its own
+  // panel on the grey ramp, gapped on both axes — no frame, no rules, no
+  // dividers anywhere.
   //
-  // `border-separate` plus `border-spacing-y` is what makes the gaps: it is
-  // the only way to space table rows, because margin does nothing on a `tr`
-  // and a gap cannot cross a table's internal layout. `border-spacing-x-0`
-  // keeps the columns tight — spacing applies to both axes otherwise, and
-  // gapped columns would break every row into loose cells.
+  // `border-separate` plus `border-spacing` is the only way to space table
+  // cells: margin does nothing on a `td` and a gap cannot cross a table's
+  // internal layout. `border-spacing-2` sets 8px on both axes, where the
+  // row-block treatment pinned the x axis to 0.
   //
-  // The trade-off worth knowing: `border-separate` disables the sticky-header
-  // trick that relies on collapsed borders. If you need a sticky header on a
-  // long table, that is the one case for keeping a bordered variant.
+  // Two trade-offs, both inherent to `border-separate` rather than to this
+  // styling:
+  //
+  //   1. It disables the sticky-header technique that relies on collapsed
+  //      borders. A long table needing a pinned header wants a ruled variant.
+  //   2. `border-spacing` also applies around the table's perimeter, so the
+  //      outermost tiles sit 8px in from the container on every side. Column
+  //      headings take the same inset, so everything inside the table stays
+  //      aligned — but the table's content edge is 8px inboard of whatever
+  //      sits above it on the page. If that matters where you are using it,
+  //      pass `class="-mx-2"` to pull the tiles back out to flush.
 
   let {
     ref = $bindable(null),
@@ -31,7 +36,7 @@
   <table
     bind:this={ref}
     class={cn(
-      "w-full caption-bottom border-separate border-spacing-x-0 border-spacing-y-2 text-[15px]",
+      "w-full caption-bottom border-separate border-spacing-2 text-[15px]",
       className,
     )}
     {...restProps}
