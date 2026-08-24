@@ -127,7 +127,6 @@ export {
   TabsTrigger,
 } from "./components/ui/tabs/index.js"
 
-export { Tag, tagVariants, type TagVariant } from "./components/ui/tag/index.js"
 export { Textarea } from "./components/ui/textarea/index.js"
 
 export {

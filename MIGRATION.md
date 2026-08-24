@@ -152,13 +152,34 @@ Do it per component, not in one sweep, and delete
 The 35 primitives that are not in the package stay exactly where they are —
 `@engineio/ui` and the local `ui/` folder coexist fine.
 
-**Where you will hit friction:** the package's Button drops `tab`, `tab-active`,
-`drawer`, `play`, `filled` and `success`, and Badge and Tag drop `originals`,
-`sportsbook`, `success` and `info`. Provider has 100+ button call sites, some on
-those variants. Extend rather than fork — see the recipe in the README — and
-put the extension in `$lib/components/ui/button-variants.ts`. `success` needs a
-decision, not a rename: it was a stock Tailwind green, and there is no status
-palette to move it onto.
+**Where you will hit friction — Button.** The package drops `tab`,
+`tab-active`, `drawer`, `play` and `filled`. Provider has 100+ button call
+sites, some on those variants. Extend rather than fork — see the recipe in the
+README — and put the extension in `$lib/components/ui/button-variants.ts`. Its
+`success` variant does survive, now on the real status token rather than the
+stock green it used to be.
+
+**Badge is a restyle, not a migration.** Badge and Tag are merged into one
+soft chip under the name `Badge`, and every variant provider actually uses —
+`default` (9 sites), `secondary` (11), `outline` (11), `success` (3),
+`destructive` (2) — survives with the same name. Nothing needs renaming.
+
+What changes is how they look. The chip goes soft: `default` becomes a magenta
+tint with `primary-300` ink instead of a solid magenta fill with white text,
+`secondary` becomes a translucent wash instead of an opaque grey, and the size
+goes from 11px to 13px. There is no `solid` variant, because an opaque fill can
+only be correct on one surface. Expect to eyeball the 35 call sites rather than
+edit them, and note the change fixes a real defect: the old solid badge's
+white-on-magenta at 11px measured 3.9:1.
+
+`Tag` is gone entirely. Neither repo has a single `<Tag>` call site, so this
+costs nothing.
+
+There is now a **status palette** — success, warning and danger — which is what
+lets `destructive` resolve to a real red instead of to magenta. If a product
+has been faking status colours with stock Tailwind hues (there are ~724
+off-palette utility usages in the engine repo), those are now replaceable with
+real tokens. That is a good second pass, not part of this migration.
 
 (Class names are written descriptively rather than literally throughout this
 file on purpose. Tailwind 4's automatic source detection scans markdown as

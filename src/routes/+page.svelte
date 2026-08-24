@@ -41,7 +41,6 @@
     TabsContent,
     TabsList,
     TabsTrigger,
-    Tag,
     Textarea,
     Tooltip,
     TooltipContent,
@@ -266,39 +265,40 @@
 
     <Section
       eyebrow="Section 05"
-      title="Badge and Tag."
-      note="A Badge is a solid pill that states status. A Tag is a soft 6px chip that labels a category — a tinted fill with matching ink, in the manner of a repository label. Never swap them. The retired sub-brand variants — originals, sportsbook — are gone."
+      title="Badge."
+      note="One chip for every job, in the soft repository-label treatment — tinted fill, matching ink, 6px radius. Badge and Tag used to be separate components with a rule about which was which; this is the merged one. Fills are translucent by design, so a chip reads the same on the page, on a card and on a table tile."
     >
-      <Row label="Badge — solid">
-        <Badge>Live</Badge>
-        <Badge variant="partner">Partner</Badge>
-        <Badge variant="secondary">Draft</Badge>
-        <Badge variant="outline">Archived</Badge>
+      <Row label="Brand and neutral">
+        <Badge>featured</Badge>
+        <Badge variant="secondary">documentation</Badge>
+        <Badge variant="outline">archived</Badge>
+        <Badge variant="partner">integration</Badge>
       </Row>
-      <Row label="Badge — status">
-        <Badge variant="success">Certified</Badge>
-        <Badge variant="warning">Pending</Badge>
-        <Badge variant="danger">Failed</Badge>
+      <Row label="Status — functional only">
+        <Badge variant="success">certified</Badge>
+        <Badge variant="warning">needs review</Badge>
+        <Badge variant="danger">blocked</Badge>
       </Row>
-      <Row label="Tag — soft">
-        <Tag>documentation</Tag>
-        <Tag variant="brand">featured</Tag>
-        <Tag variant="partner">integration</Tag>
-        <Tag variant="solid">live casino</Tag>
-      </Row>
-      <Row label="Tag — status, soft">
-        <Tag variant="success">passing</Tag>
-        <Tag variant="warning">needs review</Tag>
-        <Tag variant="danger">blocked</Tag>
+      <Row label="The same chips on a card surface">
+        <div class="flex flex-wrap items-center gap-3 rounded-card bg-card p-5">
+          <Badge>featured</Badge>
+          <Badge variant="secondary">documentation</Badge>
+          <Badge variant="outline">archived</Badge>
+          <Badge variant="success">certified</Badge>
+          <Badge variant="danger">blocked</Badge>
+        </div>
       </Row>
       <p class="max-w-[920px] text-[15px] leading-[1.45] text-grey-300">
-        The status variants are functional, not categorical: reach for
+        There is no solid variant: an opaque fill can only be right on one
+        surface, and the old solid <span class="font-mono text-[13px]">secondary</span>
+        vanished on a table tile. The status variants are functional, not
+        categorical — reach for
         <span class="font-mono text-[13px]">success</span> when something has
-        actually succeeded, never because green suited the row. Using them as a
-        topic palette spends the only signal they carry. Note the brand chip's
-        ink is <span class="font-mono text-[13px]">primary-300</span> rather
-        than pure magenta — magenta on its own tint is 4.37:1, and the brand
-        forbids magenta text below 15px bold.
+        actually succeeded, never because green suited the row. The brand chip's
+        ink is <span class="font-mono text-[13px]">primary-300</span> rather than
+        pure magenta: magenta on its own tint is 4.37:1, and the brand forbids
+        magenta text below 15px bold. That also retires the old badge's
+        white-on-magenta at 11px, which was 3.9:1 and a known AA failure.
       </p>
     </Section>
 
@@ -422,7 +422,7 @@
               </div>
             </CardContent>
             <CardFooter>
-              <Badge variant="outline">Engine Studio</Badge>
+              <Badge variant="secondary">Engine Studio</Badge>
             </CardFooter>
           </Card>
         {/each}
@@ -545,9 +545,9 @@
               <TableCell class="font-mono">{row[2]}</TableCell>
               <TableCell>
                 {#if row[3] === "Live"}
-                  <Badge>Live</Badge>
+                  <Badge variant="success">live</Badge>
                 {:else}
-                  <Badge variant="secondary">Draft</Badge>
+                  <Badge variant="secondary">draft</Badge>
                 {/if}
               </TableCell>
             </TableRow>

@@ -82,8 +82,8 @@ Brand rules (shape, weight, motion, focus ring) come from the package. Product
 variants stay in the product. If you find yourself wanting to upstream a variant
 that only one product uses, that is the signal to extend instead.
 
-`buttonVariants`, `badgeVariants`, `tagVariants` and `alertVariants` are all
-exported for this. Every primitive also passes `class` through `cn`, so
+`buttonVariants`, `badgeVariants` and `alertVariants` are all exported for
+this. Every primitive also passes `class` through `cn`, so
 `<Button class="w-full" />` works without `!important`.
 
 ## What ships
@@ -98,7 +98,12 @@ your bundler fingerprints them out of `node_modules`. You do not need a copy in
 
 **Primitives** — Alert, Badge, Button, Card, Checkbox, Dialog, Input, Label,
 Popover, Progress, RadioGroup, Select, Separator, Skeleton, Switch, Table, Tabs,
-Tag, Textarea, Tooltip.
+Textarea, Tooltip.
+
+Badge and Tag were merged into one chip. There is no `Tag`: the soft
+repository-label treatment it carried is now what `Badge` looks like, and the
+name `Badge` survived because it is the one in use — 35 call sites in the engine
+repo, against zero for `Tag`.
 
 Deliberately excluded: `form`, `data-table`, `drawer`, `resizable`, `carousel`
 and `chart` — heavy dependencies and product-specific APIs. Copy those from the
@@ -162,24 +167,27 @@ first is a decision made here that the brand documents have not caught up with.
    obvious choice is a blue, and any blue would read as the retired Sportsbook
    Blue returning. Use the neutral ramp for informational states.
 
-2. **Still no categorical palette.** `Tag` ships the soft repository-label
-   treatment — tinted fill, matching ink — in seven variants, three of which
-   are the functional status colours. A *categorical* palette (one hue per
-   topic, twenty of them) is a separate and still-unmade decision: eighteen
-   accents on one surface is the direct opposite of "one accent per surface,
-   never two". Do not press the status colours into that job — using `success`
-   to mean "slots" because green looked right spends the only signal the
-   palette carries. If a categorical palette is granted, declare it here once
-   as a named group rather than as one-off fills discovered in a diff later.
+2. **Still no categorical palette.** `Badge` ships the soft repository-label
+   treatment — tinted fill, matching ink — in eight variants, four of which are
+   the functional status colours. A *categorical* palette (one hue per topic,
+   twenty of them) is a separate and still-unmade decision: eighteen accents on
+   one surface is the direct opposite of "one accent per surface, never two".
+   Do not press the status colours into that job — using `success` to mean
+   "slots" because green looked right spends the only signal the palette
+   carries. If a categorical palette is granted, declare it here once as a
+   named group rather than as one-off fills discovered in a diff later.
 
-3. **Badge contrast contradicts itself.** §6 of the design document specifies
-   Badge as 11px with a magenta fill and white text; §3 says to keep magenta
-   fills to labels at 15px bold or larger, because white-on-magenta is 3.9:1.
-   An 11px badge cannot reach the large-text threshold, so the default variant
-   is a known AA failure. The document's own escape hatch is "Off Black on
-   magenta is always safe" — swapping `text-primary-foreground` for
-   `text-background` fixes it in one word. Not done here: it changes a
-   brand-stated colour pairing, which is the brand team's call.
+3. **Badge is one component where the brand document specifies two.**
+   ENGINE-DESIGN-SYSTEM.md §6 defines Badge and Tag separately, Badge as a
+   filled pill with white ink. This package ships a single soft chip instead,
+   at the repo owner's direction, because the two-component rule only ever
+   generated arguments about which was which. Like the status palette, that
+   makes the code and the document disagree, and the document nominally wins —
+   §6 needs updating or this needs reverting.
+
+   It does resolve the old contradiction that used to sit in this list: the
+   filled badge's white-on-magenta at 11px measured 3.9:1, a documented AA
+   failure. The soft chip's `primary-300` ink on a magenta tint is 5.81:1.
 
 4. **JetBrains Mono is not loaded.** The brand specifies it for all numerics,
    keys, IDs, code and eyebrow labels. Neither engine nor rgs has ever shipped

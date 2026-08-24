@@ -31,10 +31,14 @@
   // grey-850 tiles for a table you intend to put inputs in, or accept that
   // the field reads as an outline.
   //
-  // Everything else is clear at this fill: Badge, Tag, Separator and the
-  // unchecked Switch track are all grey-700, a comfortable 14 steps lighter.
-  // (They collided when the tile itself was grey-700 — if you change the tile
-  // fill again, re-check this list rather than trusting it.)
+  // Separator and the unchecked Switch track are grey-700, a comfortable 14
+  // steps lighter, so they are clear at this fill — but re-check them if you
+  // change the tile fill, since both collided when the tile was grey-700.
+  //
+  // Badge cannot collide with anything, by construction: its fills are washes
+  // and tints rather than opaque steps, so they composite against whatever
+  // surface they land on and stay about a step lighter everywhere. That is
+  // exactly why the merged Badge has no `solid` variant.
   let {
     ref = $bindable(null),
     class: className,

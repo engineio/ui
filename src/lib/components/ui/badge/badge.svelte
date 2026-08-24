@@ -1,54 +1,63 @@
 <script lang="ts" module>
   import { type VariantProps, tv } from "tailwind-variants"
 
-  // A Badge is a solid pill that states status ("Live", "Partner"); a Tag is
-  // an outline chip that labels a category. Never swap them.
+  // The system's one chip. Badge and Tag used to be separate components with
+  // a rule about which was which — solid pill for status, soft chip for
+  // category — and in practice that rule only ever generated arguments. This
+  // is the merged component: ONE chip, in the soft repository-label treatment
+  // (tinted fill, matching ink, 6px radius) for every job.
+  //
+  // It kept the name `Badge` because that is the name in use: 35 call sites in
+  // the engine repo say `<Badge>`, and none say `<Tag>`. Every variant those
+  // call sites reference — default, secondary, outline, success, destructive —
+  // survives below, so adopting this is a restyle rather than a migration.
   //
   // `badgeVariants` is the extension seam — see button.svelte for the
   // `tv({ extend: … })` recipe.
   //
-  // The upstream engine badge also carried `originals` and `sportsbook`
-  // variants built on the retired sub-brand ramps. Both are gone — those
-  // ramps have no owner. Its `success` and `info` variants were a stock
-  // Tailwind green and the retired sub-brand blue; `success` is back below on
-  // the real status token, and `info` is not, because any blue would read as
-  // Sportsbook Blue returning. See styles/tokens.css.
+  // FILLS ARE TRANSLUCENT, AND THAT IS THE POINT. A chip has to read on the
+  // page (#0E0E0E), on a card (#161616) and on a table tile (#242424). An
+  // opaque grey fill can only be correct on one of them — the old `secondary`
+  // was grey-700, which vanished on a table tile, and a grey-800 fill would
+  // vanish on a card. A wash composites against whatever is behind it and
+  // stays roughly one step lighter everywhere. This is why there is no
+  // `solid` variant: an opaque chip is a surface-specific chip.
   //
-  // CONTRAST WARNING — an unresolved contradiction in the spec, not a bug
-  // here. §6 of the design system specifies Badge as "11px Semibold" with a
-  // "--magenta bg, white text" fill. §3 says to keep magenta fills to
-  // "labels at 15px bold or larger", because white-on-magenta is 3.9:1 and
-  // needs the 3:1 large-text threshold to pass. An 11px badge cannot reach
-  // that threshold, so the default variant below is a known AA failure.
+  // ON THE BRAND INK. `default` sets its ink to `primary-300` #FF5C9B, not
+  // pure magenta: #FF006A on its own 12% tint measures 4.37:1, under AA, and
+  // the brand forbids magenta text below 15px bold. The lighter step gets
+  // 5.81:1 and ships today as `--brand-300` in integration.css. As a
+  // side-effect this fixes the contrast contradiction the old solid badge
+  // carried — white on magenta at 11px was 3.9:1, a known AA failure.
   //
-  // The spec's own escape hatch is "Off Black on magenta is always safe" —
-  // i.e. swap `text-primary-foreground` for `text-background` on the default
-  // variant. That is a one-word change, deliberately not made here: it alters
-  // a brand-stated colour pairing, which is the brand team's call, not this
-  // package's. Raised in the README under Known gaps.
+  // ON THE HUES. The status variants are FUNCTIONAL — success, warning and
+  // danger report state. Do not use them as a categorical palette; `success`
+  // meaning "slots" because green looked right spends the only signal they
+  // carry. A real categorical palette is still a brand-team decision.
   export const badgeVariants = tv({
     base: [
-      "inline-flex items-center rounded-control border-transparent px-2.5 py-0.5",
-      "text-[11px] font-bold tracking-[0.02em]",
+      "inline-flex items-center rounded-tag px-2 py-0.5",
+      "text-[13px] font-semibold whitespace-nowrap",
       "transition-colors duration-140 ease-brand",
-      "focus:ring-ring focus:ring-offset-background focus:ring-2 focus:ring-offset-2 focus:outline-none",
     ],
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground hover:bg-primary-press",
-        // Engine Integration's reserved accent, and light enough to take Off
-        // Black ink — never white. Not in use yet; see styles/tokens.css.
-        partner:
-          "bg-partner-yellow text-background hover:bg-partner-yellow-press",
-        secondary: "bg-grey-700 text-foreground hover:bg-grey-600",
-        outline: "border-[1.5px] border-grey-600 bg-transparent text-foreground",
+        // Brand. The default, because an unqualified chip is an Engine chip.
+        default: "bg-primary-tint-12 text-primary-300 hover:bg-primary-tint-24",
+        // Neutral. The workhorse — a label with no state attached.
+        secondary: "bg-white/8 text-grey-200 hover:bg-white/12",
+        // No fill at all, for a chip on an already-busy surface.
+        outline:
+          "border-[1.5px] border-grey-600 text-foreground hover:border-grey-500",
+        // Engine Integration's reserved accent. Not in use — see tokens.css.
+        partner: "bg-partner-yellow-tint-12 text-partner-yellow",
 
-        // Status. Off Black ink on every status fill — white fails AA on all
-        // three. A status badge reports state ("Live", "Failed", "Pending");
-        // it is never emphasis, and never a second accent.
-        success: "bg-success text-success-foreground",
-        warning: "bg-warning text-warning-foreground",
-        danger: "bg-danger text-danger-foreground",
+        // Status. Functional colour only.
+        success: "bg-success-tint-12 text-success",
+        warning: "bg-warning-tint-12 text-warning",
+        danger: "bg-danger-tint-12 text-danger",
+        // shadcn's name for danger, kept so existing call sites resolve.
+        destructive: "bg-danger-tint-12 text-danger",
       },
     },
     defaultVariants: {
