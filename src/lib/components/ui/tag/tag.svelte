@@ -20,12 +20,12 @@
   // cost of the soft style's whole character.
   //
   // ON THE HUES. A repository-label system usually comes with a wide
-  // categorical palette — red, orange, amber, lime, teal, indigo, and so on.
-  // This package ships THREE tags because the brand ships three colours, and
-  // a categorical palette is the same unmade decision as the status palette
-  // (§12). Do not add hues here to make a label set; that call belongs to the
-  // brand team, and 18 accents on one surface is the opposite of "one accent
-  // per surface, never two".
+  // CATEGORICAL palette — one hue per topic, twenty of them, meaning nothing
+  // in particular. That is still not what this is. The status colours below
+  // are FUNCTIONAL: success, warning and danger report state, and using
+  // `success` to mean "slots" because green looked nice would waste the only
+  // signal the palette has. Seven variants is the whole set; a genuine
+  // categorical palette remains a brand-team decision.
   export const tagVariants = tv({
     base: [
       "inline-flex items-center rounded-tag px-2 py-0.5",
@@ -39,6 +39,12 @@
         brand: "bg-primary-tint-12 text-primary-300 hover:bg-primary-tint-24",
         // Engine Integration's reserved accent. Not in use — see tokens.css.
         partner: "bg-partner-yellow-tint-12 text-partner-yellow",
+        // Status, in the soft treatment. Each is its own ink on its own 12%
+        // tint, which is where these read best — a soft status chip sits in a
+        // dense list without shouting the way a solid Badge does.
+        success: "bg-success-tint-12 text-success",
+        warning: "bg-warning-tint-12 text-warning",
+        danger: "bg-danger-tint-12 text-danger",
         // The filled counterpart, for a chip that has to hold its own against
         // a busy surface. White ink, so it takes the neutral fill.
         solid: "bg-grey-700 text-foreground hover:bg-grey-600",

@@ -94,29 +94,56 @@
   --color-input: #2a2a2a;
   --color-ring: #ff006a;
 
-  /*
-    THERE IS NO STATUS PALETTE. The brand defines no success / warning /
-    error colours — see §12 of the design system document. This is the
-    system's single most consequential gap and it is NOT resolved here.
+  /* ── Status ───────────────────────────────────────────────────────────
+     The design system document (§3, §12) states that no status palette
+     exists and that one must not be invented locally. IT NOW EXISTS: these
+     three were commissioned deliberately, at the repo owner's direction, to
+     close that gap. They are a decision, not a workaround — but the brand
+     documents in the engine repo still say otherwise, so ENGINE-BRAND.md §10
+     and ENGINE-DESIGN-SYSTEM.md §12 need updating to match, and the brand
+     team should ratify the values.
 
-    `destructive` maps to magenta because that is what the document
-    specifies (§6, Input): "Error state: --magenta border and message — this
-    is a consequence of having no status palette, and worth flagging in
-    review." So it is flagged. The shadcn default this replaces was an oklch
-    value inherited from upstream with no brand owner at all, which was
-    worse: it looked like a decision.
+     Chosen against the theme rather than picked off a stock ramp: one high
+     chroma step each, cool-leaning, clinical rather than sweet, and sitting
+     well clear of magenta so the accent stays the accent. Status is
+     FUNCTIONAL colour — it reports state. It is never decoration, never an
+     accent, and never a substitute for magenta.
 
-    Consequence you will notice immediately: a destructive control cannot be
-    distinguished from a primary one by colour alone. The `destructive`
-    button variant therefore uses magenta as an OUTLINE, not a fill, per the
-    document's Danger row. That is a workaround, not a solution.
+     Every value below clears 4.5:1 three ways: Off Black as ink on the solid
+     fill, and the colour itself as text on both the page and its own 12%
+     tint. Ink on a status fill is ALWAYS Off Black — white fails on all
+     three (danger is the tightest at 3.4:1).
 
-    Do not add success / warning / error colours to this file without a
-    brand-team decision. If a product needs them before then, it needs them
-    locally and visibly, not quietly upstreamed here.
-  */
-  --color-destructive: #ff006a;
-  --color-destructive-foreground: #ffffff;
+       role     value     blk-on-fill  on-page  on-tint  dE vs magenta
+       success  #00C46A      8.37       8.37     6.53        146
+       warning  #FFB020     10.56      10.56     7.91         --
+       danger   #FF3B30      5.44       5.44     4.56         38
+
+     Warning sits ΔE 28.7 from Partner Yellow #FFDD00 — visibly amber next to
+     that pure yellow, but not dramatically so. It does not matter today
+     because Partner Yellow is unused; if Engine Integration ever adopts it,
+     a warning chip beside a Partner badge on one surface wants a second look.
+
+     No `info` colour. The obvious choice is a blue, and any blue here would
+     read as the retired Sportsbook Blue coming back. Use the neutral ramp
+     for informational states instead. */
+  --color-success: #00c46a;
+  --color-success-foreground: #0e0e0e;
+  --color-success-tint-12: rgb(0 196 106 / 0.12);
+
+  --color-warning: #ffb020;
+  --color-warning-foreground: #0e0e0e;
+  --color-warning-tint-12: rgb(255 176 32 / 0.12);
+
+  --color-danger: #ff3b30;
+  --color-danger-foreground: #0e0e0e;
+  --color-danger-tint-12: rgb(255 59 48 / 0.12);
+
+  /* shadcn's name for the same thing. Kept as an alias so Alert, Input's
+     aria-invalid state and the Button's destructive variant keep resolving,
+     and so there is exactly one red in the system rather than two. */
+  --color-destructive: var(--color-danger);
+  --color-destructive-foreground: var(--color-danger-foreground);
 
   /* ── Radii, by role ───────────────────────────────────────────────── */
   /* Never mixed arbitrarily on one surface — the outer frame is always

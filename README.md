@@ -89,7 +89,8 @@ exported for this. Every primitive also passes `class` through `cn`, so
 ## What ships
 
 **Tokens** — `styles/tokens.css` as a Tailwind 4 `@theme` block. Three brand
-colours, a twelve-step neutral ramp, radii by role, two shadows, three easings.
+colours, three status colours, a twelve-step neutral ramp, radii by role, two
+shadows, three easings.
 
 **The brand face** — Proxima Nova, seven cuts, referenced by relative path so
 your bundler fingerprints them out of `node_modules`. You do not need a copy in
@@ -99,10 +100,11 @@ your bundler fingerprints them out of `node_modules`. You do not need a copy in
 Popover, Progress, RadioGroup, Select, Separator, Skeleton, Switch, Table, Tabs,
 Tag, Textarea, Tooltip.
 
-Deliberately excluded: `sonner` (toasts need success/error colours that do not
-exist — see Known gaps), and `form`, `data-table`, `drawer`, `resizable`,
-`carousel`, `chart` (heavy dependencies, product-specific APIs). Copy those from
-the engine repo into your product if you need them.
+Deliberately excluded: `form`, `data-table`, `drawer`, `resizable`, `carousel`
+and `chart` — heavy dependencies and product-specific APIs. Copy those from the
+engine repo into your product if you need them. `sonner` was excluded because
+toasts need success and error colours that did not exist; now that they do, it
+is a candidate for the next release.
 
 ## Development
 
@@ -130,29 +132,47 @@ expected until it settles. Cut `1.0.0` when it stops.
 
 ## Known gaps
 
-Stated rather than designed around. All five are inherited from the brand, not
-introduced here.
+Stated rather than designed around. Most are inherited from the brand; the
+first is a decision made here that the brand documents have not caught up with.
 
-1. **No status palette, and no categorical palette either.** No success,
-   warning or error colours are defined, so `--color-destructive` resolves to
-   magenta and a destructive control cannot be distinguished from a primary one
-   by colour. The `destructive` button variant works around this with a magenta
-   outline instead of a fill, per the design document's Danger row. **This is
-   the most consequential gap and it blocks any surface with real states.**
+1. **The status palette is a local decision the brand documents do not yet
+   know about.** Success `#00C46A`, warning `#FFB020` and danger `#FF3B30` now
+   exist in `tokens.css`, commissioned at the repo owner's direction to close
+   what was previously this list's worst gap. `--color-destructive` aliases
+   danger, so Alert, the Button's destructive variant and Input's
+   `aria-invalid` state all resolve to a real red instead of to magenta.
 
-   The same decision governs **label hues**. `Tag` ships the soft
-   repository-label treatment — tinted fill, matching ink — but only in three
-   variants, because the brand is three colours. A categorical palette (red,
-   orange, amber, lime, teal, indigo…) is a genuine product need and a genuine
-   brand decision: eighteen accents on one surface is the direct opposite of
-   "one accent per surface, never two". If it is granted, it wants declaring
-   once here as a named, documented group — not eighteen one-off fills
-   discovered in a diff later.
+   Every value clears 4.5:1 three ways — Off Black as ink on the fill, and the
+   colour as text on both the page and its own 12% tint. **Ink on a status
+   fill is always Off Black**; white fails on all three.
 
-   Either way it needs a brand-team decision. Do not add hues to `tokens.css`
-   without one; if a product needs them sooner, keep them local and visible.
+   The outstanding work is documentary, not technical: `ENGINE-BRAND.md` §10
+   and `ENGINE-DESIGN-SYSTEM.md` §12 in the engine repo still state that no
+   status palette exists and that one must not be invented. Those sections
+   need updating and the values want brand-team ratification. Until that
+   happens, this package and the brand documents disagree — and by this repo's
+   own rule (see Source of truth) the documents win, so treat these three as
+   provisional.
 
-2. **Badge contrast contradicts itself.** §6 of the design document specifies
+   One judgement call inside the palette: warning sits ΔE 28.7 from Partner
+   Yellow `#FFDD00` — visibly amber beside that pure yellow, but not
+   dramatically. It does not matter while Partner Yellow is unused; if Engine
+   Integration adopts it, a warning chip next to a Partner badge on one surface
+   wants another look. And there is deliberately **no `info` colour**: the
+   obvious choice is a blue, and any blue would read as the retired Sportsbook
+   Blue returning. Use the neutral ramp for informational states.
+
+2. **Still no categorical palette.** `Tag` ships the soft repository-label
+   treatment — tinted fill, matching ink — in seven variants, three of which
+   are the functional status colours. A *categorical* palette (one hue per
+   topic, twenty of them) is a separate and still-unmade decision: eighteen
+   accents on one surface is the direct opposite of "one accent per surface,
+   never two". Do not press the status colours into that job — using `success`
+   to mean "slots" because green looked right spends the only signal the
+   palette carries. If a categorical palette is granted, declare it here once
+   as a named group rather than as one-off fills discovered in a diff later.
+
+3. **Badge contrast contradicts itself.** §6 of the design document specifies
    Badge as 11px with a magenta fill and white text; §3 says to keep magenta
    fills to labels at 15px bold or larger, because white-on-magenta is 3.9:1.
    An 11px badge cannot reach the large-text threshold, so the default variant
@@ -161,20 +181,20 @@ introduced here.
    `text-background` fixes it in one word. Not done here: it changes a
    brand-stated colour pairing, which is the brand team's call.
 
-3. **JetBrains Mono is not loaded.** The brand specifies it for all numerics,
+4. **JetBrains Mono is not loaded.** The brand specifies it for all numerics,
    keys, IDs, code and eyebrow labels. Neither engine nor rgs has ever shipped
    the binary, so every monospace surface in both products renders in the
    platform default. `--font-mono` falls back safely, but the brand face is
    absent. It is OFL-licensed and free to redistribute: drop the `.woff2` files
    into `src/lib/fonts/` and add the `@font-face` blocks to `styles/fonts.css`.
 
-4. **Proxima Nova is commercially licensed.** The seven cuts ship inside this
+5. **Proxima Nova is commercially licensed.** The seven cuts ship inside this
    package, which is private and org-scoped — the same internal distribution as
    the copies already sitting in engine's and rgs's `static/fonts`. Worth a
    glance from whoever owns the licence before this goes anywhere less private.
    Inter is the documented substitute where the licence does not reach.
 
-5. **Engine Integration's accent is unsettled.** Brand direction assigns it
+6. **Engine Integration's accent is unsettled.** Brand direction assigns it
    Partner Yellow; every shipped surface is magenta and was deliberately
    migrated there. `--color-partner-yellow` is declared and available; build
    Integration in magenta until the call is made. A half-migrated accent is

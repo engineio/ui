@@ -8,10 +8,11 @@
   // `tv({ extend: … })` recipe.
   //
   // The upstream engine badge also carried `originals` and `sportsbook`
-  // variants built on the retired sub-brand ramps, plus `success` and `info`
-  // — a stock Tailwind green and a retired sub-brand blue. All four are gone:
-  // the retired ramps have no owner, and success/info are a status palette
-  // that does not exist. See styles/tokens.css.
+  // variants built on the retired sub-brand ramps. Both are gone — those
+  // ramps have no owner. Its `success` and `info` variants were a stock
+  // Tailwind green and the retired sub-brand blue; `success` is back below on
+  // the real status token, and `info` is not, because any blue would read as
+  // Sportsbook Blue returning. See styles/tokens.css.
   //
   // CONTRAST WARNING — an unresolved contradiction in the spec, not a bug
   // here. §6 of the design system specifies Badge as "11px Semibold" with a
@@ -41,6 +42,13 @@
           "bg-partner-yellow text-background hover:bg-partner-yellow-press",
         secondary: "bg-grey-700 text-foreground hover:bg-grey-600",
         outline: "border-[1.5px] border-grey-600 bg-transparent text-foreground",
+
+        // Status. Off Black ink on every status fill — white fails AA on all
+        // three. A status badge reports state ("Live", "Failed", "Pending");
+        // it is never emphasis, and never a second accent.
+        success: "bg-success text-success-foreground",
+        warning: "bg-warning text-warning-foreground",
+        danger: "bg-danger text-danger-foreground",
       },
     },
     defaultVariants: {

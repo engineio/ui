@@ -64,6 +64,14 @@
     { name: "Partner Yellow", hex: "#FFDD00", token: "partner-yellow" },
   ]
 
+  // Functional colour, not accents. Ink on every status fill is Off Black —
+  // white fails AA on all three.
+  const statusSwatches = [
+    { name: "Success", hex: "#00C46A", token: "success", ink: "8.37:1" },
+    { name: "Warning", hex: "#FFB020", token: "warning", ink: "10.56:1" },
+    { name: "Danger", hex: "#FF3B30", token: "danger", ink: "5.44:1" },
+  ]
+
   const greys = [
     "950",
     "900",
@@ -157,16 +165,33 @@
         {/each}
       </Row>
 
-      <Alert>
-        <AlertTitle>No status palette exists.</AlertTitle>
-        <AlertDescription>
-          The brand defines no success, warning or error colours, so
-          <span class="font-mono">--color-destructive</span> resolves to magenta
-          and a destructive control cannot be told apart from a primary one by
-          colour alone. This is the system's most consequential open gap. It
-          needs a brand-team decision, not a local workaround.
-        </AlertDescription>
-      </Alert>
+      <Row label="Status — functional only">
+        {#each statusSwatches as s (s.token)}
+          <div class="w-[168px]">
+            <div
+              class="flex h-24 items-end rounded-media p-3"
+              style="background-color: {s.hex}"
+            >
+              <span class="text-[15px] font-bold text-background">
+                {s.ink}
+              </span>
+            </div>
+            <p class="mt-2 text-[15px] font-semibold">{s.name}</p>
+            <p class="font-mono text-[13px] text-grey-400">{s.hex}</p>
+            <p class="font-mono text-[11px] text-grey-500">--color-{s.token}</p>
+          </div>
+        {/each}
+      </Row>
+      <p class="max-w-[920px] text-[15px] leading-[1.45] text-grey-300">
+        Status is functional colour: it reports state and nothing else. It is
+        never decoration, never a second accent, and never a stand-in for
+        magenta. Ink on a status fill is always Off Black — white fails AA on
+        all three. There is deliberately no
+        <span class="font-mono text-[13px]">info</span> colour: the obvious
+        choice is a blue, and any blue here would read as the retired
+        Sportsbook Blue returning. Use the neutral ramp for informational
+        states.
+      </p>
     </Section>
 
     <Section
@@ -244,32 +269,60 @@
       title="Badge and Tag."
       note="A Badge is a solid pill that states status. A Tag is a soft 6px chip that labels a category — a tinted fill with matching ink, in the manner of a repository label. Never swap them. The retired sub-brand variants — originals, sportsbook — are gone."
     >
-      <Row label="Badge — status, solid">
+      <Row label="Badge — solid">
         <Badge>Live</Badge>
         <Badge variant="partner">Partner</Badge>
         <Badge variant="secondary">Draft</Badge>
         <Badge variant="outline">Archived</Badge>
       </Row>
-      <Row label="Tag — category, soft">
+      <Row label="Badge — status">
+        <Badge variant="success">Certified</Badge>
+        <Badge variant="warning">Pending</Badge>
+        <Badge variant="danger">Failed</Badge>
+      </Row>
+      <Row label="Tag — soft">
         <Tag>documentation</Tag>
         <Tag variant="brand">featured</Tag>
         <Tag variant="partner">integration</Tag>
         <Tag variant="solid">live casino</Tag>
       </Row>
-      <Alert>
-        <AlertTitle>Three tags, because the brand has three colours.</AlertTitle>
-        <AlertDescription>
-          A repository-label system usually arrives with a wide categorical
-          palette — red, orange, amber, lime, teal, indigo. That palette is the
-          same unmade decision as the status colours, and eighteen accents on
-          one surface is the opposite of one accent per surface. The soft
-          treatment is here; the hues need a brand-team call. Note also that
-          the brand chip's ink is
-          <span class="font-mono">primary-300</span> rather than pure magenta:
-          magenta on its own tint is 4.37:1, and the brand forbids magenta text
-          below 15px bold.
-        </AlertDescription>
-      </Alert>
+      <Row label="Tag — status, soft">
+        <Tag variant="success">passing</Tag>
+        <Tag variant="warning">needs review</Tag>
+        <Tag variant="danger">blocked</Tag>
+      </Row>
+      <p class="max-w-[920px] text-[15px] leading-[1.45] text-grey-300">
+        The status variants are functional, not categorical: reach for
+        <span class="font-mono text-[13px]">success</span> when something has
+        actually succeeded, never because green suited the row. Using them as a
+        topic palette spends the only signal they carry. Note the brand chip's
+        ink is <span class="font-mono text-[13px]">primary-300</span> rather
+        than pure magenta — magenta on its own tint is 4.37:1, and the brand
+        forbids magenta text below 15px bold.
+      </p>
+    </Section>
+
+    <Section
+      eyebrow="Section 05b"
+      title="Alert."
+      note="A block-level message. The destructive variant now resolves to the danger token rather than to magenta, so an error finally reads as an error instead of as the brand accent."
+    >
+      <div class="flex max-w-[920px] flex-col gap-4">
+        <Alert>
+          <AlertTitle>Build queued.</AlertTitle>
+          <AlertDescription>
+            The bundle is uploading and will enter the approval queue when the
+            checksum is verified.
+          </AlertDescription>
+        </Alert>
+        <Alert variant="destructive">
+          <AlertTitle>Math validation failed.</AlertTitle>
+          <AlertDescription>
+            The simulated RTP is outside the declared tolerance. Re-run the
+            simulation before resubmitting.
+          </AlertDescription>
+        </Alert>
+      </div>
     </Section>
 
     <Section

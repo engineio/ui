@@ -29,10 +29,10 @@
   //
   // Brand rules (shape, weight, motion, focus) live here and are shared.
   // Product variants live in the product. The upstream engine button carried
-  // `tab`, `tab-active`, `drawer`, `play`, `filled` and `success` in this
-  // file; they are app concerns and have been left to the apps. `success` was
-  // additionally off-palette — a stock Tailwind green standing in for a status
-  // colour the brand has never defined. See the note in styles/tokens.css.
+  // `tab`, `tab-active`, `drawer`, `play` and `filled` in this file; they are
+  // app concerns and have been left to the apps. Its `success` variant was a
+  // stock Tailwind green standing in for a status colour that did not exist —
+  // it is back below, on the real token. See styles/tokens.css.
   export const buttonVariants = tv({
     base: [
       "inline-flex cursor-pointer items-center justify-center gap-2 whitespace-nowrap",
@@ -56,13 +56,13 @@
         link: "text-primary underline-offset-4 hover:underline",
         icon: "bg-transparent text-foreground hover:bg-white/6",
 
-        // Danger, per the system's Danger row: magenta as an OUTLINE with a
-        // tint wash, never a magenta fill. A filled destructive button would
-        // be pixel-identical to `default`, because there is no status palette
-        // and `--color-destructive` therefore resolves to magenta. This shape
-        // is the documented workaround for that gap, not a resolution of it.
+        // Status. Ink is Off Black on every status fill — white fails AA on
+        // all three. These are the only non-magenta fills in the button, and
+        // they are functional rather than decorative: reach for them when the
+        // button's OUTCOME is destructive or confirming, never for emphasis.
         destructive:
-          "border-[1.5px] border-grey-500 bg-transparent text-primary hover:bg-primary-tint-12",
+          "bg-danger text-danger-foreground hover:bg-danger/90",
+        success: "bg-success text-success-foreground hover:bg-success/90",
       },
       size: {
         // 32 / 40 / 48px with the system's 12 / 18 / 24px padding.
