@@ -3,6 +3,9 @@
   import { cn } from "$lib/utils.js"
   import type { HTMLAttributes } from "svelte/elements"
 
+  // Bold 15px Pure White. The title carries the message — the bar only says
+  // which kind of message it is, so the words have to work with the colour
+  // ignored entirely. "Upload failed." not "Error."
   let {
     ref = $bindable(null),
     class: className,
@@ -18,7 +21,10 @@
   role="heading"
   aria-level={level}
   bind:this={ref}
-  class={cn("mb-1 font-medium leading-none tracking-tight", className)}
+  class={cn(
+    "text-[15px] leading-[1.2] font-bold tracking-[-0.01em] text-foreground",
+    className,
+  )}
   {...restProps}
 >
   {@render children?.()}

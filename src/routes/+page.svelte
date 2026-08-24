@@ -305,24 +305,38 @@
     <Section
       eyebrow="Section 05b"
       title="Alert."
-      note="A block-level message. The destructive variant now resolves to the danger token rather than to magenta, so an error finally reads as an error instead of as the brand accent."
+      note="The panel is always neutral. A 3px bar down the left edge is the only thing that says good, bad or warning — the fill, the rule and the type never change. A column of alerts reads as one surface with state down its side, rather than as four different components."
     >
-      <div class="flex max-w-[920px] flex-col gap-4">
+      <div class="flex max-w-[560px] flex-col gap-3">
+        <Alert variant="success" onDismiss={() => {}}>
+          <AlertTitle>Game published.</AlertTitle>
+          <AlertDescription>Live on 12 operators.</AlertDescription>
+        </Alert>
+        <Alert variant="warning" onDismiss={() => {}}>
+          <AlertTitle>Approval expires in 3 days.</AlertTitle>
+          <AlertDescription>
+            Resubmit the maths certificate to keep the listing active.
+          </AlertDescription>
+        </Alert>
+        <Alert variant="danger" onDismiss={() => {}}>
+          <AlertTitle>Upload failed.</AlertTitle>
+          <AlertDescription>Asset bundle exceeded 250 MB.</AlertDescription>
+        </Alert>
         <Alert>
           <AlertTitle>Build queued.</AlertTitle>
           <AlertDescription>
-            The bundle is uploading and will enter the approval queue when the
-            checksum is verified.
-          </AlertDescription>
-        </Alert>
-        <Alert variant="destructive">
-          <AlertTitle>Math validation failed.</AlertTitle>
-          <AlertDescription>
-            The simulated RTP is outside the declared tolerance. Re-run the
-            simulation before resubmitting.
+            The bundle enters the approval queue once its checksum is verified.
           </AlertDescription>
         </Alert>
       </div>
+      <p class="max-w-[920px] text-[15px] leading-[1.45] text-grey-300">
+        The bar is <span class="font-mono text-[13px]">aria-hidden</span>, so
+        the title has to carry the message with the colour ignored entirely —
+        "Upload failed." rather than "Error." The neutral variant takes a
+        grey bar rather than none, so a mixed stack keeps its left edge. Pass
+        <span class="font-mono text-[13px]">onDismiss</span> to get the close
+        control; omit it for a static alert.
+      </p>
     </Section>
 
     <Section

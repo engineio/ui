@@ -177,17 +177,29 @@ first is a decision made here that the brand documents have not caught up with.
    carries. If a categorical palette is granted, declare it here once as a
    named group rather than as one-off fills discovered in a diff later.
 
-3. **Badge is one component where the brand document specifies two.**
-   ENGINE-DESIGN-SYSTEM.md §6 defines Badge and Tag separately, Badge as a
-   filled pill with white ink. This package ships a single soft chip instead,
-   at the repo owner's direction, because the two-component rule only ever
-   generated arguments about which was which. Like the status palette, that
-   makes the code and the document disagree, and the document nominally wins —
-   §6 needs updating or this needs reverting.
+3. **Two deliberate deviations from the brand document**, both at the repo
+   owner's direction, both leaving the code and the document in disagreement.
 
-   It does resolve the old contradiction that used to sit in this list: the
-   filled badge's white-on-magenta at 11px measured 3.9:1, a documented AA
-   failure. The soft chip's `primary-300` ink on a magenta tint is 5.81:1.
+   **Badge is one component where §6 specifies two.** The document defines
+   Badge and Tag separately, Badge as a filled pill with white ink. This
+   package ships a single soft chip, because the two-component rule only ever
+   generated arguments about which a given label was. It does resolve a
+   contradiction that used to sit in this list: the filled badge's
+   white-on-magenta at 11px measured 3.9:1, a documented AA failure, against
+   5.81:1 for the soft chip's `primary-300` ink on a magenta tint.
+
+   **Alert signals state with a coloured left-edge bar**, which the brand
+   prohibits — twice. Worth reading the wording precisely, because it is
+   narrower than it first looks: ENGINE-BRAND.md §2 bans "a coloured left-edge
+   accent **to signal which sub-brand a card belongs to**", and
+   ENGINE-DESIGN-SYSTEM.md §11 bans "a coloured left border **to indicate
+   category or ownership**". Both scope the prohibition to signalling
+   identity, and both give the same reason: the lockup does that job. A status
+   bar signals state, which no lockup can express. That is the reading this is
+   built on — a reading, not an exemption.
+
+   Either way, §6 and §11 need updating or these need reverting, and by this
+   repo's own source-of-truth rule the document nominally wins.
 
 4. **JetBrains Mono is not loaded.** The brand specifies it for all numerics,
    keys, IDs, code and eyebrow labels. Neither engine nor rgs has ever shipped
