@@ -6,10 +6,13 @@
   // The tile. Each cell is a panel in its own right: filled on the grey ramp,
   // 10px radius, gapped from its neighbours by the table's border-spacing.
   //
+  // 44px tall with 12px sides — dense, which is what a business tool wants.
+  // The gap between tiles does the work padding would otherwise do, so the
+  // padding only has to hold the text off its own tile edge.
+  //
   // 10px is `--radius-field`, the system's role for fields and INNER panels —
-  // the correct step for a tile this size. The row-block treatment used 18px
-  // because a whole row is a card; a single cell is not, and 18px on a 56px
-  // tile reads as a lozenge.
+  // the correct step for a tile this size. An 18px card radius on a tile this
+  // small reads as a lozenge.
   //
   // Hover and selection come from the row via `group-hover/row:` — one tile
   // hovered lights the whole row, because a row is still the unit a person
@@ -37,7 +40,7 @@
 <td
   bind:this={ref}
   class={cn(
-    "h-14 rounded-field bg-grey-700 px-4 align-middle text-[15px]",
+    "h-11 rounded-field bg-grey-700 px-3 align-middle text-[15px]",
     "transition-colors duration-140 ease-brand",
     "group-hover/row:bg-grey-600",
     "group-data-[state=selected]/row:bg-primary-tint-24",

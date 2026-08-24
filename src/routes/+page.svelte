@@ -459,7 +459,7 @@
     <Section
       eyebrow="Section 11"
       title="Table."
-      note="A grid of tiles, not a grid of lines. The page colour is the ground; every cell is its own panel on the grey ramp, gapped on both axes, and the headings sit directly on the page rather than in a filled bar. No frame, no rules, no dividers anywhere."
+      note="A grid of tiles, not a grid of lines. The page colour is the ground; every cell is its own panel on the grey ramp, gapped on both axes, headings included. Dense by default — the gaps do the work padding would otherwise do. No frame, no rules, no dividers anywhere."
     >
       <Table>
         <TableHeader>
@@ -474,7 +474,7 @@
           {#each [["Turbine Rush", "Northwind", "96.42%", "Live", false], ["Manifold", "Grayscale", "95.18%", "Draft", true], ["Keycap Klondike", "Northwind", "96.01%", "Live", false], ["Pipework", "Grayscale", "94.87%", "Draft", false]] as row (row[0])}
             <TableRow data-state={row[4] ? "selected" : undefined}>
               <TableCell class="font-semibold">{row[0]}</TableCell>
-              <TableCell class="text-grey-300">{row[1]}</TableCell>
+              <TableCell>{row[1]}</TableCell>
               <TableCell class="font-mono">{row[2]}</TableCell>
               <TableCell>
                 {#if row[3] === "Live"}
@@ -495,7 +495,7 @@
         <TableFooter>
           <TableRow>
             <TableCell>4 games</TableCell>
-            <TableCell class="text-grey-300">2 studios</TableCell>
+            <TableCell>2 studios</TableCell>
             <TableCell class="font-mono">95.87%</TableCell>
             <TableCell></TableCell>
           </TableRow>

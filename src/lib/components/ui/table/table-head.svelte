@@ -3,13 +3,19 @@
   import { cn } from "$lib/utils.js"
   import type { HTMLThAttributes } from "svelte/elements"
 
-  // The system's label: 11px Semibold, uppercase, +0.08em tracking. Column
-  // headings are structural labels, which is the one place UPPERCASE is
-  // sanctioned.
+  // Headings are tiles too — same fill and radius as the cells, so the header
+  // reads as the top course of the grid rather than as floating labels above
+  // it. Padding matches the cells so a heading sits directly over the text of
+  // the column it names.
   //
-  // Transparent, and padded to match the cells (px-4) so a heading lines up
-  // with the left edge of the text in the tiles below it rather than with the
-  // tile itself.
+  // The system's label spec otherwise: 11px Semibold, uppercase, +0.08em
+  // tracking. Column headings are structural labels, which is the one place
+  // UPPERCASE is sanctioned. Ink is Pure White — on a filled tile the label
+  // is doing real work, so it takes full-strength text rather than a muted
+  // step.
+  //
+  // No hover state: the cells take `group-hover/row:` but a heading is not
+  // part of the row a person is pointing at.
   let {
     ref = $bindable(null),
     class: className,
@@ -21,8 +27,8 @@
 <th
   bind:this={ref}
   class={cn(
-    "h-8 px-4 text-left align-middle whitespace-nowrap",
-    "text-[11px] font-semibold tracking-[0.08em] text-grey-400 uppercase",
+    "h-9 rounded-field bg-grey-700 px-3 text-left align-middle whitespace-nowrap",
+    "text-[11px] font-semibold tracking-[0.08em] text-foreground uppercase",
     "[&:has([role=checkbox])]:pr-0",
     className,
   )}
