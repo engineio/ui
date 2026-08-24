@@ -459,7 +459,7 @@
     <Section
       eyebrow="Section 11"
       title="Table."
-      note="Two surfaces and no third: the frame carries the page colour behind a hairline rule, the header and footer are filled on the grey ramp, and body rows stay transparent so the frame shows through. Depth comes from the rules, never a shadow. Dense by default — this is a business tool."
+      note="A list of blocks, not a grid of lines. The page colour is the ground; each row is its own panel on the grey ramp with a gap above and below, and the headings sit directly on the page rather than in a filled bar. No frame, no rules, no dividers."
     >
       <Table>
         <TableHeader>
@@ -495,11 +495,13 @@
           </TableRow>
         </TableFooter>
       </Table>
-      <p class="text-[15px] leading-[1.45] text-grey-300">
-        Hover a row for the 6% white wash. The second row is
-        <span class="font-mono text-[13px]">data-state="selected"</span> — the
-        magenta tint at 12%, which is the one place the accent earns a place in
-        a dense grid.
+      <p class="max-w-[920px] text-[15px] leading-[1.45] text-grey-300">
+        Hover a block and its fill lifts to the next ramp step. The second row
+        is <span class="font-mono text-[13px]">data-state="selected"</span> —
+        the fill swaps for the magenta tint rather than taking a coloured
+        border, which the brand rules out. The corner radius sits on the first
+        and last cells, because a row is not a painted box under
+        <span class="font-mono text-[13px]">border-separate</span>.
       </p>
     </Section>
 

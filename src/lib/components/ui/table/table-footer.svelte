@@ -3,8 +3,9 @@
   import { cn } from "$lib/utils.js"
   import type { HTMLAttributes } from "svelte/elements"
 
-  // Totals row: the same lighter surface as the header, so a table reads as
-  // filled top and bottom with the body between them.
+  // Totals sit in a block of their own, one step darker than the rows so it
+  // reads as a summary rather than one more item in the list. Rounding is on
+  // the end cells for the same reason as TableRow.
   let {
     ref = $bindable(null),
     class: className,
@@ -16,7 +17,9 @@
 <tfoot
   bind:this={ref}
   class={cn(
-    "border-t border-grey-600 bg-grey-700 font-semibold [&_tr]:border-b-0",
+    "font-semibold",
+    "[&>tr]:bg-grey-850 [&>tr]:hover:bg-grey-850",
+    "[&>tr>*:first-child]:rounded-l-card [&>tr>*:last-child]:rounded-r-card",
     className,
   )}
   {...restProps}
