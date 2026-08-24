@@ -92,11 +92,16 @@
   }
 
   /* 2px magenta ring, offset by the page colour, per the system's focus
-     rule. Always visible on keyboard focus — never removed. */
+     rule. Always visible on keyboard focus — never removed.
+
+     The border deliberately stays on its resting grey. Recolouring it to
+     magenta as well drew a second magenta line inside the offset gap, so a
+     focused field read as a double border — magenta, page colour, magenta.
+     The ring is the affordance; the border's job is to delineate the field,
+     and it does that whether or not the field has focus. */
   &:focus,
   &:focus-visible {
     outline: none;
-    border-color: var(--color-primary);
     box-shadow:
       0 0 0 2px var(--color-background),
       0 0 0 4px var(--color-ring);
