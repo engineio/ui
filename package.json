@@ -1,6 +1,6 @@
 {
   "name": "@engineio/ui",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "The Engine design system — tokens, fonts and Svelte primitives.",
   "license": "UNLICENSED",
   "private": false,
