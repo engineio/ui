@@ -16,6 +16,7 @@
   },
   "files": [
     "dist",
+    "AGENTS.md",
     "!dist/**/*.test.*",
     "!dist/**/*.spec.*"
   ],
