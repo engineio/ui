@@ -9,6 +9,11 @@ Gallery — <https://engineio.github.io/ui>
 bun add @engineio/ui
 ```
 
+Public on npmjs, so that is the whole of it — no registry configuration, no
+token, no `.npmrc`. Published from CI by npm trusted publishing, so every
+version carries provenance linking it back to the commit and workflow run that
+built it.
+
 ```css
 /* app.css */
 @import "tailwindcss";
@@ -246,6 +251,20 @@ first is a decision made here that the brand documents have not caught up with.
    migrated there. `--color-partner-yellow` is declared and available; build
    Integration in magenta until the call is made. A half-migrated accent is
    worse than a consistent one.
+
+7. **No vector sub-brand artwork.** The wordmark and the figure mark are
+   vector and ship here. The 3x3 dot badges that precede a sub-brand name in a
+   lockup are raster extractions at roughly 29px and go soft above 24px, so
+   this package ships no `SubBrandLockup` at all. The originals are a
+   brand-team ask.
+
+8. **Layout and scrim tokens live only in the document.** `--space-*`,
+   `--page-max`, `--content-max` and `--scrim-bottom` are specified in the
+   design system document §2 and are not declared in `tokens.css`. Tailwind's
+   own 4px scale already produces every spacing step (`p-14` is 56px, `p-32`
+   is 128px), and the two page widths are carried as arbitrary values, so the
+   numbers are reachable but unnamed. The gallery's imagery section sets the
+   scrim inline for the same reason.
 
 ## Source of truth
 

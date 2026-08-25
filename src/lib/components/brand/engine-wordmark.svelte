@@ -8,16 +8,34 @@
   // "The engine wordmark is a custom soft-rounded face, not Proxima Nova. It is
   // artwork. Never set the wordmark in type, never approximate it in a
   // lookalike, never outline, stretch, skew or recolour it beyond white / Off
-  // Black." That rule is the reason this component exists at all — with the
-  // vector in the package there is no longer any excuse to typeset "engine" in
-  // Proxima Nova and hope.
+  // Black." That rule is the reason this component exists. With the vector in
+  // the package there is no longer any excuse to typeset "engine" in Proxima
+  // Nova and hope.
   //
   // Colour is the same two-value variant as EngineIcon, for the same reason:
   // `currentColor` would let any ancestor's text colour become brand colour.
   //
-  // Sizing is height-only by class. The mark is 2000x449, so `class="h-6"`
-  // gives a ~107px-wide wordmark — check the small end, because the counters in
-  // the two "e"s and the "g" close up before the shape stops being legible.
+  // THE viewBox IS NOT THE ARTWORK'S BOUNDING BOX, AND MUST NOT BE "FIXED".
+  //
+  // The paths occupy 0..449 vertically: the letters sit on a baseline at
+  // 361.532 and the g descends 87.468 below it. That box centres on 224.5,
+  // while the word itself centres on 180.766. Anything vertically centring
+  // this mark, such as a flex header or a table cell, put the word 43.734
+  // units too high and left the descender doing the balancing. At h-7 that is
+  // most of 3px, which is plainly visible beside adjacent text.
+  //
+  // So the box is padded above the letters by exactly the descender depth,
+  // 87.468. The artwork is untouched; the box is now symmetric about the word,
+  // its centre (180.766) lands on the word's centre, and `items-center` is
+  // correct with no per-call-site nudging.
+  //
+  // The cost is that height now buys 536.468 units instead of 449, so the
+  // letters render ~16% smaller for a given `h-*` than they did before. That
+  // is the trade for a box that centres: one step up the scale restores it.
+  //
+  // Sizing is height-only by class. At 2000x536.468, `class="h-6"` gives a
+  // ~89px-wide wordmark. Check the small end, because the counters in the two
+  // "e"s and the "g" close up before the shape stops being legible.
   // Master-brand surfaces carry this; a sub-brand surface carries a lockup
   // (wordmark plus the sub-brand name), which this package does not ship
   // because the badge artwork is still raster.
@@ -32,7 +50,7 @@
     ref?: SVGSVGElement | null
     variant?: EngineMarkVariant
     /**
-     * Accessible name, defaulting to "Engine" — unlike the icon, a wordmark
+     * Accessible name, defaulting to "Engine". Unlike the icon, a wordmark
      * carries the company name as its content, so it is almost never
      * decorative. Pass `title={undefined}` to hide it from screen readers when
      * it sits next to naming text.
@@ -43,7 +61,7 @@
 
 <svg
   bind:this={ref}
-  viewBox="0 0 2000 449"
+  viewBox="0 -87.468 2000 536.468"
   xmlns="http://www.w3.org/2000/svg"
   class={cn(
     "h-6 w-auto shrink-0",

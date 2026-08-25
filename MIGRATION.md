@@ -18,102 +18,18 @@ so the shape is the same for each:
 
 ## 1. Registry access
 
-`@engineio/ui` is private and org-scoped, so every place that runs
-`bun install` needs a credential. Four places do.
+None. `@engineio/ui` is public on npmjs, so nothing needs configuring — no
+`.npmrc`, no token, no `packages: read` in CI, no secret mounted into the Docker
+build. `bun install` resolves it like any other dependency.
 
-**Local dev.** Each developer needs a **classic** PAT with `read:packages`, in
-`~/.npmrc` (not the repo — never commit a token):
+This section used to be the longest in this document. The package was on GitHub
+Packages, which requires an access token to install **even for public
+packages** — so every developer needed a classic PAT, SSO-authorised and
+renewed on expiry, and every CI job and Docker build needed the same credential
+plumbed in. Moving to npmjs deleted all of it.
 
-```
-@engineio:registry=https://npm.pkg.github.com
-//npm.pkg.github.com/:_authToken=ghp_xxxxxxxx
-```
-
-It has to be a classic token. GitHub Packages' npm registry does not accept
-fine-grained PATs, and the failure looks identical to a wrong token, so this is
-the usual reason access stays broken after someone has "added a token".
-
-Add a repo-level `.npmrc` with **only** the registry line:
-
-```
-@engineio:registry=https://npm.pkg.github.com
-```
-
-Do not put an auth line in the repo `.npmrc`, not even as a
-`${NODE_AUTH_TOKEN}` placeholder. npm expands it, it is unset outside CI, and
-the empty result overrides the real token in `~/.npmrc` — so every developer
-gets `E401 unauthenticated` while holding a perfectly good credential. (This
-happened in the design system repo; that is why its `.npmrc` carries the
-registry line and nothing else.) CI does not need it either: `setup-node`
-writes its own authenticated user config from `NODE_AUTH_TOKEN`.
-
-**Check access before going further**, because everything below assumes it:
-
-```
-npm view @engineio/ui --registry=https://npm.pkg.github.com
-```
-
-`E401` means no token reached the registry — check `~/.npmrc` and that no
-project `.npmrc` is shadowing it. `E403 does not match expected scopes` means
-the token arrived but lacks `read:packages`, or is fine-grained.
-
-**CI.** `GITHUB_TOKEN` can read packages in the same org — add the permission to
-any job that installs:
-
-```yaml
-permissions:
-  contents: read
-  packages: read
-```
-
-then before install:
-
-```yaml
-- run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" >> .npmrc
-```
-
-**The Docker build.** This is the fiddly one, because the install happens inside
-buildx. In the Dockerfile, mount the credential as a secret rather than baking it
-into a layer:
-
-```diff
- COPY package.json bun.lock turbo.json ./
- COPY apps/provider/package.json apps/provider/package.json
- COPY packages/shared/package.json packages/shared/package.json
--RUN bun install --frozen-lockfile
-+RUN --mount=type=secret,id=npmrc,target=/root/.npmrc,required=true \
-+    bun install --frozen-lockfile
-```
-
-The builder stage runs as root, so `/root/.npmrc` is on bun's search path. A
-secret mount leaves nothing in the image.
-
-In the bake target:
-
-```diff
- target "studio-front-front" {
-   context    = "./front"
-   dockerfile = "Dockerfile"
-   network    = "host"
-+  secret     = ["id=npmrc,env=NPMRC"]
- }
-```
-
-and in the conveyor and release workflows, export `NPMRC` before `bake`:
-
-```yaml
-env:
-  NPMRC: |
-    @engineio:registry=https://npm.pkg.github.com
-    //npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}
-```
-
-Note the front bake target already sets `network = "host"`, which is what lets
-bun reach an external registry at all from the microVM builders — that
-entitlement is why this works without further network plumbing.
-
-**Watch for:** `--frozen-lockfile` fails if `bun.lock` predates the dependency.
-Run `bun install` locally and commit the lockfile in the same PR.
+A `.npmrc` mentioning `npm.pkg.github.com` in either repo is left over from that
+period and can go.
 
 ## 2. Install and wire the stylesheet
 
