@@ -3,25 +3,44 @@ name: release
 # Every push to main releases, if the commits since the last tag warrant one.
 # No release PR, no approval step: semantic-release reads the conventional
 # commits, works out the next version, tags it, writes the GitHub release notes
-# and publishes to GitHub Packages in a single run.
+# and publishes to npm in a single run.
 #
 # A push with nothing releasable in it (docs:, chore:, ci:) is a no-op. That is
 # the behaviour to expect rather than a failure — see .releaserc.json for which
 # commit types earn which bump.
 #
+# PUBLISHES TO npmjs, PUBLICLY, WITH NO TOKEN. Authentication is npm trusted
+# publishing: GitHub Actions mints a short-lived OIDC token, npm verifies it
+# against the Trusted Publisher configured on the package, and no long-lived
+# secret exists to leak or expire. `id-token: write` below is what makes that
+# possible, and @semantic-release/npm@13 detects the OIDC context and skips its
+# token check.
+#
+# This replaced GitHub Packages, where a classic PAT was required to install —
+# even for public packages, per GitHub's own docs — meaning every developer and
+# every CI job needed one, forever, and re-made it on expiry. On npmjs a
+# consumer needs nothing at all.
+#
+# npm provenance is generated automatically under trusted publishing, so the
+# published package carries a verifiable link back to this repo and this
+# workflow run. It requires a public repo and a public package; both hold.
+#
+# ONE-TIME SETUP ON npmjs, which cannot be done from here:
+#   npmjs.com -> @engineio/ui -> Settings -> Trusted Publisher
+#     Organization or user: engineio
+#     Repository:           ui
+#     Workflow filename:    release.yml
+# Until that exists the publish step fails with an auth error, which is correct
+# — it means nothing can publish under this name without going through here.
+#
 # WHAT THIS DELIBERATELY DOES NOT DO: write anything back to main. The usual
 # semantic-release setup adds @semantic-release/changelog and
 # @semantic-release/git so the version bump and CHANGELOG land as a commit on
-# the release branch. Both are omitted here, because main requires pull requests
-# and a bot pushing straight to it would either be blocked or need a bypass
-# nobody should hand a CI job. The consequences, both fine:
-#
-#   * package.json's version in the repo is a placeholder. Git tags are the
-#     source of truth for what exists; semantic-release writes the real version
-#     into package.json in the runner just before publishing, and never commits
-#     it. Do not bump it by hand — nothing reads it.
-#   * There is no CHANGELOG.md. The GitHub release notes are the changelog, and
-#     they are generated from the same commits.
+# the release branch. Both are omitted, because main requires pull requests and
+# a bot pushing straight to it would need a bypass nobody should hand a CI job.
+# So package.json's version stays the placeholder 0.0.0-development — tags are
+# the source of truth, and the real version is written in the runner just
+# before publishing — and the GitHub release notes are the changelog.
 
 on:
   push:
@@ -34,7 +53,7 @@ concurrency:
 
 permissions:
   contents: write # create tags and releases
-  packages: write # publish to npm.pkg.github.com
+  id-token: write # mint the OIDC token for npm trusted publishing
   issues: write # semantic-release/github verifies these even with
   pull-requests: write # comments switched off
 
@@ -53,13 +72,21 @@ jobs:
         with:
           bun-version: 1.3.14
 
-      # Writes the .npmrc that the publish reads, scoped to this org and
-      # pointed at GitHub Packages. semantic-release itself runs on Node.
+      # Node 22.14+ is the floor for trusted publishing. registry-url points
+      # npm at npmjs and writes the .npmrc it reads; there is no token to put
+      # in it.
       - uses: actions/setup-node@v6
         with:
-          node-version: 22
-          registry-url: https://npm.pkg.github.com
-          scope: "@engineio"
+          node-version: "22.14"
+          registry-url: https://registry.npmjs.org
+
+      # Node 22 bundles npm 10.x, and trusted publishing needs npm >= 11.5.1.
+      # Without this the publish fails asking for credentials, which looks like
+      # a misconfigured Trusted Publisher rather than an old CLI.
+      - name: Ensure npm supports trusted publishing
+        run: |
+          npm install -g npm@^11
+          npm --version
 
       - run: bun install --frozen-lockfile
 
@@ -75,5 +102,3 @@ jobs:
         run: bunx semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
