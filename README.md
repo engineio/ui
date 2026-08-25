@@ -121,6 +121,35 @@ engine repo into your product if you need them. `sonner` was excluded because
 toasts need success and error colours that did not exist; now that they do, it
 is a candidate for the next release.
 
+## Using it with AI agents
+
+The package ships `AGENTS.md`, so it lands at
+`node_modules/@engineio/ui/AGENTS.md` and **versions with the code**. Point at
+that path from a consuming repo rather than copying the rules in — a copy in
+someone's `CLAUDE.md` silently goes stale on the next version bump, and stale
+brand rules are worse than none.
+
+In a consumer's `AGENTS.md` or `CLAUDE.md`:
+
+```md
+UI is built on `@engineio/ui`. Read `node_modules/@engineio/ui/AGENTS.md`
+before writing or reviewing any UI.
+```
+
+For Claude Code specifically, copy the skill instead — it loads only when
+relevant, so the reference costs nothing until a UI task actually needs it:
+
+```bash
+mkdir -p .claude/skills
+cp -R node_modules/@engineio/ui/../../../ui/.claude/skills/engine-design-system \
+  .claude/skills/   # or from a checkout of engineio/ui
+```
+
+Skills have to live in `.claude/skills/`, `~/.claude/skills/` or a plugin —
+Claude Code does not load them from `node_modules` — which is why the substance
+lives in `AGENTS.md` and the skill is a thin pointer to it. That way the copied
+file has nothing in it that can rot.
+
 ## Development
 
 ```bash
