@@ -16,10 +16,12 @@ name: release
 # possible, and @semantic-release/npm@13 detects the OIDC context and skips its
 # token check.
 #
-# This replaced GitHub Packages, where a classic PAT was required to install —
-# even for public packages, per GitHub's own docs — meaning every developer and
-# every CI job needed one, forever, and re-made it on expiry. On npmjs a
-# consumer needs nothing at all.
+# Every release goes to BOTH registries: npmjs first (canonical), then mirrored
+# to GitHub Packages. npm is what the consumer repos install from, because
+# GitHub Packages requires an access token to install even for public packages —
+# per GitHub's own docs — which would put a PAT back in every developer's
+# ~/.npmrc and every CI job. The mirror exists for the org-internal listing, not
+# for consumption.
 #
 # npm provenance is generated automatically under trusted publishing, so the
 # published package carries a verifiable link back to this repo and this
@@ -54,6 +56,7 @@ concurrency:
 permissions:
   contents: write # create tags and releases
   id-token: write # mint the OIDC token for npm trusted publishing
+  packages: write # mirror the release to GitHub Packages
   issues: write # semantic-release/github verifies these even with
   pull-requests: write # comments switched off
 
@@ -133,3 +136,34 @@ jobs:
           # secret. Under trusted publishing this whole block becomes
           # unnecessary and can go.
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      # npm is the CANONICAL registry — it is what both consumer repos install
+      # from, and the only one that needs no credential. This mirrors the same
+      # version to GitHub Packages for the org-internal package listing and for
+      # anything still pointed there. If the two ever disagree, npm is right.
+      #
+      # Runs only when semantic-release actually released: its npm plugin writes
+      # the real version into package.json in the workspace during prepare, so a
+      # version other than the placeholder is the signal. A push with nothing
+      # releasable leaves the placeholder and this no-ops.
+      #
+      # --registry overrides publishConfig.registry on the command line, which
+      # is why package.json stays pinned to npmjs. GITHUB_TOKEN suffices —
+      # GitHub Packages accepts it for a same-repo publish, so there is no extra
+      # secret. Note this does NOT make GitHub Packages installable without a
+      # token: that is a GitHub restriction on reads, not on publishing.
+      - name: Mirror to GitHub Packages
+        run: |
+          set -euo pipefail
+          version=$(node -p "require('./package.json').version")
+          if [ "$version" = "0.0.0-development" ]; then
+            echo "no release this run — nothing to mirror"
+            exit 0
+          fi
+          echo "mirroring @engineio/ui@$version to GitHub Packages"
+          npm publish \
+            --registry=https://npm.pkg.github.com \
+            --ignore-scripts \
+            --tag latest
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
