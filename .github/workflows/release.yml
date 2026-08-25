@@ -160,10 +160,27 @@ jobs:
             echo "no release this run — nothing to mirror"
             exit 0
           fi
+
+          # A DEDICATED npmrc, because setup-node's one only carries auth for
+          # registry.npmjs.org. Publishing with --registry=npm.pkg.github.com
+          # against it fails ENEEDAUTH: npm finds no credential for that host
+          # and does not fall back. NPM_CONFIG_USERCONFIG also means the
+          # runner's ~/.npmrc is ignored, so appending there does nothing.
+          rc=$(mktemp)
+          printf '//npm.pkg.github.com/:_authToken=%s\n' "$NODE_AUTH_TOKEN" > "$rc"
+
           echo "mirroring @engineio/ui@$version to GitHub Packages"
-          npm publish \
-            --registry=https://npm.pkg.github.com \
-            --ignore-scripts \
-            --tag latest
+          # A version already present on the mirror is success, not failure —
+          # it means a previous run got this far. Anything else is a real error.
+          if NPM_CONFIG_USERCONFIG="$rc" npm publish \
+               --registry=https://npm.pkg.github.com \
+               --ignore-scripts --tag latest 2>&1 | tee /tmp/mirror.log; then
+            echo "mirrored"
+          elif grep -qE 'EPUBLISHCONFLICT|cannot publish over|already exists' /tmp/mirror.log; then
+            echo "$version already on GitHub Packages — nothing to do"
+          else
+            echo "::error::mirror to GitHub Packages failed"
+            exit 1
+          fi
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
