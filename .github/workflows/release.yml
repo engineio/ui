@@ -117,3 +117,19 @@ jobs:
           # falls through to the OIDC path. So this line needs no edit when the
           # secret is added or removed.
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          # BOTH names are required, and leaving this one out is why five
+          # release attempts failed with `401 GET /-/whoami`.
+          #
+          # `setup-node` with `registry-url` writes its own user-level .npmrc
+          # containing `//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}`
+          # and points NPM_CONFIG_USERCONFIG at it. With NODE_AUTH_TOKEN unset,
+          # npm expands it to an empty string and every registry call is
+          # unauthenticated — the same shadowing bug that an empty
+          # ${NODE_AUTH_TOKEN} in a project .npmrc causes locally, except
+          # inflicted by the action rather than by a checked-in file.
+          #
+          # NPM_TOKEN is what @semantic-release/npm reads; NODE_AUTH_TOKEN is
+          # what setup-node's .npmrc dereferences. Both point at the same
+          # secret. Under trusted publishing this whole block becomes
+          # unnecessary and can go.
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
