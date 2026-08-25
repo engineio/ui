@@ -26,7 +26,8 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "svelte": "./dist/index.js"
+      "svelte": "./dist/index.js",
+      "default": "./dist/index.js"
     },
     "./styles": "./dist/styles/index.css",
     "./styles/tokens": "./dist/styles/tokens.css",
@@ -39,19 +40,23 @@
     },
     "./components/ui/*": {
       "types": "./dist/components/ui/*/index.d.ts",
-      "svelte": "./dist/components/ui/*/index.js"
+      "svelte": "./dist/components/ui/*/index.js",
+      "default": "./dist/components/ui/*/index.js"
     },
     "./components/ui/*/index.js": {
       "types": "./dist/components/ui/*/index.d.ts",
-      "svelte": "./dist/components/ui/*/index.js"
+      "svelte": "./dist/components/ui/*/index.js",
+      "default": "./dist/components/ui/*/index.js"
     },
     "./components/brand": {
       "types": "./dist/components/brand/index.d.ts",
-      "svelte": "./dist/components/brand/index.js"
+      "svelte": "./dist/components/brand/index.js",
+      "default": "./dist/components/brand/index.js"
     },
     "./components/brand/index.js": {
       "types": "./dist/components/brand/index.d.ts",
-      "svelte": "./dist/components/brand/index.js"
+      "svelte": "./dist/components/brand/index.js",
+      "default": "./dist/components/brand/index.js"
     }
   },
   "scripts": {
