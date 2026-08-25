@@ -102,3 +102,18 @@ jobs:
         run: bunx semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Bootstrap escape hatch, and normally empty.
+          #
+          # npm's docs do not say whether a Trusted Publisher can be registered
+          # for a package name that does not exist yet, and a Trusted Publisher
+          # is configured in a package's settings — which a package needs to
+          # exist to have. If pre-registering turns out to be impossible, add an
+          # npm automation token as the NPM_TOKEN secret, let the first publish
+          # use it, then configure the Trusted Publisher and DELETE the secret.
+          #
+          # Passing it unconditionally is safe either way: an unset secret
+          # arrives as an empty string, @semantic-release/npm only writes an
+          # authToken when the value is truthy, and with nothing written it
+          # falls through to the OIDC path. So this line needs no edit when the
+          # secret is added or removed.
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
