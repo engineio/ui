@@ -97,14 +97,44 @@ this. Every primitive also passes `class` through `cn`, so
 colours, three status colours, a twelve-step neutral ramp, radii by role, two
 shadows, three easings.
 
-**The brand face** — Proxima Nova, seven cuts, referenced by relative path so
-your bundler fingerprints them out of `node_modules`. You do not need a copy in
-`static/fonts`.
+**Type roles, not faces** — `--font-brand`, `--font-condensed`,
+`--font-extra-condensed`, `--font-mono`. No typeface ships here. Declare your
+own `@font-face` blocks, keep the binaries in your repo, and bind the tokens in
+your `@theme`. See "Wiring your faces" below — it is a required step and it
+fails quietly.
 
 **Marks** — `EngineWordmark` and `EngineIcon`, vector, in the two sanctioned
 colourways (`variant="primary"` white, `variant="secondary"` Off Black). Size
 by height alone. The wordmark is artwork, not type — with the vector in the
 package there is no reason to typeset "engine" in Proxima Nova again.
+
+### Wiring your faces
+
+The system names four type roles and binds none of them:
+
+```css
+@import "./fonts.css";          /* your own @font-face blocks */
+@import "tailwindcss";
+@import "@engineio/ui/styles";
+@source "../node_modules/@engineio/ui/dist";
+
+@theme {
+  --font-brand: "ProximaNova", "Helvetica Neue", Arial, sans-serif;
+  --font-condensed: "ProximaNovaCondensed", Arial, sans-serif;
+  --font-extra-condensed: "ProximaNovaExtraCondensed", Arial, sans-serif;
+  /* --font-mono defaults to --font-brand; set it only if you have a mono face */
+}
+```
+
+Keep the binaries in your own `static/fonts/` and reference them with absolute
+`/fonts/...` URLs. Weight coverage is a local concern too — if your family is
+missing a cut the product asks for, declare the face over a `font-weight`
+RANGE so the gap maps somewhere deliberate rather than wherever the browser's
+matching algorithm lands.
+
+**Like `@source`, this fails silently.** The tokens resolve either way, so a
+repo that skips it renders in the system stack with no error. Generic-looking
+type is the symptom.
 
 **Primitives** — Alert, Badge, Button, Card, Checkbox, Dialog, Input, Label,
 Popover, Progress, RadioGroup, Select, Separator, Skeleton, Switch, Table, Tabs,
@@ -262,18 +292,20 @@ first is a decision made here that the brand documents have not caught up with.
    Either way, §6 and §11 need updating or these need reverting, and by this
    repo's own source-of-truth rule the document nominally wins.
 
-4. **JetBrains Mono is not loaded.** The brand specifies it for all numerics,
-   keys, IDs, code and eyebrow labels. Neither engine nor rgs has ever shipped
-   the binary, so every monospace surface in both products renders in the
-   platform default. `--font-mono` falls back safely, but the brand face is
-   absent. It is OFL-licensed and free to redistribute: drop the `.woff2` files
-   into `src/lib/fonts/` and add the `@font-face` blocks to `styles/fonts.css`.
+4. **No mono face.** JetBrains Mono is retired at the owner's direction and
+   `--font-mono` resolves to the brand face, so `font-mono` is not monospaced.
+   Set the token yourself if a surface genuinely needs character-cell
+   alignment. ENGINE-BRAND.md and ENGINE-DESIGN-SYSTEM.md still name JetBrains
+   Mono and need updating.
 
-5. **Proxima Nova is commercially licensed.** The seven cuts ship inside this
-   package, which is private and org-scoped — the same internal distribution as
-   the copies already sitting in engine's and rgs's `static/fonts`. Worth a
-   glance from whoever owns the licence before this goes anywhere less private.
-   Inter is the documented substitute where the licence does not reach.
+5. **No typeface ships with this package, and that is the point.** Proxima Nova
+   used to. It is commercially licensed, and this package is MIT and published
+   publicly to npm from a public repo — so the seven cuts were being handed to
+   every reader of the registry under a licence nobody here can grant. They are
+   gone from `dist/`, and each product now keeps its own copy in its own
+   private repo. Note that removing them does not unpublish them: they remain
+   inside every already-published 0.x tarball and in this repo's git history,
+   which is a separate call for whoever owns the licence.
 
 6. **Engine Integration's accent is unsettled.** Brand direction assigns it
    Partner Yellow; every shipped surface is magenta and was deliberately

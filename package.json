@@ -32,9 +32,7 @@
     },
     "./styles": "./dist/styles/index.css",
     "./styles/tokens": "./dist/styles/tokens.css",
-    "./styles/fonts": "./dist/styles/fonts.css",
     "./styles/utilities": "./dist/styles/utilities.css",
-    "./fonts/*": "./dist/fonts/*",
     "./utils": {
       "types": "./dist/utils.d.ts",
       "default": "./dist/utils.js"

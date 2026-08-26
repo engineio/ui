@@ -18,11 +18,14 @@
 
   Import the parts individually if you need finer control:
 
-      @import "@engineio/ui/styles/fonts";
       @import "@engineio/ui/styles/tokens";
       @import "@engineio/ui/styles/utilities";
+
+  NO FACES SHIP HERE. This package names the type ROLES (--font-brand,
+  --font-condensed, --font-extra-condensed, --font-mono) and binds none of
+  them to a binary. Each consumer declares its own @font-face blocks and sets
+  those tokens — see "Type" in tokens.css for the contract and the recipe.
 */
 
-@import "./fonts.css";
 @import "./tokens.css";
 @import "./utilities.css";

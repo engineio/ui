@@ -177,28 +177,53 @@
   --ease-brand-out: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-brand-accelerate: cubic-bezier(0.6, 0, 0.3, 1);
 
-  /* ── Type ─────────────────────────────────────────────────────────── */
-  /* Proxima Nova is the brand face and ships with this package. Inter is the
-     documented substitute where the licence does not reach. */
-  --font-brand:
-    "ProximaNova", "Inter", "Helvetica Neue", Arial, sans-serif;
-  --font-sans: var(--font-brand);
-  --font-condensed:
-    "ProximaNovaCondensed", "ProximaNova", Arial, sans-serif;
-  --font-extra-condensed:
-    "ProximaNovaExtraCondensed", "ProximaNovaCondensed", Arial, sans-serif;
-  /* NO MONO FACE. JetBrains Mono was specified for numerics, keys, IDs, code
-     and eyebrow labels, and is now retired at the owner's direction: Proxima
-     Nova is the root face everywhere, and there is no second typeface.
+  /* ── Type ─────────────────────────────────────────────────────────────
+     THIS PACKAGE NAMES ROLES. IT SHIPS NO FACES.
 
-     The token stays, pointed at the brand face, because ~200 call sites and
-     every `font-mono` utility read it — removing the name would silently drop
-     each of them to the browser default rather than to the brand. Code blocks
-     that genuinely need character-cell alignment should say so explicitly and
-     are a product decision, not a token one.
+     Every value below is a fallback, not a choice. The consumer declares its
+     own @font-face blocks, keeps the binaries in its own repo, and overrides
+     these four names in its own `@theme`:
+
+         @import "./fonts.css";        <- your own @font-face blocks
+         @import "@engineio/ui/styles";
+
+         @theme {
+           --font-brand: "YourFace", "Helvetica Neue", Arial, sans-serif;
+           --font-condensed: "YourFaceCondensed", Arial, sans-serif;
+           --font-extra-condensed: "YourFaceExtraCondensed", Arial, sans-serif;
+         }
+
+     WHY, rather than shipping the brand face here as this package used to.
+
+     1. LICENCE. Proxima Nova is commercially licensed. This package is MIT
+        and published publicly to npm from a public repo, so shipping the
+        binaries handed every reader of the registry a font nobody here has
+        the right to sublicense. That is the blocking reason.
+     2. ONE SYSTEM, MANY BRANDS. Engine Studio and Engine Integration are
+        Proxima Nova; the casino product is a separate brand on its own faces.
+        A design system that hard-codes one typeface makes every other brand
+        fight it — which is exactly what the casino repo was doing.
+     3. WEIGHTS ARE A LOCAL PROBLEM. Which cuts a repo has licensed, and how
+        the gaps get mapped, differs per repo. That belongs next to the
+        binaries, not in a shared token.
+
+     SETTING THESE IS A REQUIRED SETUP STEP, and skipping it fails the same
+     quiet way a missing `@source` line does: the tokens still resolve, so
+     nothing errors — the app just renders in the system stack. If the type
+     looks generic, this is the first thing to check.
+
+     --font-mono has NO mono face on purpose. JetBrains Mono was retired at the
+     owner's direction and the token points at the brand face, because every
+     `font-mono` utility reads it and removing the name would drop those call
+     sites to the browser default rather than to the brand. A consumer that
+     wants a real monospace sets it, like any other role.
 
      ENGINE-BRAND.md and ENGINE-DESIGN-SYSTEM.md still name JetBrains Mono and
-     need updating to match. */
+     still describe the face as shipping with the system; both need updating. */
+  --font-brand: ui-sans-serif, system-ui, -apple-system, Arial, sans-serif;
+  --font-sans: var(--font-brand);
+  --font-condensed: var(--font-brand);
+  --font-extra-condensed: var(--font-condensed);
   --font-mono: var(--font-brand);
 
   --breakpoint-2xl: 1400px;

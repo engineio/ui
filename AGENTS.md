@@ -76,7 +76,8 @@ radii      --radius-tag 6  --radius-field 10  --radius-card-inner 10
            --radius-control 999
 motion     --ease-brand  --ease-brand-out  --ease-brand-accelerate
            140ms controls · 220ms surfaces · 360–640ms reveals
-type       --font-brand (Proxima Nova) --font-mono (JetBrains Mono, see gaps)
+type       --font-brand --font-condensed --font-extra-condensed --font-mono
+           ROLES ONLY — no face ships here. Bind them in your repo (see below)
 depth      --shadow-panel  --shadow-modal   (product chrome and modals only)
 utility    `field` — the shared input skin, incl. the focus ring
 ```
@@ -131,8 +132,30 @@ State these rather than working around them silently.
    component where §6 specifies two, and Alert signals state with a coloured
    left-edge bar which §11 prohibits for *category or ownership* — state is a
    narrower reading, not an exemption.
-3. **JetBrains Mono is not loaded.** `--font-mono` falls back to the platform
-   monospace, so every mono surface is off-brand until the binary ships.
-4. **Proxima Nova is commercially licensed** and ships inside this package.
+3. **No mono face.** JetBrains Mono is retired; `--font-mono` resolves to the
+   brand face. Set it yourself if a surface genuinely needs character-cell
+   alignment.
+4. **No typeface ships with this package.** It names the type roles and binds
+   none of them. Each consumer declares its own `@font-face` blocks, keeps the
+   binaries in its own repo, and overrides the tokens:
+
+   ```css
+   @import "./fonts.css";          /* your own @font-face blocks */
+   @import "@engineio/ui/styles";
+
+   @theme {
+     --font-brand: "ProximaNova", "Helvetica Neue", Arial, sans-serif;
+     --font-condensed: "ProximaNovaCondensed", Arial, sans-serif;
+     --font-extra-condensed: "ProximaNovaExtraCondensed", Arial, sans-serif;
+   }
+   ```
+
+   **This is a required setup step and it fails quietly** — exactly like a
+   missing `@source` line. Skip it and the tokens still resolve, nothing
+   errors, and the app renders in the system stack. Generic-looking type is
+   the symptom.
+
+   Proxima Nova used to ship here. It is commercially licensed and this package
+   is MIT and public, which is why it no longer does.
 5. **Engine Integration's accent is unsettled** — build Integration in magenta;
    `--color-partner-yellow` exists but is not in use.
