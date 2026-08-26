@@ -29,11 +29,44 @@
      it there.
 */
 
+/*
+  ── WEIGHT RANGES, AND WHY ────────────────────────────────────────────────
+
+  Four faces ship: Regular 400, Semibold 600, Bold 700, Black 900. There is no
+  Medium (500) binary and no ExtraBold (800) one, and the products ask for both
+  — 500 is the single most-used non-body weight across the three sites (490
+  uses in studio, 61 in rgs, 7 in casino) and 800 has 23.
+
+  Left to the CSS font-matching algorithm those two land badly. A request for
+  500 searches DOWN before it searches up, so it resolves to Regular and a
+  `font-medium` label comes out identical to body text — the emphasis is
+  silently gone. A request for 800 searches UP, so it resolves to Black, two
+  steps heavier than asked for.
+
+  This was masked until now: the products loaded Inter (400–800) and Archivo
+  (400–600) from Google Fonts, both of which carry a real 500.
+
+  So each face declares the RANGE it stands in for, rather than a single value.
+  A static face named over a range is used for every weight in it, with no
+  synthesis. 500 is deliberately folded UP into Semibold, not down into
+  Regular: `font-medium` is used in these UIs to lift labels above body, and
+  the brand specifies Semibold for exactly that job (ENGINE-BRAND.md §3, "UI
+  labels and subtitles"). Folding it down would erase the distinction the call
+  site was making.
+
+  650 and 700 keep resolving to Bold exactly as they do today. Only 500 and 800
+  change, and both were broken.
+
+  THE REAL FIX is the two missing binaries. If Medium and ExtraBold can be
+  licensed, add them and narrow these ranges back to single values.
+*/
+
 /* ── ProximaNova ──────────────────────────────────────────────────────── */
 
 @font-face {
   font-family: "ProximaNova";
   src: url("../fonts/ProximaNovaRegular.otf") format("opentype");
+  /* Body only. 500 is NOT folded in here — see the note above. */
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -42,7 +75,8 @@
 @font-face {
   font-family: "ProximaNova";
   src: url("../fonts/ProximaNovaSemibold.otf") format("opentype");
-  font-weight: 600;
+  /* Stands in for Medium: no 500 binary ships. */
+  font-weight: 500 600;
   font-style: normal;
   font-display: swap;
 }
@@ -50,7 +84,9 @@
 @font-face {
   font-family: "ProximaNova";
   src: url("../fonts/ProximaNovaBold.otf") format("opentype");
-  font-weight: 700;
+  /* Stands in for ExtraBold: no 800 binary ships. 650 lands here too, which
+     is where it already resolved. */
+  font-weight: 650 800;
   font-style: normal;
   font-display: swap;
 }

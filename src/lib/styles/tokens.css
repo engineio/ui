@@ -187,11 +187,19 @@
     "ProximaNovaCondensed", "ProximaNova", Arial, sans-serif;
   --font-extra-condensed:
     "ProximaNovaExtraCondensed", "ProximaNovaCondensed", Arial, sans-serif;
-  /* JetBrains Mono is specified for numerics, keys, IDs, code and eyebrow
-     labels. No binary ships with this package yet — see README, Known gaps —
-     so this currently resolves to the platform monospace. */
-  --font-mono:
-    "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  /* NO MONO FACE. JetBrains Mono was specified for numerics, keys, IDs, code
+     and eyebrow labels, and is now retired at the owner's direction: Proxima
+     Nova is the root face everywhere, and there is no second typeface.
+
+     The token stays, pointed at the brand face, because ~200 call sites and
+     every `font-mono` utility read it — removing the name would silently drop
+     each of them to the browser default rather than to the brand. Code blocks
+     that genuinely need character-cell alignment should say so explicitly and
+     are a product decision, not a token one.
+
+     ENGINE-BRAND.md and ENGINE-DESIGN-SYSTEM.md still name JetBrains Mono and
+     need updating to match. */
+  --font-mono: var(--font-brand);
 
   --breakpoint-2xl: 1400px;
 
