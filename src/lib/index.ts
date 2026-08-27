@@ -100,6 +100,18 @@ export {
 } from "./components/ui/radio-group/index.js"
 
 export {
+  ResponsiveDialog,
+  ResponsiveDialogClose,
+  ResponsiveDialogContent,
+  ResponsiveDialogDescription,
+  ResponsiveDialogFooter,
+  ResponsiveDialogHeader,
+  ResponsiveDialogTitle,
+  ResponsiveDialogTrigger,
+  type ResponsiveDialogMode,
+} from "./components/ui/responsive-dialog/index.js"
+
+export {
   Select,
   SelectContent,
   SelectGroup,

@@ -38,11 +38,12 @@ bare subpath resolve.
 ## Components
 
 Alert, Badge, Button, Card, Checkbox, Dialog, Input, Label, Popover, Progress,
-RadioGroup, Select, Separator, Skeleton, Switch, Table, Tabs, Textarea, Tooltip.
-Marks: `EngineWordmark`, `EngineIcon`.
+RadioGroup, ResponsiveDialog, Select, Separator, Skeleton, Switch, Table, Tabs,
+Textarea, Tooltip. Marks: `EngineWordmark`, `EngineIcon`.
 
 Not shipped, on purpose: `sonner`, `form`, `data-table`, `drawer`, `resizable`,
-`carousel`, `chart`. Copy from the engine repo if needed.
+`carousel`, `chart`. Copy from the engine repo if needed. A standalone drawer is
+not on that list because ResponsiveDialog covers what one was wanted for.
 
 | Component | Variants |
 | --- | --- |
@@ -50,6 +51,50 @@ Not shipped, on purpose: `sonner`, `form`, `data-table`, `drawer`, `resizable`,
 | Badge | `default` `secondary` `outline` `partner` `success` `warning` `danger` `destructive` |
 | Alert | `default` `success` `warning` `danger` `destructive`; optional `onDismiss` |
 | Marks | `variant="primary"` (white) or `"secondary"` (Off Black) |
+
+### ResponsiveDialog
+
+One panel, three surfaces. Below 768px it is a bottom sheet; above it, a centred
+modal, or an anchored popover with `desktop="popover"`. Reach for it whenever a
+dialog has to survive a phone — a centred modal on a 390px viewport is the thing
+it exists to stop.
+
+```svelte
+<ResponsiveDialog bind:open>
+  <ResponsiveDialogTrigger>
+    {#snippet child({ props })}<Button {...props}>Adjust limits</Button>{/snippet}
+  </ResponsiveDialogTrigger>
+  <ResponsiveDialogContent>
+    <ResponsiveDialogHeader>
+      <ResponsiveDialogTitle>Adjust limits.</ResponsiveDialogTitle>
+      <ResponsiveDialogDescription>…</ResponsiveDialogDescription>
+    </ResponsiveDialogHeader>
+    …
+    <ResponsiveDialogFooter>…</ResponsiveDialogFooter>
+  </ResponsiveDialogContent>
+</ResponsiveDialog>
+```
+
+| Root prop | |
+| --- | --- |
+| `open` | bindable; survives the swap when the viewport crosses over |
+| `desktop` | `dialog` (default) or `popover` — what `auto` picks above the breakpoint |
+| `mode` | `auto` (default), or pin to `sheet` / `dialog` / `popover` |
+| `breakpoint` | px, default 768 |
+
+Content takes `showClose` (defaults on, off for a popover), `swipeToClose`
+(sheet only), `overlayClass`, and `align` / `side` / `sideOffset` for the
+popover. `ResponsiveDialogFooter` is the part that earns its keep: stacked
+full-width actions on the sheet, a right-aligned row everywhere else, from the
+same markup.
+
+Two things worth knowing. The sheet and the modal are the same bits-ui Dialog —
+focus trap, scroll lock, Escape, outside click — laid out differently; the
+popover is a different primitive and is **not** modal and does **not** trap
+focus, so do not put a destructive confirmation behind `desktop="popover"`.
+And crossing the breakpoint with the panel open remounts it, because there is no
+honest way to morph a popover into a sheet. Anything mid-edit inside it wants
+state that lives above the panel.
 
 There is **one** chip. Badge absorbed Tag — a soft tinted chip, not a solid
 pill. There is no `Tag` export and no `solid` badge variant: an opaque fill can
@@ -76,6 +121,7 @@ radii      --radius-tag 6  --radius-field 10  --radius-card-inner 10
            --radius-control 999
 motion     --ease-brand  --ease-brand-out  --ease-brand-accelerate
            140ms controls · 220ms surfaces · 360–640ms reveals
+           --animate-{overlay,dialog,sheet,popover}-{in,out}
 type       --font-brand --font-condensed --font-extra-condensed --font-mono
            ROLES ONLY — no face ships here. Bind them in your repo (see below)
 depth      --shadow-panel  --shadow-modal   (product chrome and modals only)
@@ -157,5 +203,12 @@ State these rather than working around them silently.
 
    Proxima Nova used to ship here. It is commercially licensed and this package
    is MIT and public, which is why it no longer does.
-5. **Engine Integration's accent is unsettled** — build Integration in magenta;
+5. **Dialog, Popover and Tooltip do not animate.** They are written against
+   `animate-in` / `fade-in-0` / `zoom-in-95` / `slide-in-from-top-2`, which
+   come from the `tailwindcss-animate` plugin. This package neither ships nor
+   depends on it, so those class names generate no CSS — the panels appear and
+   vanish instantly, and the gallery's "enter over 220ms, exit over 140ms" note
+   is aspirational. The `--animate-*` tokens ResponsiveDialog uses are the
+   replacement; the three older primitives have not been moved onto them yet.
+6. **Engine Integration's accent is unsettled** — build Integration in magenta;
    `--color-partner-yellow` exists but is not in use.

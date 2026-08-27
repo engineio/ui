@@ -177,6 +177,113 @@
   --ease-brand-out: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-brand-accelerate: cubic-bezier(0.6, 0, 0.3, 1);
 
+  /* Overlay and panel motion, named so the two halves stay together.
+
+     The utilities the primitives were originally written against —
+     `animate-in`, `fade-in-0`, `zoom-in-95`, `slide-in-from-bottom-2` — come
+     from the `tailwindcss-animate` plugin. This package does not ship it and
+     does not depend on it, so those class names generate nothing. These do.
+
+     Every pair is an ANIMATION rather than a transition, and that is load
+     bearing: bits-ui keeps a closing panel mounted only until its CSS
+     animation ends, so an exit written as a transition never plays — the
+     node has already gone. `animation-name: none` is how it decides there is
+     nothing to wait for.
+
+     Enter is 220ms on --ease-brand-out, exit 140ms on
+     --ease-brand-accelerate: surfaces arrive settling and leave quickly.
+     Panels scale about their own centre. Centring offsets ride on the
+     `translate` property, which leaves `transform` free here — that is also
+     what lets a half-dragged sheet keep its offset while the exit runs. */
+  --animate-overlay-in: overlay-in 220ms var(--ease-brand-out);
+  --animate-overlay-out: overlay-out 140ms var(--ease-brand-accelerate);
+  --animate-dialog-in: dialog-in 220ms var(--ease-brand-out);
+  --animate-dialog-out: dialog-out 140ms var(--ease-brand-accelerate);
+  --animate-sheet-in: sheet-in 220ms var(--ease-brand-out);
+  --animate-sheet-out: sheet-out 140ms var(--ease-brand-accelerate);
+  --animate-popover-in: popover-in 140ms var(--ease-brand-out);
+  --animate-popover-out: popover-out 140ms var(--ease-brand-accelerate);
+
+  @keyframes overlay-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes overlay-out {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
+  }
+
+  @keyframes dialog-in {
+    from {
+      opacity: 0;
+      transform: scale(0.97);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @keyframes dialog-out {
+    from {
+      opacity: 1;
+      transform: none;
+    }
+    to {
+      opacity: 0;
+      transform: scale(0.97);
+    }
+  }
+
+  @keyframes sheet-in {
+    from {
+      transform: translateY(100%);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes sheet-out {
+    from {
+      transform: translateY(0);
+    }
+    to {
+      transform: translateY(100%);
+    }
+  }
+
+  @keyframes popover-in {
+    from {
+      opacity: 0;
+      transform: scale(0.98);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @keyframes popover-out {
+    from {
+      opacity: 1;
+      transform: none;
+    }
+    to {
+      opacity: 0;
+      transform: scale(0.98);
+    }
+  }
+
   /* ── Type ─────────────────────────────────────────────────────────────
      THIS PACKAGE NAMES ROLES. IT SHIPS NO FACES.
 

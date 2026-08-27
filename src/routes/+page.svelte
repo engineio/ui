@@ -29,6 +29,13 @@
     Progress,
     RadioGroup,
     RadioGroupItem,
+    ResponsiveDialog,
+    ResponsiveDialogContent,
+    ResponsiveDialogDescription,
+    ResponsiveDialogFooter,
+    ResponsiveDialogHeader,
+    ResponsiveDialogTitle,
+    ResponsiveDialogTrigger,
     Separator,
     Skeleton,
     Switch,
@@ -56,6 +63,9 @@
   let checked = $state(true)
   let radio = $state("studio")
   let dialogOpen = $state(false)
+  let adaptiveOpen = $state(false)
+  let sheetOpen = $state(false)
+  let popoutOpen = $state(false)
 
   const swatches = [
     { name: "Off Black", hex: "#0E0E0E", token: "background" },
@@ -1229,6 +1239,81 @@
           </TooltipTrigger>
           <TooltipContent>Appears after 300ms, fades in 140ms.</TooltipContent>
         </Tooltip>
+      </Row>
+
+      <Row label="Responsive dialog">
+        <ResponsiveDialog bind:open={adaptiveOpen}>
+          <ResponsiveDialogTrigger>
+            {#snippet child({ props })}
+              <Button {...props}>Adjust Limits</Button>
+            {/snippet}
+          </ResponsiveDialogTrigger>
+          <ResponsiveDialogContent>
+            <ResponsiveDialogHeader>
+              <ResponsiveDialogTitle>Adjust Limits.</ResponsiveDialogTitle>
+              <ResponsiveDialogDescription>
+                Narrow the window past 768px and open it again. The same markup
+                arrives as a bottom sheet, and the footer stacks.
+              </ResponsiveDialogDescription>
+            </ResponsiveDialogHeader>
+            <div class="flex flex-col gap-2">
+              <Label for="stake-cap">Stake cap</Label>
+              <Input id="stake-cap" value="250.00" />
+            </div>
+            <ResponsiveDialogFooter>
+              <Button variant="ghost" onclick={() => (adaptiveOpen = false)}>
+                Cancel
+              </Button>
+              <Button onclick={() => (adaptiveOpen = false)}>Save</Button>
+            </ResponsiveDialogFooter>
+          </ResponsiveDialogContent>
+        </ResponsiveDialog>
+
+        <ResponsiveDialog mode="sheet" bind:open={sheetOpen}>
+          <ResponsiveDialogTrigger>
+            {#snippet child({ props })}
+              <Button variant="outline" {...props}>Sheet, Pinned</Button>
+            {/snippet}
+          </ResponsiveDialogTrigger>
+          <ResponsiveDialogContent>
+            <ResponsiveDialogHeader>
+              <ResponsiveDialogTitle>Sheet, Pinned.</ResponsiveDialogTitle>
+              <ResponsiveDialogDescription>
+                The mobile surface held open on a desktop viewport. Drag the
+                handle down to dismiss it.
+              </ResponsiveDialogDescription>
+            </ResponsiveDialogHeader>
+            <ResponsiveDialogFooter>
+              <Button variant="ghost" onclick={() => (sheetOpen = false)}>
+                Cancel
+              </Button>
+              <Button onclick={() => (sheetOpen = false)}>Confirm</Button>
+            </ResponsiveDialogFooter>
+          </ResponsiveDialogContent>
+        </ResponsiveDialog>
+
+        <ResponsiveDialog desktop="popover" bind:open={popoutOpen}>
+          <ResponsiveDialogTrigger>
+            {#snippet child({ props })}
+              <Button variant="ghost" {...props}>Popover, Then Sheet</Button>
+            {/snippet}
+          </ResponsiveDialogTrigger>
+          <ResponsiveDialogContent align="start">
+            <ResponsiveDialogHeader>
+              <ResponsiveDialogTitle>Sort By.</ResponsiveDialogTitle>
+            </ResponsiveDialogHeader>
+            <RadioGroup bind:value={radio}>
+              <div class="flex items-center gap-2">
+                <RadioGroupItem value="studio" id="sort-studio" />
+                <Label for="sort-studio">Studio</Label>
+              </div>
+              <div class="flex items-center gap-2">
+                <RadioGroupItem value="release" id="sort-release" />
+                <Label for="sort-release">Release date</Label>
+              </div>
+            </RadioGroup>
+          </ResponsiveDialogContent>
+        </ResponsiveDialog>
       </Row>
     </Section>
 
