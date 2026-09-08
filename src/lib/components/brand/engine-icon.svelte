@@ -5,9 +5,9 @@
    *   primary   — Pure White, for the dark surfaces the brand actually uses
    *   secondary — Off Black, for print, letterhead and inverted brand panels
    *
-   * These are named after the source artwork (Engine_Primary_Icon.svg /
-   * Engine_Secondary_Icon.svg) rather than after the colour, so the files and
-   * the code agree.
+   * These are named after the wordmark artwork they are cut from
+   * (Primary_Wordmark_White.svg / Primary_Wordmark_Black.svg) rather than after
+   * the colour, so the files and the code agree.
    */
   export type EngineMarkVariant = "primary" | "secondary"
 </script>
@@ -16,10 +16,16 @@
   import { cn } from "$lib/utils.js"
   import type { SVGAttributes } from "svelte/elements"
 
-  // The Engine figure mark. Vector, from the brand team's own artwork — which
-  // closes the gap the earlier marks had: every previous badge and lockup in
-  // this system was a raster extraction from deck page images at roughly 29px,
-  // and went soft above 24px. This scales.
+  // The Engine figure mark: the wordmark's g, which is what this mark has
+  // always been. It is not separate artwork and must not be redrawn as any.
+  //
+  // THE PATH IS NOT CROPPED, THE viewBox IS. The `d` below is byte-identical
+  // to the sixth path of engine-wordmark.svelte, and the viewBox frames that
+  // path's own bounds (762.043 0.257324 362.577 546.597) inside the wordmark's
+  // coordinate system. Diff the two files and the glyph must match exactly; if
+  // it ever does not, one of them has been edited by hand and both are wrong.
+  // Re-cutting after new wordmark artwork lands is a viewBox measurement, not
+  // a drawing job.
   //
   // THE MARK IS ARTWORK, NOT AN ICON. The brand allows it in white or Off
   // Black and nothing else — never outlined, stretched, skewed, or recoloured.
@@ -30,7 +36,7 @@
   //
   // Sizing is by class, and height-only: `class="h-8"` with width following
   // from the viewBox. Never set both — the brand forbids distortion, and the
-  // 810x1000 ratio is not one anybody reproduces by hand.
+  // 663x1000 ratio is not one anybody reproduces by hand.
 
   let {
     ref = $bindable(null),
@@ -52,7 +58,7 @@
 
 <svg
   bind:this={ref}
-  viewBox="0 0 810 1000"
+  viewBox="762.043 0.257324 362.577 546.597"
   xmlns="http://www.w3.org/2000/svg"
   class={cn(
     "h-8 w-auto shrink-0",
@@ -70,6 +76,6 @@
     fill="currentColor"
     fill-rule="evenodd"
     clip-rule="evenodd"
-    d="M809.525 207.792H755.007C786.985 265.518 805.192 331.931 805.192 402.597C805.192 521.09 754 627.625 672.527 701.297C745.977 767.713 794.816 860.839 803.724 965.356C805.349 984.429 789.676 1000 770.534 1000H632.061C612.919 1000 597.724 984.35 594.357 965.507C578.074 874.372 498.414 805.195 402.597 805.195C306.78 805.195 227.121 874.372 210.837 965.507C207.47 984.35 192.275 1000 173.134 1000H34.6592C15.5177 1000 -0.154779 984.429 1.4707 965.356C10.3784 860.84 59.2162 767.714 132.665 701.298C51.192 627.626 3.5177e-05 521.09 0 402.597C0 180.249 180.249 0 402.597 0H809.525V207.792ZM402.597 207.793C295.009 207.793 207.792 295.01 207.792 402.598C207.792 510.185 295.009 597.402 402.597 597.402C510.184 597.402 597.401 510.185 597.401 402.598C597.401 295.01 510.184 207.793 402.597 207.793Z"
+    d="M1124.62 93.3265H1100.2C1114.53 119.182 1122.69 148.926 1122.69 180.577C1122.69 180.757 1122.68 180.937 1122.68 181.117L1122.69 366.531C1122.69 466.12 1041.95 546.854 942.363 546.854H870.632C862.065 546.854 855.12 539.909 855.12 531.341V469.193C855.12 460.625 862.065 453.68 870.632 453.68H942.363C990.195 453.68 1029.61 414.364 1029.61 366.531V338.419C1003.76 352.742 974.014 360.9 942.363 360.9C842.775 360.899 762.043 280.165 762.043 180.577C762.043 80.9903 842.774 0.259036 942.36 0.257324H1124.62V93.3265ZM942.363 93.3265C894.176 93.3272 855.113 132.39 855.112 180.577C855.112 228.765 894.176 267.83 942.363 267.83C990.551 267.83 1029.62 228.765 1029.62 180.577C1029.62 132.39 990.55 93.3265 942.363 93.3265Z"
   />
 </svg>
