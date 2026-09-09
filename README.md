@@ -107,6 +107,9 @@ fails quietly.
 colourways (`variant="primary"` white, `variant="secondary"` Off Black). Size
 by height alone. The wordmark is artwork, not type — with the vector in the
 package there is no reason to typeset "engine" in Proxima Nova again.
+`EngineIcon` is the turbo; the wordmark's g is retired as a standalone mark, so
+a product still shipping its own `engine-icon.svg` cut from the g is showing
+the old brand.
 
 ### Wiring your faces
 

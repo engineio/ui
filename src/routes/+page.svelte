@@ -416,12 +416,12 @@
     <Section
       eyebrow="Brand 02"
       title="Marks."
-      note="Vector artwork from the brand team, in the only two colourways the brand sanctions. Pure White for dark surfaces, Off Black for print and inverted panels. The wordmark is a custom soft-rounded face, not Proxima Nova. It is artwork, never set in type and never approximated."
+      note="Vector artwork from the brand team, in the only two colourways the brand sanctions. Pure White for dark surfaces, Off Black for print and inverted panels. The wordmark is a custom soft-rounded face, not Proxima Nova. It is artwork, never set in type and never approximated. The figure mark is the turbo — the wordmark's g is retired as a standalone mark and does not come back."
     >
       <Row label="Wordmark, for master brand surfaces">
         <EngineWordmark class="h-10" />
       </Row>
-      <Row label="Figure mark">
+      <Row label="Figure mark, the turbo">
         <EngineIcon class="h-14" title="Engine" />
       </Row>
       <Row label="Secondary, on an inverted panel">
@@ -444,8 +444,9 @@
         currentColor, any ancestor's text colour silently becomes brand colour,
         and a magenta wordmark is one careless
         <span class="font-mono text-[13px]">text-primary</span> away. Size by
-        height alone. The brand forbids distortion, and neither the 810:1000
-        nor the 2000:536 ratio is one anybody reproduces by hand.
+        height alone. The brand forbids distortion, and neither the turbo's
+        1001:1000 — square to the eye, not to the box — nor the wordmark's
+        2001:732.5 is a ratio anybody reproduces by hand.
       </p>
     </Section>
 
