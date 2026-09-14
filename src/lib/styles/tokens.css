@@ -335,6 +335,71 @@
 
   --breakpoint-2xl: 1400px;
 
+  /* ── Marketing pages ───────────────────────────────────────────────────
+     The landing-page formula, measured off the two logged-out landings
+     (engine.io and integration.engine.io, September 2026) and calibrated
+     against stripe.com. Product surfaces keep the 1480px page and 40px
+     gutters from §5 of the design document. A marketing page is narrower
+     and breathes more, because a stranger reads it top to bottom on a phone
+     as often as on a monitor.
+
+     COLUMN. 1180px, so content starts at x=194 on a 1440 viewport (Stripe:
+     208). The gutter and the section rhythm are fluid clamps rather than the
+     56 / 72 / 96 / 128 steps: a landing is read at every width from 375 to
+     1920 and a fixed jump is wrong at one end or the other. `px-gutter`,
+     `mt-section`, `max-w-marketing`, `h-header`, `scroll-mt-anchor`.
+
+     The header is 64px on phones and 72px from `md`; anchors scroll to
+     header + 24px / + 48px so a section heading never lands under the glass.
+
+     TYPE. Four sizes plus a standfirst. Every heading is `text-balance` and
+     capped in `ch`, never px, so line length survives the clamp. Weight and
+     tracking ride on the token: `text-hero` is the whole spec, not a size.
+     Small text is 13px and WHITE — grey is reserved for meaning (an inactive
+     state, a unit beside a figure), never used as a default body colour.
+
+       hero        clamp(38px, 5vw, 64px)   1.02  −0.02em  700   h1, max 18ch
+       section     clamp(28px, 3.2vw, 44px) 1.06  −0.02em  700   h2, max 26ch
+       standfirst  clamp(18px, 1.5vw, 22px) 1.5                  under the h1, max 54ch
+       lead        clamp(17px, 1.4vw, 20px) 1.5                  under an h2, max 52ch
+       card-title  17px                     1.35           600   one sentence per bento card
+       stat        42px                     0.94           900   32px below `md`, tabular
+       small       13px                     1.5                  labels, captions, footer
+
+     GLASS. The one sanctioned blur is the sticky header (and the modal
+     scrim). 65% page colour over 20px of blur, always on, so the hero art
+     shows through it at rest. */
+  --container-marketing: 1180px;
+  --spacing-gutter: clamp(20px, 5vw, 64px);
+  --spacing-section: clamp(88px, 12vw, 160px);
+  --spacing-header: 72px;
+  --spacing-header-sm: 64px;
+  --spacing-anchor: 120px;
+  --spacing-anchor-sm: 96px;
+
+  --text-hero: clamp(38px, 5vw, 64px);
+  --text-hero--line-height: 1.02;
+  --text-hero--letter-spacing: -0.02em;
+  --text-hero--font-weight: 700;
+  --text-section: clamp(28px, 3.2vw, 44px);
+  --text-section--line-height: 1.06;
+  --text-section--letter-spacing: -0.02em;
+  --text-section--font-weight: 700;
+  --text-standfirst: clamp(18px, 1.5vw, 22px);
+  --text-standfirst--line-height: 1.5;
+  --text-lead: clamp(17px, 1.4vw, 20px);
+  --text-lead--line-height: 1.5;
+  --text-card-title: 17px;
+  --text-card-title--line-height: 1.35;
+  --text-card-title--font-weight: 600;
+  --text-stat: 42px;
+  --text-stat--line-height: 0.94;
+  --text-stat--font-weight: 900;
+  --text-small: 13px;
+  --text-small--line-height: 1.5;
+
+  --blur-glass: 20px;
+
   /* ── Sidebar ──────────────────────────────────────────────────────── */
   /* Left-nav hover and active states: magenta at very low lightness, so the
      wash reads as brand-tinted rather than plain grey. */

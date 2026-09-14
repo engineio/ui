@@ -1,3 +1,5 @@
+/// <reference types="vite/client" />
+
 declare global {
   /**
    * The release this build came from — injected by `define` in

@@ -1,0 +1,206 @@
+/*
+  Engine design system — the marketing grammar.
+
+  The motion vocabulary and the two page-shell utilities the landing pages
+  are written in. Everything here was arrived at on the two logged-out
+  landings (engine.io and integration.engine.io) in September 2026, tuned by
+  eye against stripe.com until the pages read as calm rather than busy. The
+  numbers are the point; do not restate them at a call site.
+
+  THE GRAMMAR
+
+  A mock screen is a scene. Its elements RISE in, one after another, 140ms
+  apart, over 700ms on the settling curve. Anything that fills — a gauge, a
+  split bar — SWEEPS from the left; anything that stacks — a bar chart —
+  CLIMBS from the bottom. Three seconds in, once the reader has taken the
+  screen in, the confirmation SETTLES: "Saved.", "Paid.", a status tag that
+  SWAPS from pending to done. A LIVE-DOT breathes at 2.4s beside anything that
+  updates in real time. Sections REVEAL with a scroll-driven fade as they
+  enter the viewport — opacity only, no translate, because a translated box
+  is measured by the browser before it lands and every anchor scroll then
+  stops short of its heading.
+
+  ONE BEAT. When several things on a page rotate (a table, a shelf of covers,
+  an invoice cycling), they share one 3s metronome and take turns, so only one
+  thing moves at a time and each rotates every 12s. Two independent intervals
+  on one screen is the quickest way to make a page feel like an advert.
+
+  GATED. Nothing plays until it is on screen. Utilities here honour a
+  `--motion` custom property: `motion-gate` on an ancestor holds every
+  descendant paused until the ancestor also carries `live`, which the
+  BentoGrid component sets from an IntersectionObserver. Tour screens need no
+  gate because they mount only while active.
+
+  REDUCED MOTION shows END STATES, not nothing. The base layer already
+  collapses every animation to 0.01ms, so a `both`-filled keyframe lands on
+  its final frame — the field is there, the gauge is full, the tag says Paid.
+  The only additions here are the two cases that rule gets wrong: a swap's
+  outgoing half must vanish rather than flash, and a scroll-timeline fade must
+  be switched off rather than sped up.
+
+  THE STAGGER is `--i`, set inline: <div class="rise" style="--i: 2">. A
+  rotating row (one that enters as another leaves) must NOT use `rise` — the
+  delay it inherits from `--i` leaves a visible hole for half a second. Use
+  Svelte's fly/flip/fade for those; `rise` is for a scene that is being built,
+  not a list that is being kept.
+*/
+
+@layer base {
+  :root {
+    --motion-reveal: 700ms;
+    --motion-stagger: 140ms;
+    --motion-settle: 3000ms;
+    --motion-swap: 300ms;
+    --motion-fill: 1400ms;
+    --motion-pulse: 2400ms;
+    --motion-step: 8000ms;
+    --motion-beat: 3000ms;
+  }
+}
+
+@keyframes mk-rise {
+  from {
+    opacity: 0;
+    translate: 0 8px;
+  }
+}
+
+@keyframes mk-vanish {
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+@keyframes mk-sweep {
+  from {
+    scale: 0 1;
+  }
+}
+
+@keyframes mk-climb {
+  from {
+    scale: 1 0;
+  }
+}
+
+@keyframes mk-type {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@keyframes mk-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
+}
+
+@keyframes mk-reveal {
+  from {
+    opacity: 0;
+  }
+}
+
+/* An element arriving on a scene: 8px up with a fade, 700ms, settling.
+   Sibling order comes from `--i`. */
+@utility rise {
+  animation: mk-rise var(--motion-reveal) var(--ease-brand-out) both;
+  animation-delay: calc(var(--i, 0) * var(--motion-stagger));
+  animation-play-state: var(--motion, running);
+}
+
+/* The confirmation, three seconds after the scene: "Saved.", "Paid.". */
+@utility settle {
+  animation: mk-rise 600ms var(--ease-brand-out) var(--motion-settle) both;
+  animation-play-state: var(--motion, running);
+}
+
+/* A two-state swap, stacked in one grid cell. Set `--swap-at` on both to
+   move the moment; it defaults to the settle time. */
+@utility swap-out {
+  animation: mk-vanish var(--motion-swap) var(--ease-brand) var(--swap-at, var(--motion-settle)) both;
+  animation-play-state: var(--motion, running);
+
+  @media (prefers-reduced-motion: reduce) {
+    display: none;
+  }
+}
+
+@utility swap-in {
+  animation: mk-rise 600ms var(--ease-brand-out) calc(var(--swap-at, var(--motion-settle)) + 100ms) both;
+  animation-play-state: var(--motion, running);
+}
+
+/* A fill growing from the left: gauges, progress, a split bar. Set the width
+   on the element; the animation only scales it in. */
+@utility sweep {
+  transform-origin: left;
+  animation: mk-sweep var(--motion-fill) var(--ease-brand-out) both;
+  animation-delay: calc(var(--i, 0) * var(--motion-stagger) + 300ms);
+  animation-play-state: var(--motion, running);
+}
+
+/* A bar growing from the bottom. Tighter stagger, because a chart has more
+   siblings than a form. */
+@utility climb {
+  transform-origin: bottom;
+  animation: mk-climb 1000ms var(--ease-brand-out) both;
+  animation-delay: calc(var(--i, 0) * 60ms + 300ms);
+  animation-play-state: var(--motion, running);
+}
+
+/* A typewriter that works in any face. Width animation only works in a
+   monospace; this clips instead. The element wants `inline-block
+   overflow-hidden whitespace-nowrap`, and `--chars` set to its length. */
+@utility type-in {
+  animation-name: mk-type;
+  animation-duration: 1400ms;
+  animation-timing-function: steps(var(--chars, 21));
+  animation-delay: 600ms;
+  animation-fill-mode: both;
+  animation-play-state: var(--motion, running);
+}
+
+/* The dot beside anything live. The one loop the brand allows on a product
+   mock, because it is the mock's own live indicator. */
+@utility live-dot {
+  animation: mk-pulse var(--motion-pulse) var(--ease-brand) infinite;
+  animation-play-state: var(--motion, running);
+}
+
+/* A section fading in over its first 220px of entry. Opacity only. */
+@utility reveal {
+  @supports (animation-timeline: view()) {
+    animation: mk-reveal linear both;
+    animation-timeline: view();
+    animation-range: entry 0px entry 220px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+
+/* Holds every motion utility below it paused until `live` is added. */
+@utility motion-gate {
+  --motion: paused;
+
+  &.live {
+    --motion: running;
+  }
+}
+
+/* The sticky header's surface: 65% page over 20px of blur, always on. */
+@utility glass {
+  background-color: color-mix(in oklab, var(--color-background) 65%, transparent);
+  -webkit-backdrop-filter: blur(var(--blur-glass));
+  backdrop-filter: blur(var(--blur-glass));
+}

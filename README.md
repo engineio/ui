@@ -95,7 +95,7 @@ this. Every primitive also passes `class` through `cn`, so
 
 **Tokens** — `styles/tokens.css` as a Tailwind 4 `@theme` block. Three brand
 colours, three status colours, a twelve-step neutral ramp, radii by role, two
-shadows, three easings.
+shadows, three easings, and the marketing page's column, rhythm and type ramp.
 
 **Type roles, not faces** — `--font-brand`, `--font-condensed`,
 `--font-extra-condensed`, `--font-mono`. No typeface ships here. Declare your
@@ -143,6 +143,17 @@ type is the symptom.
 Popover, Progress, RadioGroup, Select, Separator, Skeleton, Switch, Table, Tabs,
 Textarea, Tooltip.
 
+**Marketing kit** — the landing-page formula the two Engine landings settled
+on, as components and tokens: `SiteBanner`, `SiteHeader`, `Hero`, `Marquee`,
+`SectionHead`, `Tour`, `BentoGrid` / `BentoCard`, `StatBand`, `SiteFooter`,
+with the `inView` attachment and `prefersReducedMotion()`. The 1180px column,
+fluid gutter and section rhythm, the four-size type ramp (`text-hero`,
+`text-section`, `text-standfirst`, `text-lead`, `text-small`) and the glass
+header are tokens; the motion grammar (`rise`, `sweep`, `settle`, `swap-in` /
+`swap-out`, `live-dot`, `reveal`, `motion-gate`) is `styles/marketing.css`,
+imported by `@engineio/ui/styles`. `AGENTS.md` has the formula and the rules
+behind each number.
+
 Badge and Tag were merged into one chip. There is no `Tag`: the soft
 repository-label treatment it carried is now what `Badge` looks like, and the
 name `Badge` survived because it is the one in use — 35 call sites in the engine
@@ -184,6 +195,10 @@ lives in `AGENTS.md` and the skill is a thin pointer to it. That way the copied
 file has nothing in it that can rot.
 
 ## Development
+
+The gallery is published at https://engineio.github.io/ui/ on every push to
+`main`, built on the marketing formula it documents, with the agent reference
+served alongside it at https://engineio.github.io/ui/AGENTS.md.
 
 ```bash
 bun install

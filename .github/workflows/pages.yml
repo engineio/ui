@@ -60,16 +60,17 @@ jobs:
 
       - run: bun install --frozen-lockfile
 
-      # No PAGES_BASE. This site has ACCESS CONTROL enabled, and a private
-      # Pages site is served from its own generated subdomain at the root
-      # (https://<generated>.pages.github.io/) rather than as a project site
-      # under /<repo>. Setting a base of /ui here was harmless only by luck —
-      # the static adapter emits relative asset URLs and the gallery is a
-      # single page whose only links are same-page anchors — but it would break
-      # every internal link the moment the gallery gains a second route.
+      # PAGES_BASE is /ui because this is a PUBLIC project site, served at
+      # engineio.github.io/ui. The static adapter emits relative asset URLs, so
+      # a single page of same-page anchors survived without a base — but the
+      # site now has a second route (/AGENTS.md, the agent reference served as
+      # a file) and every internal link is built from `$app/paths` base, which
+      # is empty unless this is set.
       #
-      # If access control is ever turned off, the URL becomes
-      # engineio.github.io/ui and this needs `PAGES_BASE: /ui` back.
+      # If access control is ever turned ON, a private Pages site moves to its
+      # own generated subdomain at the root (https://<generated>.pages.github.io/)
+      # and this needs to go back to empty. `gh api repos/engineio/ui/pages
+      # --jq .html_url` prints the current URL.
       #
       # DS_VERSION labels the gallery with the release it was built from, which
       # is why the checkout above is unshallow: `git describe` needs the tags.
@@ -77,6 +78,7 @@ jobs:
         run: bun run build:gallery
         env:
           DS_VERSION: ${{ steps.tag.outputs.version }}
+          PAGES_BASE: /ui
 
       # No `enablement: true` — see the note at the top of this file. This step
       # fails with "Resource not accessible by integration" until Pages is

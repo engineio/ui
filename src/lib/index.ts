@@ -37,6 +37,26 @@ export {
 } from "./components/brand/index.js"
 
 export {
+  BentoCard,
+  BentoGrid,
+  Hero,
+  Marquee,
+  SectionHead,
+  SiteBanner,
+  SiteFooter,
+  SiteHeader,
+  StatBand,
+  Tour,
+  inView,
+  prefersReducedMotion,
+  type FooterColumn,
+  type MarqueeItem,
+  type NavLink,
+  type Stat,
+  type TourStep,
+} from "./components/marketing/index.js"
+
+export {
   Alert,
   AlertDescription,
   AlertTitle,

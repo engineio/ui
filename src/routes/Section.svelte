@@ -1,14 +1,16 @@
 <script lang="ts">
   import type { Snippet } from "svelte"
 
+  // A sub-block of one of the page's sections: an h3, a note, then the
+  // specimens. No eyebrow and no rule above it — rhythm comes from the gap
+  // between blocks being clearly larger than the gap inside one, which is
+  // the page's own spacing rule applied to itself.
   let {
     title,
-    eyebrow,
     note,
     children,
   }: {
     title: string
-    eyebrow: string
     note?: string
     children?: Snippet
   } = $props()
@@ -21,17 +23,12 @@
   )
 </script>
 
-<section {id} class="border-t border-grey-700 py-14 first:border-t-0">
-  <p
-    class="mb-3 font-mono text-[11px] font-semibold tracking-[0.08em] text-grey-400 uppercase"
-  >
-    {eyebrow}
-  </p>
-  <h2 class="text-[30px] leading-[1.2] font-bold tracking-[-0.01em]">
+<section {id} class="scroll-mt-anchor-sm md:scroll-mt-anchor [&+&]:mt-20">
+  <h3 class="text-[24px] leading-[1.2] font-bold tracking-[-0.01em] text-white">
     {title}
-  </h2>
+  </h3>
   {#if note}
-    <p class="mt-3 max-w-[920px] text-[15px] leading-[1.45] text-grey-300">
+    <p class="mt-3 max-w-[920px] text-[15px] leading-[1.5] text-foreground">
       {note}
     </p>
   {/if}

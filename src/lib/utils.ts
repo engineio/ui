@@ -1,5 +1,32 @@
 import { clsx, type ClassValue } from "clsx"
-import { twMerge } from "tailwind-merge"
+import { extendTailwindMerge } from "tailwind-merge"
+
+/**
+ * tailwind-merge only resolves a conflict between two classes it can
+ * classify, and it classifies by value: `mt-4` and `mt-0` are both margins,
+ * but `mt-section` is a word it has never seen, so `cn("mt-section", "mt-0")`
+ * used to keep both and let stylesheet order decide — which meant a caller's
+ * `class="mt-0"` on SectionHead silently lost. The same held for every named
+ * token this system adds: `rounded-card` against `rounded-lg`, `text-small`
+ * against `text-[13px]`, `max-w-marketing` against `max-w-[920px]`.
+ *
+ * So the merger is told the system's own scales. Every name here is a token
+ * in styles/tokens.css; add to this list when adding a token there, or the
+ * new utility will not override at a call site.
+ */
+const twMerge = extendTailwindMerge({
+  extend: {
+    theme: {
+      spacing: ["gutter", "section", "header", "header-sm", "anchor", "anchor-sm"],
+      container: ["marketing"],
+      text: ["hero", "section", "standfirst", "lead", "card-title", "stat", "small"],
+      radius: ["tag", "field", "card-inner", "media", "card", "frame", "control"],
+      blur: ["glass"],
+      shadow: ["panel", "modal"],
+      ease: ["brand", "brand-out", "brand-accelerate"],
+    },
+  },
+})
 
 /**
  * Merge Tailwind classes, letting later ones win over conflicting earlier

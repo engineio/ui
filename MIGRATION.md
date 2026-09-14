@@ -161,3 +161,48 @@ Ship §1 and §2 alone first — registry access plus the token swap, no compone
 changes. That is the highest-value, lowest-risk half: it puts both products on
 one set of tokens and fixes the Semibold mapping. Then migrate components at
 whatever pace suits, and treat the `.ig-*` port as its own project.
+
+---
+
+## The two landings
+
+Both logged-out landings — `studio/front/apps/provider/src/routes/(marketing)/+page.svelte`
+and `rgs/services/front/apps/operator/src/routes/+page.svelte` — were built
+before the marketing kit existed, so each repo carries its own copy of the
+shell under `packages/shared/src/lib/components/marketing/`: `Tour.svelte`,
+the marquee (`ProviderMarquee` / `CreatorMarquee`), the walkthrough and bento
+consumers, `Wordmark.svelte`, `TurboIcon.svelte`, and inline class recipes on
+the page (`gutter`, `sectionHead`, `heading`, `lead`, `stripCell`, `stat`).
+The two `Tour.svelte` files differ by one padding value and the address-bar
+host. Every edit today has to be made twice.
+
+Once a release carries the kit and both fronts have bumped past it:
+
+1. Replace the page recipes with the tokens: `px-[clamp(20px,5vw,64px)]` →
+   `px-gutter`, `max-w-[1180px]` → `max-w-marketing`, the `sectionHead`,
+   `heading` and `lead` consts → `SectionHead`, the h1 classes → `text-hero`,
+   `scroll-mt-[96px] md:scroll-mt-[120px]` → `scroll-mt-anchor-sm md:scroll-mt-anchor`.
+2. Delete the local `Tour.svelte` and import `Tour` from
+   `@engineio/ui/components/marketing/index.js`, passing
+   `host="integration.engine.io"` on the operator page (the studio page's host
+   is the default).
+3. Delete the local marquee and render `Marquee` with the twelve logos.
+4. Replace the inline `.rise` / `.gauge` / `.done` / `.swap-*` / `.live`
+   `<style>` blocks in the walkthrough and bento files with the global
+   utilities: `gauge` is `sweep`, `done` is `settle`, `bar` is `climb`,
+   `type` is `type-in`, `live` / `dot` are `live-dot`. The bento's
+   `.live .rise { running }` gating becomes `BentoGrid`, and its single
+   `setInterval` becomes `onbeat`.
+5. Replace the stats band with `StatBand` (floor the live figures first — the
+   plus is a promise), the header with `SiteHeader`, the banner with
+   `SiteBanner`, the footer with `SiteFooter`, the hero with `Hero`.
+6. Delete `Wordmark.svelte` and `TurboIcon.svelte` in favour of
+   `EngineWordmark` and `EngineIcon`. The package wordmark's box is padded for
+   the g's descender, so a given `h-*` renders the word about 27% smaller than
+   the local copy did — step up one size where it matters.
+7. Delete the `BRIDGE` `@theme` block at the end of each `app.css` — the grey
+   lift it carries is already in the package.
+
+Keep the copy, the step content, the bento scenes and the real-data fetches
+where they are; the kit is the shell, not the story.
+

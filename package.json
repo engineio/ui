@@ -33,6 +33,7 @@
     "./styles": "./dist/styles/index.css",
     "./styles/tokens": "./dist/styles/tokens.css",
     "./styles/utilities": "./dist/styles/utilities.css",
+    "./styles/marketing": "./dist/styles/marketing.css",
     "./utils": {
       "types": "./dist/utils.d.ts",
       "default": "./dist/utils.js"
@@ -56,6 +57,16 @@
       "types": "./dist/components/brand/index.d.ts",
       "svelte": "./dist/components/brand/index.js",
       "default": "./dist/components/brand/index.js"
+    },
+    "./components/marketing": {
+      "types": "./dist/components/marketing/index.d.ts",
+      "svelte": "./dist/components/marketing/index.js",
+      "default": "./dist/components/marketing/index.js"
+    },
+    "./components/marketing/index.js": {
+      "types": "./dist/components/marketing/index.d.ts",
+      "svelte": "./dist/components/marketing/index.js",
+      "default": "./dist/components/marketing/index.js"
     }
   },
   "scripts": {
