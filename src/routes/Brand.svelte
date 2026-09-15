@@ -255,7 +255,7 @@
 
 <Section
   title="Marks."
-  note="Vector artwork from the brand team, in the only two colourways the brand sanctions. Pure White for dark surfaces, Off Black for print and inverted panels. The wordmark is a custom soft-rounded face, not Proxima Nova. It is artwork, never set in type and never approximated. The figure mark is the turbo — the wordmark's g is retired as a standalone mark and does not come back."
+  note="Vector artwork from the brand team, in the only two colourways the brand sanctions. Pure White for dark surfaces, Off Black for print and inverted panels. The wordmark is a custom soft-rounded face, not DM Sans. It is artwork, never set in type and never approximated. The figure mark is the turbo — the wordmark's g is retired as a standalone mark and does not come back."
 >
   <Row label="Wordmark, for master brand surfaces">
     <EngineWordmark class="h-10" />
@@ -354,7 +354,7 @@
 
 <Section
   title="Typography."
-  note="Proxima Nova only. Bold for display, Semibold for UI labels, Regular for body. Title Case for headlines, UPPERCASE only for small structural labels. No all-caps headlines, no italics, no other typefaces."
+  note="DM Sans only. Bold for display, Semibold for UI labels, Regular for body. Title Case for headlines, UPPERCASE only for small structural labels. No all-caps headlines, no italics, no other typefaces."
 >
   <div class="flex w-full flex-col gap-6 overflow-x-auto">
     {#each type as t (t.role)}
@@ -377,40 +377,37 @@
         GAME_ID 7f3a91c2 · RTP 96.42% · 2300 live games
       </p>
     </div>
-    <div class="flex min-w-max items-baseline gap-8 border-b border-grey-800 pb-6">
+    <div class="flex min-w-max items-baseline gap-8">
       <p
         class="w-[120px] shrink-0 text-small text-grey-300"
       >
-        Condensed
+        Condensed roles
       </p>
       <p class="font-condensed text-[64px] leading-[0.94] font-black">
         2300 Games.
       </p>
     </div>
-    <div class="flex min-w-max items-baseline gap-8">
-      <p
-        class="w-[120px] shrink-0 text-small text-grey-300"
-      >
-        Extra Cond.
-      </p>
-      <p class="font-extra-condensed text-[64px] leading-[0.94] font-black">
-        Momentum.
-      </p>
-    </div>
   </div>
   <p class="max-w-[920px] text-[15px] leading-[1.5] text-foreground">
-    The two condensed cuts are for big numbers and poster-scale words only.
-    Stat bands, lanyards, single-word statements. Never running text, and
-    never below Black. Display type is large: 92 to 104px on a 1480px page.
-    Scaling Display 1 down to 48px does not produce a smaller display size.
-    It produces an H1.
+    DM Sans has no condensed cut.
+    <span class="font-mono text-[13px]">--font-condensed</span> and
+    <span class="font-mono text-[13px]">--font-extra-condensed</span> remain
+    as roles and resolve to the brand face, so big numbers and poster-scale
+    words are set in DM Sans Black until the brand team assigns a condensed
+    face. Display type is large: 92 to 104px on a 1480px page. Scaling
+    Display 1 down to 48px does not produce a smaller display size. It
+    produces an H1.
   </p>
   <p class="max-w-[920px] text-[15px] leading-[1.5] text-foreground">
-    Proxima Nova is commercially licensed. Where the licence does not reach,
-    the substitute is <span class="font-mono text-[13px]">Inter</span>. Not
-    a geometric display face and not a grotesque, because Proxima Nova is
-    humanist with a tall x-height. JetBrains Mono carries every numeric,
-    key, ID, code sample and eyebrow label.
+    DM Sans is a variable Google Font under the Open Font Licence: weight 100
+    to 1000, and an optical-size axis from 9 to 40, so body sizes get the
+    looser cut and display sizes the tight one. There is no substitute face.
+    A machine that cannot reach Google renders a size-adjusted Helvetica Neue
+    or Arial matched to DM Sans's width, which the package ships as
+    <span class="font-mono text-[13px]">"DM Sans Fallback"</span>.
+    <span class="font-mono text-[13px]">--font-mono</span> resolves to the
+    brand face; JetBrains Mono is retired, and a product that needs
+    character-cell alignment binds its own monospace.
   </p>
 </Section>
 

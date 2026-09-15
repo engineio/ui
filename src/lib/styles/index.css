@@ -18,16 +18,19 @@
 
   Import the parts individually if you need finer control:
 
+      @import "@engineio/ui/styles/fonts";
       @import "@engineio/ui/styles/tokens";
       @import "@engineio/ui/styles/utilities";
       @import "@engineio/ui/styles/marketing";
 
-  NO FACES SHIP HERE. This package names the type ROLES (--font-brand,
-  --font-condensed, --font-extra-condensed, --font-mono) and binds none of
-  them to a binary. Each consumer declares its own @font-face blocks and sets
-  those tokens — see "Type" in tokens.css for the contract and the recipe.
+  THE BRAND FACE IS DM SANS, loaded by the consumer from Google Fonts with a
+  stylesheet link in app.html — no binary ships here. tokens.css names it in
+  --font-brand and fonts.css ships the metric-matched local fallback behind
+  it, so no @theme override is needed. fonts.css has the link and the loader
+  contract; "Type" in tokens.css has the reasoning.
 */
 
+@import "./fonts.css";
 @import "./tokens.css";
 @import "./utilities.css";
 @import "./marketing.css";

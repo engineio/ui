@@ -11,6 +11,10 @@
     color: var(--color-foreground);
     font-family: var(--font-brand);
     font-weight: 400;
+    /* DM Sans carries an optical-size axis (9-40). `auto` is the initial
+       value; it is written down so the looser cut at body sizes and the tight
+       cut at display sizes are a decision, not a default nobody can find. */
+    font-optical-sizing: auto;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }

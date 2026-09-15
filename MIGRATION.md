@@ -55,9 +55,11 @@ Then **delete** from `app.css`:
   `--color-primary` differently is a coin flip.
 - `@utility field { … }` — shipped in `styles/utilities.css`.
 - the `color-scheme`, scrollbar and `.scrollbar-hide` rules — same.
-- the `@import "./fonts.css"` line, once you delete `fonts.css` and the seven
-  `.otf` files in `static/fonts/` (the package references its own by relative
-  path). Keep `LeagueGothic*` if a product still uses it.
+- the `@import "./fonts.css"` line, once you delete `fonts.css` and the Proxima
+  Nova files in `static/fonts/` — the brand face is DM Sans from Google Fonts,
+  loaded by a link in `app.html` (see 2a). Keep `LeagueGothic*` and the Proxima
+  condensed cuts if a product still uses them for artwork, as the studio's
+  media editor does.
 
 Keep in `app.css`: `--gradient-brand*`, the `@keyframes`, `.floating`,
 `.markdown-body`, the `input[aria-hidden]` fix, `carta.css` and
@@ -70,10 +72,33 @@ up (`src` → `shared` → `packages` → `front`); rgs is the same depth under
 check it before wondering why the tokens did not land.
 
 **Two visible changes** you should expect from the token layer, both deliberate:
-Proxima Nova Semibold now maps to weight 600 rather than 500, so
-`font-semibold` labels will render in the correct cut for the first time; and
-`--color-destructive` becomes the real danger red `#FF3B30` rather than the
-oklch value inherited from shadcn, which had no brand owner.
+the brand face is DM Sans, one variable font, so `font-medium` (500) renders as
+a real Medium rather than folding into Regular as it did across Proxima Nova's
+four static cuts; and `--color-destructive` becomes the real danger red
+`#FF3B30` rather than the oklch value inherited from shadcn, which had no brand
+owner.
+
+### 2a. Load the brand face
+
+The package names DM Sans in `--font-brand` and ships the metric-matched
+`"DM Sans Fallback"` behind it. What it cannot do is fetch the font, so each
+app's `app.html` carries Google's link:
+
+```html
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap" rel="stylesheet" />
+```
+
+Then delete, if the repo has them from before this release: its own
+`--font-brand` / `--font-condensed` / `--font-extra-condensed` overrides in
+`@theme`, and any local `"DM Sans Fallback"` or Proxima Nova `@font-face`
+blocks — the package's copies are identical, and two declarations of the same
+family are one too many to keep in step. Keep the `__appReady` loader gate in
+`app.html`: Google's CSS is `font-display: swap`, and the gate is what hides
+the swap. The studio front additionally needs `https://fonts.googleapis.com`
+in `style-src` and `https://fonts.gstatic.com` in `font-src` of the nginx CSP
+in `front/Dockerfile`; the rgs front's already has both.
 
 ## 3. Migrate imports, one component at a time
 

@@ -16,14 +16,13 @@
     { target: 4, label: "Checks in CI" },
   ]
 
-  const setup = `@import "./fonts.css";
-@import "tailwindcss";
+  const setup = `@import "tailwindcss";
 @import "@engineio/ui/styles";
-@source "../node_modules/@engineio/ui/dist";
+@source "../node_modules/@engineio/ui/dist";`
 
-@theme {
-  --font-brand: "ProximaNova", "Helvetica Neue", Arial, sans-serif;
-}`
+  const face = `<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap" rel="stylesheet" />`
 
   const pointer =
     "UI is built on `@engineio/ui`. Read `node_modules/@engineio/ui/AGENTS.md`\nbefore writing or reviewing any UI."
@@ -66,9 +65,14 @@
 
 <Section
   title="Setup."
-  note="Tailwind 4 does not scan node_modules, so the @source line is required; without it the page half-styles with no error. No typeface ships, because the brand face is licensed and the package is public. Declare your own @font-face blocks and set the font tokens."
+  note="Tailwind 4 does not scan node_modules, so the @source line is required; without it the page half-styles with no error. The brand face is DM Sans from Google Fonts: the package names it and ships the fallback behind it, and you add the link to app.html. Skip that and the page renders in the fallback, also with no error."
 >
-  <pre class={code}>{setup}</pre>
+  <Row label="app.css">
+    <pre class={code}>{setup}</pre>
+  </Row>
+  <Row label="app.html">
+    <pre class={code}>{face}</pre>
+  </Row>
 </Section>
 
 <Section

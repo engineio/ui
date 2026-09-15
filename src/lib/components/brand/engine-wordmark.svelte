@@ -6,10 +6,11 @@
   // The Engine wordmark. Vector, from the brand team's artwork
   // (Primary_Wordmark_Black.svg / Primary_Wordmark_White.svg, 2001x550).
   //
-  // "The engine wordmark is a custom soft-rounded face, not Proxima Nova. It is
-  // artwork. Never set the wordmark in type, never approximate it in a
-  // lookalike, never outline, stretch, skew or recolour it beyond white / Off
-  // Black." That rule is the reason this component exists.
+  // The engine wordmark is a custom soft-rounded face, not the brand face —
+  // not DM Sans, and not Proxima Nova before it. It is artwork. Never set the
+  // wordmark in type, never approximate it in a lookalike, never outline,
+  // stretch, skew or recolour it beyond white / Off Black. That rule is the
+  // reason this component exists.
   //
   // Colour is the same two-value variant as EngineIcon, for the same reason:
   // `currentColor` would let any ancestor's text colour become brand colour.

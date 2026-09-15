@@ -307,8 +307,9 @@ motion     --ease-brand  --ease-brand-out  --ease-brand-accelerate
            marketing: --motion-{reveal,stagger,settle,swap,fill,pulse,step,beat}
            and the utilities rise sweep climb settle swap-in/out type-in
            live-dot reveal motion-gate glass
-type       --font-brand --font-condensed --font-extra-condensed --font-mono
-           ROLES ONLY — no face ships here. Bind them in your repo (see below)
+type       --font-brand = DM Sans, from Google Fonts — you add the link
+           (see below); --font-condensed --font-extra-condensed --font-mono
+           are roles that resolve to the brand face
 depth      --shadow-panel  --shadow-modal   (product chrome and modals only)
 utility    `field` — the shared input skin, incl. the focus ring
 ```
@@ -370,28 +371,29 @@ State these rather than working around them silently.
 3. **No mono face.** JetBrains Mono is retired; `--font-mono` resolves to the
    brand face. Set it yourself if a surface genuinely needs character-cell
    alignment.
-4. **No typeface ships with this package.** It names the type roles and binds
-   none of them. Each consumer declares its own `@font-face` blocks, keeps the
-   binaries in its own repo, and overrides the tokens:
+4. **The brand face is loaded by you, not shipped.** `--font-brand` names DM
+   Sans, a variable Google Font, and `styles/fonts.css` ships a metric-matched
+   local fallback behind it. No binary ships. Put the link in `app.html`:
 
-   ```css
-   @import "./fonts.css";          /* your own @font-face blocks */
-   @import "@engineio/ui/styles";
-
-   @theme {
-     --font-brand: "ProximaNova", "Helvetica Neue", Arial, sans-serif;
-     --font-condensed: "ProximaNovaCondensed", Arial, sans-serif;
-     --font-extra-condensed: "ProximaNovaExtraCondensed", Arial, sans-serif;
-   }
+   ```html
+   <link rel="preconnect" href="https://fonts.googleapis.com" />
+   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap" rel="stylesheet" />
    ```
 
+   No `@font-face`, no `@theme` override. Google's CSS is `font-display:
+   swap`, so an app that covers first paint with a loader waits on
+   `document.fonts.load('400 1rem "DM Sans"')` under a cap before lifting it.
+
    **This is a required setup step and it fails quietly** — exactly like a
-   missing `@source` line. Skip it and the tokens still resolve, nothing
-   errors, and the app renders in the system stack. Generic-looking type is
-   the symptom.
+   missing `@source` line. Skip it and nothing errors; the app renders in the
+   size-adjusted Helvetica Neue / Arial fallback. Generic-looking type is the
+   symptom.
 
    Proxima Nova used to ship here. It is commercially licensed and this package
-   is MIT and public, which is why it no longer does.
+   is MIT and public, which is why it stopped; the brand team moved to DM Sans,
+   which is open, in September 2026. A product on another brand overrides
+   `--font-brand` in its own `@theme`.
 5. **Dialog, Popover and Tooltip do not animate.** They are written against
    `animate-in` / `fade-in-0` / `zoom-in-95` / `slide-in-from-top-2`, which
    come from the `tailwindcss-animate` plugin. This package neither ships nor

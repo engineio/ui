@@ -31,6 +31,7 @@
       "default": "./dist/index.js"
     },
     "./styles": "./dist/styles/index.css",
+  "./styles/fonts": "./dist/styles/fonts.css",
     "./styles/tokens": "./dist/styles/tokens.css",
     "./styles/utilities": "./dist/styles/utilities.css",
     "./styles/marketing": "./dist/styles/marketing.css",

@@ -1,0 +1,112 @@
+/*
+  Engine design system — the brand face, and what stands in for it.
+
+  The brand face is DM Sans, and it is NOT shipped here as a binary. It is a
+  variable Google Font — weight 100-1000, optical size 9-40, upright and
+  italic, Open Font Licence — and each consumer loads it from Google in its
+  app.html:
+
+      <link rel="preconnect" href="https://fonts.googleapis.com" />
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+      <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap" rel="stylesheet" />
+
+  Google serves it as per-script woff2 subsets, so a Latin page downloads one
+  small file that covers every weight, and every weight a product asks for is
+  a real instance — nothing to fold, nothing to synthesise. tokens.css names
+  the face in --font-brand, so once that link is in place no @theme override
+  is needed; a consumer on another brand (the casino is Fluke) overrides the
+  role as before.
+
+  The stylesheet Google returns fixes `font-display: swap`. A product that
+  covers its first paint with a loader should wait for the face before
+  lifting it — `document.fonts.load('400 1rem "DM Sans"')`, under a cap — or
+  the fallback below paints and then visibly swaps. Both Engine products do
+  this in app.html.
+
+  ── THE METRIC-MATCHED FALLBACK ──────────────────────────────────────────
+  "DM Sans Fallback" is what stands behind a slow or blocked Google fetch and
+  a browser that declines the download. It is three local() faces — no
+  binary — and --font-brand names it right after "DM Sans", ahead of the bare
+  "Helvetica Neue"/Arial entries that remain the last resort for a machine
+  with none of the locals below.
+
+  Tuned for WIDTH, because the event it has to keep quiet is the swap to the
+  real face once it lands: a fallback the same width as DM Sans reflows
+  nothing, whereas one matched on x-height would run about 6% narrow and
+  re-wrap every line. Measured on a representative product string at DM
+  Sans's 14pt optical size, in units per 1000 em:
+
+      DM Sans         400 53771   500 54674   600 55796   700 56651
+      Helvetica Neue  Reg 51863   Med 53373               Bold 54927
+      Arial           Reg 51527                           Bold 54848
+
+  The bands mirror the weight matching a plain stack would do anyway —
+  400 -> Regular, 500 -> Medium, 600 and 700 -> Bold — declared explicitly so
+  each band carries its own size-adjust and so the UA never synthesises:
+
+    100-450   -> local Regular   104.0%  (103.7% vs Helvetica Neue, 104.4% vs Arial)
+    451-550   -> local Medium    102.4%  (Arial has no Medium; its Regular runs ~6% narrow)
+    551-1000  -> local Bold      102.4%  (101.6% for 600, 103.1% for 700 — splits them)
+
+  600 goes UP to Bold rather than down to Medium so `font-medium` and
+  `font-semibold` stay distinct in the fallback; they sit side by side on most
+  screens, and semibold next to bold is far rarer.
+
+  Known trade-off, taken knowingly: matched on width, the fallback's x-height
+  is 5-7% taller than DM Sans's (517 vs 504 per 1000, before the adjust) —
+  slightly larger-looking letters for the moments before the swap, in
+  exchange for no reflow at it. These are body-size figures: DM Sans tightens
+  at display sizes through its optical axis and the fallback does not, so a
+  headline in the fallback runs a little wide.
+
+  Line metrics: DM Sans is 992/-310/0 in hhea and OS/2 alike, with
+  USE_TYPO_METRICS set, so one override set is right on every platform. The
+  overrides are DIVIDED by each band's size-adjust because the UA scales them
+  by it: 99.2/1.040 = 95.4% and 31.0/1.040 = 29.8%; 99.2/1.024 = 96.9% and
+  31.0/1.024 = 30.3%; line-gap 0.
+
+  Every local() lists the PostScript name as well as the human one. Chrome
+  matches local() against the full name and the PostScript name and NOT the
+  family name, so "Helvetica Neue Medium" alone silently misses on Chrome and
+  the band falls through to the next entry.
+*/
+
+@font-face {
+  font-family: "DM Sans Fallback";
+  src:
+    local("Helvetica Neue"), local("HelveticaNeue"), local("Arial"),
+    local("ArialMT"), local("Liberation Sans"), local("LiberationSans");
+  font-weight: 100 450;
+  font-style: normal;
+  size-adjust: 104%;
+  ascent-override: 95.4%;
+  descent-override: 29.8%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: "DM Sans Fallback";
+  src:
+    local("Helvetica Neue Medium"), local("HelveticaNeue-Medium"),
+    local("Arial"), local("ArialMT");
+  font-weight: 451 550;
+  font-style: normal;
+  size-adjust: 102.4%;
+  ascent-override: 96.9%;
+  descent-override: 30.3%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: "DM Sans Fallback";
+  src:
+    local("Helvetica Neue Bold"), local("HelveticaNeue-Bold"),
+    local("Arial Bold"), local("Arial-BoldMT"), local("Liberation Sans Bold"),
+    local("LiberationSans-Bold");
+  font-weight: 551 1000;
+  font-style: normal;
+  size-adjust: 102.4%;
+  ascent-override: 96.9%;
+  descent-override: 30.3%;
+  line-gap-override: 0%;
+}

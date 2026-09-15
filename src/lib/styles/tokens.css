@@ -285,39 +285,40 @@
   }
 
   /* ── Type ─────────────────────────────────────────────────────────────
-     THIS PACKAGE NAMES ROLES. IT SHIPS NO FACES.
+     THE BRAND FACE IS DM SANS. THIS PACKAGE NAMES IT AND SHIPS NO BINARY.
 
-     Every value below is a fallback, not a choice. The consumer declares its
-     own @font-face blocks, keeps the binaries in its own repo, and overrides
-     these four names in its own `@theme`:
+     DM Sans is a variable Google Font under the Open Font Licence, so the
+     role can name it outright: --font-brand resolves to it the moment a
+     consumer puts Google's stylesheet link in app.html — no @theme override,
+     no @font-face of its own. The link, the loader contract and the
+     metric-matched "DM Sans Fallback" (three local() faces, no binary) are
+     in fonts.css:
 
-         @import "./fonts.css";        <- your own @font-face blocks
-         @import "@engineio/ui/styles";
+         <link rel="preconnect" href="https://fonts.googleapis.com" />
+         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+         <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap" rel="stylesheet" />
 
-         @theme {
-           --font-brand: "YourFace", "Helvetica Neue", Arial, sans-serif;
-           --font-condensed: "YourFaceCondensed", Arial, sans-serif;
-           --font-extra-condensed: "YourFaceExtraCondensed", Arial, sans-serif;
-         }
+     WHY NAME IT HERE, when this package used to name only roles.
 
-     WHY, rather than shipping the brand face here as this package used to.
+     1. LICENCE. The roles were unbound because of Proxima Nova: it is
+        commercially licensed and this package is MIT and public, so shipping
+        the binaries handed every reader of the registry a font nobody here
+        could sublicense. DM Sans is open, and it is not shipped anyway —
+        Google serves it — so nothing in this repo needs a licence.
+     2. ONE SYSTEM, MANY BRANDS still holds. The value is a default, not a
+        lock: the casino product is a separate brand on its own faces and
+        overrides --font-brand in its own @theme, exactly as before.
+     3. WEIGHTS ARE NO LONGER A LOCAL PROBLEM. The old face came in four
+        static cuts and each repo mapped 500 and 800 onto them by hand. DM
+        Sans is one variable face; every weight is real.
 
-     1. LICENCE. Proxima Nova is commercially licensed. This package is MIT
-        and published publicly to npm from a public repo, so shipping the
-        binaries handed every reader of the registry a font nobody here has
-        the right to sublicense. That is the blocking reason.
-     2. ONE SYSTEM, MANY BRANDS. Engine Studio and Engine Integration are
-        Proxima Nova; the casino product is a separate brand on its own faces.
-        A design system that hard-codes one typeface makes every other brand
-        fight it — which is exactly what the casino repo was doing.
-     3. WEIGHTS ARE A LOCAL PROBLEM. Which cuts a repo has licensed, and how
-        the gaps get mapped, differs per repo. That belongs next to the
-        binaries, not in a shared token.
+     Skipping the app.html link fails the same quiet way a missing `@source`
+     line does: nothing errors, the page renders in "DM Sans Fallback" and
+     then Helvetica Neue / Arial. Generic-looking type is the symptom.
 
-     SETTING THESE IS A REQUIRED SETUP STEP, and skipping it fails the same
-     quiet way a missing `@source` line does: the tokens still resolve, so
-     nothing errors — the app just renders in the system stack. If the type
-     looks generic, this is the first thing to check.
+     --font-condensed and --font-extra-condensed resolve to the brand face.
+     DM Sans has no condensed cut; the roles stay so the utilities keep
+     working, and a product that is handed one binds it.
 
      --font-mono has NO mono face on purpose. JetBrains Mono was retired at the
      owner's direction and the token points at the brand face, because every
@@ -325,9 +326,9 @@
      sites to the browser default rather than to the brand. A consumer that
      wants a real monospace sets it, like any other role.
 
-     ENGINE-BRAND.md and ENGINE-DESIGN-SYSTEM.md still name JetBrains Mono and
-     still describe the face as shipping with the system; both need updating. */
-  --font-brand: ui-sans-serif, system-ui, -apple-system, Arial, sans-serif;
+     ENGINE-BRAND.md and ENGINE-DESIGN-SYSTEM.md still name Proxima Nova and
+     JetBrains Mono; both need updating. */
+  --font-brand: "DM Sans", "DM Sans Fallback", "Helvetica Neue", Arial, sans-serif;
   --font-sans: var(--font-brand);
   --font-condensed: var(--font-brand);
   --font-extra-condensed: var(--font-condensed);

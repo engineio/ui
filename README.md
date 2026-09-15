@@ -97,46 +97,64 @@ this. Every primitive also passes `class` through `cn`, so
 colours, three status colours, a twelve-step neutral ramp, radii by role, two
 shadows, three easings, and the marketing page's column, rhythm and type ramp.
 
-**Type roles, not faces** — `--font-brand`, `--font-condensed`,
-`--font-extra-condensed`, `--font-mono`. No typeface ships here. Declare your
-own `@font-face` blocks, keep the binaries in your repo, and bind the tokens in
-your `@theme`. See "Wiring your faces" below — it is a required step and it
-fails quietly.
+**The brand face, named** — `--font-brand` is DM Sans, a variable Google
+Font. No binary ships here: put Google's stylesheet link in your `app.html`
+and the role resolves to it, with a metric-matched local fallback
+(`styles/fonts.css`) behind it. `--font-condensed`, `--font-extra-condensed`
+and `--font-mono` are roles that resolve to the brand face until a product
+binds them. See "Loading the brand face" below — the link is a required step
+and skipping it fails quietly.
 
 **Marks** — `EngineWordmark` and `EngineIcon`, vector, in the two sanctioned
 colourways (`variant="primary"` white, `variant="secondary"` Off Black). Size
 by height alone. The wordmark is artwork, not type — with the vector in the
-package there is no reason to typeset "engine" in Proxima Nova again.
+package there is no reason to typeset "engine" in the brand face again.
 `EngineIcon` is the turbo; the wordmark's g is retired as a standalone mark, so
 a product still shipping its own `engine-icon.svg` cut from the g is showing
 the old brand.
 
-### Wiring your faces
+### Loading the brand face
 
-The system names four type roles and binds none of them:
+The system names DM Sans in `--font-brand`. You load it, once, in `app.html`:
+
+```html
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap" rel="stylesheet" />
+```
+
+and the stylesheet stays three lines:
 
 ```css
-@import "./fonts.css";          /* your own @font-face blocks */
 @import "tailwindcss";
 @import "@engineio/ui/styles";
 @source "../node_modules/@engineio/ui/dist";
+```
 
+No `@font-face`, no `@theme` override, no binaries in `static/fonts/`. Google
+serves the variable face (weight 100-1000, optical size 9-40) as per-script
+woff2 subsets, so every weight a product asks for is a real instance and the
+old weight-range folding is gone. Behind it the package ships
+`"DM Sans Fallback"` — three `local()` faces, Helvetica Neue or Arial
+size-adjusted to DM Sans's width — so a slow or blocked fetch reflows
+nothing when the real face lands. `styles/fonts.css` has the numbers.
+
+Google's CSS is `font-display: swap`. If your app covers first paint with a
+loader, wait on `document.fonts.load('400 1rem "DM Sans"')` under a cap
+before lifting it, or the fallback paints and then visibly swaps. Both Engine
+products do this in `app.html`.
+
+A product on another brand overrides the role in its own `@theme`, as the
+casino does:
+
+```css
 @theme {
-  --font-brand: "ProximaNova", "Helvetica Neue", Arial, sans-serif;
-  --font-condensed: "ProximaNovaCondensed", Arial, sans-serif;
-  --font-extra-condensed: "ProximaNovaExtraCondensed", Arial, sans-serif;
-  /* --font-mono defaults to --font-brand; set it only if you have a mono face */
+  --font-brand: "YourFace", "Helvetica Neue", Arial, sans-serif;
 }
 ```
 
-Keep the binaries in your own `static/fonts/` and reference them with absolute
-`/fonts/...` URLs. Weight coverage is a local concern too — if your family is
-missing a cut the product asks for, declare the face over a `font-weight`
-RANGE so the gap maps somewhere deliberate rather than wherever the browser's
-matching algorithm lands.
-
-**Like `@source`, this fails silently.** The tokens resolve either way, so a
-repo that skips it renders in the system stack with no error. Generic-looking
+**Like `@source`, the link fails silently.** The tokens resolve either way, so
+a repo that skips it renders in the fallback with no error. Generic-looking
 type is the symptom.
 
 **Primitives** — Alert, Badge, Button, Card, Checkbox, Dialog, Input, Label,
@@ -316,14 +334,15 @@ first is a decision made here that the brand documents have not caught up with.
    alignment. ENGINE-BRAND.md and ENGINE-DESIGN-SYSTEM.md still name JetBrains
    Mono and need updating.
 
-5. **No typeface ships with this package, and that is the point.** Proxima Nova
-   used to. It is commercially licensed, and this package is MIT and published
-   publicly to npm from a public repo — so the seven cuts were being handed to
-   every reader of the registry under a licence nobody here can grant. They are
-   gone from `dist/`, and each product now keeps its own copy in its own
-   private repo. Note that removing them does not unpublish them: they remain
-   inside every already-published 0.x tarball and in this repo's git history,
-   which is a separate call for whoever owns the licence.
+5. **No binary ships with this package, and it no longer needs to.** Proxima
+   Nova used to. It is commercially licensed, and this package is MIT and
+   published publicly to npm from a public repo — so the seven cuts were being
+   handed to every reader of the registry under a licence nobody here can
+   grant. Removing them did not unpublish them: they remain inside every 0.x
+   tarball published before the DM Sans release and in this repo's git
+   history, which is a separate call for whoever owns the licence. The brand
+   face is now DM Sans, open and served by Google, so the package names it in
+   the token and the question does not come back.
 
 6. **Engine Integration's accent is unsettled.** Brand direction assigns it
    Partner Yellow; every shipped surface is magenta and was deliberately

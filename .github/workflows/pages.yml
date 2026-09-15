@@ -12,8 +12,8 @@ name: pages
 # Settings -> Pages -> Build and deployment -> Source: GitHub Actions, and then
 # Visibility: Private. The repo is internal and the org is on Enterprise, so
 # access control is available — without it a Pages site is PUBLIC even from a
-# private or internal repo, and this one serves the brand system, the marks and
-# the licensed Proxima Nova webfonts.
+# private or internal repo, and this one serves the brand system and the marks.
+# (No webfont is served here: the brand face is DM Sans, from Google Fonts.)
 #
 # `configure-pages` takes an `enablement: true` option that would create the
 # site on first run and turn this red job green with no human involved. It is
