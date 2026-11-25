@@ -1,29 +1,36 @@
-# @engineio/ui
+# Engine design system
 
-The Engine design system: tokens, the brand face, and twenty Svelte primitives,
-published once and consumed by every Engine product.
+The Engine design system: tokens, themes, the brand face, and twenty Svelte
+primitives. **This repo is a reference, not a dependency.** Products copy what
+they need into their own source tree and own the copy, the way the knowledge
+repo's rules are read rather than installed. Nothing is published to npm.
 
-Gallery — <https://engineio.github.io/ui>
+Gallery: <https://engineio.github.io/ui>. Rules for agents:
+<https://engineio.github.io/ui/AGENTS.md>.
+
+## Using it in a product
+
+With engine-ui checked out beside the product (the usual sibling layout), from
+the product's front-end workspace:
 
 ```bash
-bun add @engineio/ui
+bun ../engine-ui/scripts/copy-into.ts packages/shared/src/lib/engine-ui
+bun add bits-ui clsx tailwind-merge tailwind-variants @lucide/svelte
 ```
 
-Public on npmjs, so that is the whole of it — no registry configuration, no
-token, no `.npmrc`. Published from CI by npm trusted publishing, so every
-version carries provenance linking it back to the commit and workflow run that
-built it.
+That copies `src/lib` and writes `ENGINE-UI.md` beside it, recording the commit
+it came from. Every import inside `src/lib` is relative, so the folder works
+wherever it lands.
 
 ```css
 /* app.css */
 @import "tailwindcss";
-@import "@engineio/ui/styles";
-@source "../node_modules/@engineio/ui/dist";
+@import "./lib/engine-ui/styles/index.css";
 ```
 
 ```svelte
 <script>
-  import { Button, Card, CardHeader, CardTitle } from "@engineio/ui"
+  import { Button, Card, CardHeader, CardTitle } from "$lib/engine-ui/index.js"
 </script>
 
 <Card>
@@ -32,19 +39,19 @@ built it.
 </Card>
 ```
 
-**That `@source` line is not optional.** Tailwind 4 does not scan
-`node_modules`, so without it the utility classes the primitives are written
-against never get generated. Adjust the relative path to wherever
-`node_modules` sits from the importing stylesheet — it resolves relative to the
-CSS file that declares it.
+There is no `@source` line, which the npm package needed. The copy is inside
+your source tree, so Tailwind scans it like any other file.
 
-The failure mode is nastier than "nothing renders", which is why it is worth
-getting right first time: the tokens still land (they are plain custom property
-declarations), and any class that *also* appears somewhere in your own source
-still works. So you get a page that is half-styled — magenta fills present,
-`rounded-control` and `border-grey-600` missing — which reads like a component
-bug rather than a build-config one. In a test consumer, omitting the line took
-the stylesheet from 30KB to 6KB with no error at all.
+**Picking up later changes.** The copy is yours, so the script won't overwrite
+it. Run it again and it prints the command to diff upstream since your copy:
+
+```bash
+git -C ../engine-ui diff <copied-sha> HEAD -- src/lib
+```
+
+Port what you want, then bump the commit in `ENGINE-UI.md`. Copying a single
+component works the same way: take its folder from `src/lib/components/` and
+`utils.ts` if you don't have it yet.
 
 ---
 
@@ -57,19 +64,20 @@ It does not own **product behaviour**. Engine Studio's approval queue, rgs's
 operator picker, a `play` button variant — those live in the products. The
 package is deliberately small so it can stay stable.
 
-Consumers are **never auto-upgraded**. Cutting a release only makes a version
-available; engine and rgs pick it up when someone bumps the dependency and opens
-a PR. That is the point of publishing rather than sharing source — the upgrade
-is a reviewable diff on the consumer's own schedule.
+Products are **never auto-upgraded**. A change here reaches a product when
+someone ports it into that product's copy, as a reviewable diff on the product's
+own schedule. That's the same property the npm package had, without a release
+or a version bump in between.
 
 ## Extending a component
 
-Every variant map is exported. Add product variants without forking the
-component or waiting on a release here:
+The copy is yours, so you *can* edit a component in place. Prefer extending
+its exported variant map instead, which keeps your copy diffable against
+upstream when you port the next change:
 
 ```ts
-// $lib/components/ui/button-variants.ts — in YOUR repo
-import { buttonVariants } from "@engineio/ui"
+// $lib/components/ui/button-variants.ts, beside your copy
+import { buttonVariants } from "$lib/engine-ui/index.js"
 import { tv } from "tailwind-variants"
 
 export const appButtonVariants = tv({
@@ -83,8 +91,8 @@ export const appButtonVariants = tv({
 })
 ```
 
-Brand rules (shape, weight, motion, focus ring) come from the package. Product
-variants stay in the product. If you find yourself wanting to upstream a variant
+Brand rules (shape, weight, motion, focus ring) come from the copy. Product
+variants stay beside it. If you find yourself wanting to upstream a variant
 that only one product uses, that is the signal to extend instead.
 
 `buttonVariants`, `badgeVariants` and `alertVariants` are all exported for
@@ -96,6 +104,13 @@ this. Every primitive also passes `class` through `cn`, so
 **Tokens** — `styles/tokens.css` as a Tailwind 4 `@theme` block. Three brand
 colours, three status colours, a twelve-step neutral ramp, radii by role, two
 shadows, three easings, and the marketing page's column, rhythm and type ramp.
+
+**Themes**: `styles/themes/`. Engine Magenta (dark, the default) and Engine
+Magenta Light, selected with `data-theme` on `<html>` or on any subtree. With no
+attribute set, a page renders exactly as before. Components name roles, not
+colours, so a theme is one CSS rule. To add a theme, copy a file, change the
+values and run `bun run check:themes`, which checks completeness and AA
+contrast. See [`src/lib/styles/themes/README.md`](src/lib/styles/themes/README.md).
 
 **The brand face, named** — `--font-brand` is DM Sans, a variable Google
 Font. No binary ships here: put Google's stylesheet link in your `app.html`
@@ -127,8 +142,7 @@ and the stylesheet stays three lines:
 
 ```css
 @import "tailwindcss";
-@import "@engineio/ui/styles";
-@source "../node_modules/@engineio/ui/dist";
+@import "./lib/engine-ui/styles/index.css";
 ```
 
 No `@font-face`, no `@theme` override, no binaries in `static/fonts/`. Google
@@ -185,32 +199,21 @@ is a candidate for the next release.
 
 ## Using it with AI agents
 
-The package ships `AGENTS.md`, so it lands at
-`node_modules/@engineio/ui/AGENTS.md` and **versions with the code**. Point at
-that path from a consuming repo rather than copying the rules in — a copy in
-someone's `CLAUDE.md` silently goes stale on the next version bump, and stale
-brand rules are worse than none.
-
-In a consumer's `AGENTS.md` or `CLAUDE.md`:
+The rules live in [`AGENTS.md`](AGENTS.md), also served at
+<https://engineio.github.io/ui/AGENTS.md>. Point a product's `CLAUDE.md` at
+that, not at a copy of the rules, because a copy goes stale silently:
 
 ```md
-UI is built on `@engineio/ui`. Read `node_modules/@engineio/ui/AGENTS.md`
-before writing or reviewing any UI.
+UI follows the Engine design system. Before writing or reviewing UI, read
+../engine-ui/AGENTS.md (or https://engineio.github.io/ui/AGENTS.md). Our copy
+of the components is in packages/shared/src/lib/engine-ui; ENGINE-UI.md there
+says which upstream commit it matches.
 ```
 
-For Claude Code specifically, copy the skill instead — it loads only when
-relevant, so the reference costs nothing until a UI task actually needs it:
-
-```bash
-mkdir -p .claude/skills
-cp -R node_modules/@engineio/ui/../../../ui/.claude/skills/engine-design-system \
-  .claude/skills/   # or from a checkout of engineio/ui
-```
-
-Skills have to live in `.claude/skills/`, `~/.claude/skills/` or a plugin —
-Claude Code does not load them from `node_modules` — which is why the substance
-lives in `AGENTS.md` and the skill is a thin pointer to it. That way the copied
-file has nothing in it that can rot.
+The knowledge repo's `engine-brand` and `front-conventions` skills carry the
+same pointer, so an agent in any Engine repo reaches these rules without
+anything installed. `.claude/skills/engine-design-system` in this repo is the
+same pointer as a standalone skill, for a repo outside the platform.
 
 ## Development
 
@@ -222,7 +225,8 @@ served alongside it at https://engineio.github.io/ui/AGENTS.md.
 bun install
 bun run dev            # the gallery, on :3100
 bun run check          # svelte-check
-bun run build          # svelte-package -> dist, then publint
+bun run build          # svelte-package -> dist, then publint (proves src/lib builds alone)
+bun run check:themes   # every theme complete and AA-readable
 bun run build:gallery  # the gallery -> build/
 ```
 
@@ -232,35 +236,14 @@ happened in the products.
 
 ## Releasing
 
-**Every push to `main` releases.** semantic-release reads the conventional
-commits since the last tag, works out the version, tags it, writes the GitHub
-release notes and publishes to GitHub Packages — one run, no release PR, no
-approval step. A push with nothing releasable in it (`docs:`, `chore:`, `ci:`)
-is a no-op rather than a failure.
+There are no releases. Merging to `main` publishes the reference: the gallery
+and `AGENTS.md` redeploy, and the next product to port picks the change up.
+Commit messages still follow conventional commits so a product porting a range
+can read what changed from `git log`.
 
-| Commit type | Bump |
-| --- | --- |
-| `feat:`, `tokens:` | minor |
-| `fix:`, `perf:`, `style:`, `refactor:` | patch |
-| `docs:`, `test:`, `build:`, `ci:`, `chore:` | none |
-| any `!` / `BREAKING CHANGE:` | minor, while under 1.0.0 |
-
-Use `tokens:` for token changes so they land in their own release-notes
-section.
-
-**Two things are deliberately not tracked in git.** `package.json`'s version is
-the placeholder `0.0.0-development` — tags are the source of truth, and
-semantic-release writes the real version in the runner just before publishing.
-And there is no `CHANGELOG.md`; the release notes are the changelog, generated
-from the same commits. Both follow from `main` requiring pull requests: the
-usual setup commits the bump and changelog back to the release branch, which
-would need a bypass no CI job should hold.
-
-We are on `0.x` on purpose. Semver means something the moment two repos depend
-on you, and the token layer is still moving — breaking changes are cheap and
-expected until it settles. That is enforced by `breaking → minor` in
-`.releaserc.json`; deleting that rule is the deliberate act that cuts `1.0.0`
-and starts the promises.
+The npm package `@engineio/ui` stops at 0.10.0. It stays installable for the
+products still on it until they switch to copies (see `MIGRATION.md`), but no
+newer version will be published.
 
 ## Known gaps
 
@@ -275,8 +258,9 @@ first is a decision made here that the brand documents have not caught up with.
    `aria-invalid` state all resolve to a real red instead of to magenta.
 
    Every value clears 4.5:1 three ways — Off Black as ink on the fill, and the
-   colour as text on both the page and its own 12% tint. **Ink on a status
-   fill is always Off Black**; white fails on all three.
+   colour as text on both the page and its own 12% tint. Ink on a status
+   fill is its `-foreground` token. On Engine Magenta that is Off Black, because
+   white fails on all three; the light theme's deeper steps take white.
 
    The outstanding work is documentary, not technical: `ENGINE-BRAND.md` §10
    and `ENGINE-DESIGN-SYSTEM.md` §12 in the engine repo still state that no
@@ -368,5 +352,5 @@ first is a decision made here that the brand documents have not caught up with.
 
 `docs/brand/ENGINE-DESIGN-SYSTEM.md` in the engine repo is the written
 specification, and `docs/brand/ENGINE-BRAND.md` the brand guidelines. Where this
-package and those documents disagree, **the documents win and this package is
+repo and those documents disagree, **the documents win and this repo is
 wrong** — open an issue rather than changing the document to match the code.

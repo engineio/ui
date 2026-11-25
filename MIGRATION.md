@@ -1,233 +1,84 @@
-# Adopting @engineio/ui in engine and rgs
+# Switching a product from the npm package to a copy
 
-Consumer-side changes, in the order they need to happen. Nothing here has been
-applied to either repo — this is the plan, not a record.
+engine-ui is a reference now, not a dependency. `@engineio/ui@0.10.0` is the
+last npm release, and it stays installable, so nothing breaks before a product
+switches. This is the plan for switching. **Nothing here has been applied to
+any repo yet.**
 
-Both consumers are SvelteKit apps in a bun workspace behind a docker-bake build,
-so the shape is the same for each:
-
-| | engine | rgs |
+| | Imports of `@engineio/ui` | Mode |
 | --- | --- | --- |
-| Workspace root | `front/` | `services/front/` |
-| Apps | `apps/provider` | `apps/operator`, `apps/admin` |
-| Dockerfile | `front/Dockerfile` | `deploy/front/Dockerfile` |
-| Bake file | `deploy/studio-front/docker-bake.hcl` | `deploy/front/docker-bake.hcl` |
-| Stylesheet | `front/packages/shared/src/app.css` | same path under `services/front` |
+| studio `front/` | 225 files | workspace package |
+| rgs `services/front/` | 48 files | workspace package |
+| casino `front/` | 1 file | folder |
 
----
+## Workspace package (studio, rgs)
 
-## 1. Registry access
+The copy becomes a local workspace package that is still named `@engineio/ui`,
+so **no import changes**. All 225 and 48 files keep resolving.
 
-None. `@engineio/ui` is public on npmjs, so nothing needs configuring — no
-`.npmrc`, no token, no `packages: read` in CI, no secret mounted into the Docker
-build. `bun install` resolves it like any other dependency.
-
-This section used to be the longest in this document. The package was on GitHub
-Packages, which requires an access token to install **even for public
-packages** — so every developer needed a classic PAT, SSO-authorised and
-renewed on expiry, and every CI job and Docker build needed the same credential
-plumbed in. Moving to npmjs deleted all of it.
-
-A `.npmrc` mentioning `npm.pkg.github.com` in either repo is left over from that
-period and can go.
-
-## 2. Install and wire the stylesheet
+From the front-end workspace root, with engine-ui checked out beside the repo:
 
 ```bash
-cd front && bun add @engineio/ui
+bun ../../engine-ui/scripts/copy-into.ts packages/engine-ui --package   # rgs: ../../../engine-ui
 ```
 
-Then in `packages/shared/src/app.css` — and this is the step that matters most,
-because the package and the existing file both define the same tokens:
+1. **Dependency.** Change `"@engineio/ui": "^0.10.0"` to `"workspace:*"` in
+   every `package.json` that has it: studio has three (root, `packages/shared`,
+   `apps/provider`) and rgs has three (root, `packages/shared`, `apps/landing`).
+   Then run `bun install` and commit the lockfile.
+2. **Stylesheet.** Keep `@import "@engineio/ui/styles";` and repoint the
+   `@source` line from `node_modules/@engineio/ui/dist` to the copy, relative to
+   each `app.css`. For `packages/shared/src/app.css` that is
+   `@source "../../engine-ui/src";`. rgs has a second `app.css` in
+   `apps/landing`.
+3. **Dockerfile.** Both Dockerfiles copy each workspace `package.json` before
+   `bun install --frozen-lockfile`. Add the new one, or the image build fails:
 
-```diff
- @import "./fonts.css";
- @import "tailwindcss";
-+@import "@engineio/ui/styles";
-+@source "../../../node_modules/@engineio/ui/dist";
- @import "tw-animate-css";
+   ```dockerfile
+   COPY packages/engine-ui/package.json packages/engine-ui/package.json
+   ```
+
+   The later `COPY . .` brings the source.
+4. **Verify.** Run `bun run check` (in a copy of the tree, never on the host
+   while the Tilt pod is up), a production build, and a screenshot of a dense
+   page against the current one. The copy is the v0.10.0 components plus
+   everything merged since, so expect the newer changes to show up: theming,
+   brighter sub-text greys, and 16px reading text.
+
+Tested on a scratch workspace built from the gallery. Every import stayed
+`@engineio/ui`, and `svelte-check` and the build both passed.
+
+## Folder (casino, or any new product)
+
+```bash
+bun ../engine-ui/scripts/copy-into.ts src/lib/engine-ui
+bun add bits-ui clsx tailwind-merge tailwind-variants @lucide/svelte
 ```
 
-Then **delete** from `app.css`:
+- In `app.css`, replace `@import "@engineio/ui/styles";` and its `@source` line
+  with `@import "./lib/engine-ui/styles/index.css";`. No `@source` is needed,
+  because the copy is inside the source tree.
+- Change the imports from `@engineio/ui…` to `$lib/engine-ui…`.
+- Remove the `@engineio/ui` dependency.
+- Casino's Fluke token bridge still overrides the tokens in its own `@theme`,
+  unchanged.
 
-- the entire `@theme { … }` block — colours, greys, radii, shadows, easings. It
-  now comes from the package, and two `@theme` blocks defining
-  `--color-primary` differently is a coin flip.
-- `@utility field { … }` — shipped in `styles/utilities.css`.
-- the `color-scheme`, scrollbar and `.scrollbar-hide` rules — same.
-- the `@import "./fonts.css"` line, once you delete `fonts.css` and the Proxima
-  Nova files in `static/fonts/` — the brand face is DM Sans from Google Fonts,
-  loaded by a link in `app.html` (see 2a). Keep `LeagueGothic*` and the Proxima
-  condensed cuts if a product still uses them for artwork, as the studio's
-  media editor does.
+## After the switch
 
-Keep in `app.css`: `--gradient-brand*`, the `@keyframes`, `.floating`,
-`.markdown-body`, the `input[aria-hidden]` fix, `carta.css` and
-`container.css` — product-specific, not brand.
+- **The copy is the product's.** Fix and extend it in place. Prefer
+  `tv({ extend })` beside it for product variants, so the copy stays diffable.
+- **Picking up upstream changes.** `ENGINE-UI.md` in the copy records the
+  engine-ui commit it matches. `git -C ../engine-ui diff <sha> HEAD -- src/lib`
+  shows what to port. Bump the commit when done.
+- **A fix worth sharing goes upstream too.** Make it in engine-ui, then port it
+  to the other products the same way.
 
-`@source` resolves relative to the CSS file that declares it. From
-`front/packages/shared/src/app.css` the workspace `node_modules` is three levels
-up (`src` → `shared` → `packages` → `front`); rgs is the same depth under
-`services/front`. Get it wrong and everything renders unstyled with no error, so
-check it before wondering why the tokens did not land.
+## Outside the product repos
 
-**Two visible changes** you should expect from the token layer, both deliberate:
-the brand face is DM Sans, one variable font, so `font-medium` (500) renders as
-a real Medium rather than folding into Regular as it did across Proxima Nova's
-four static cuts; and `--color-destructive` becomes the real danger red
-`#FF3B30` rather than the oklch value inherited from shadcn, which had no brand
-owner.
-
-### 2a. Load the brand face
-
-The package names DM Sans in `--font-brand` and ships the metric-matched
-`"DM Sans Fallback"` behind it. What it cannot do is fetch the font, so each
-app's `app.html` carries Google's link:
-
-```html
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap" rel="stylesheet" />
-```
-
-Then delete, if the repo has them from before this release: its own
-`--font-brand` / `--font-condensed` / `--font-extra-condensed` overrides in
-`@theme`, and any local `"DM Sans Fallback"` or Proxima Nova `@font-face`
-blocks — the package's copies are identical, and two declarations of the same
-family are one too many to keep in step. Keep the `__appReady` loader gate in
-`app.html`: Google's CSS is `font-display: swap`, and the gate is what hides
-the swap. The studio front additionally needs `https://fonts.googleapis.com`
-in `style-src` and `https://fonts.gstatic.com` in `font-src` of the nginx CSP
-in `front/Dockerfile`; the rgs front's already has both.
-
-## 3. Migrate imports, one component at a time
-
-Both repos alias `$lib` to the shared package via `kit.files.lib`, so this is a
-find-and-replace with no config change:
-
-```diff
--import { Button } from "$lib/components/ui/button/index.js"
-+import { Button } from "@engineio/ui"
-```
-
-Do it per component, not in one sweep, and delete
-`packages/shared/src/lib/components/ui/<name>/` only once nothing imports it.
-The 35 primitives that are not in the package stay exactly where they are —
-`@engineio/ui` and the local `ui/` folder coexist fine.
-
-**Where you will hit friction — Button.** The package drops `tab`,
-`tab-active`, `drawer`, `play` and `filled`. Provider has 100+ button call
-sites, some on those variants. Extend rather than fork — see the recipe in the
-README — and put the extension in `$lib/components/ui/button-variants.ts`. Its
-`success` variant does survive, now on the real status token rather than the
-stock green it used to be.
-
-**Badge is a restyle, not a migration.** Badge and Tag are merged into one
-soft chip under the name `Badge`, and every variant provider actually uses —
-`default` (9 sites), `secondary` (11), `outline` (11), `success` (3),
-`destructive` (2) — survives with the same name. Nothing needs renaming.
-
-What changes is how they look. The chip goes soft: `default` becomes a magenta
-tint with `primary-300` ink instead of a solid magenta fill with white text,
-`secondary` becomes a translucent wash instead of an opaque grey, and the size
-goes from 11px to 13px. There is no `solid` variant, because an opaque fill can
-only be correct on one surface. Expect to eyeball the 35 call sites rather than
-edit them, and note the change fixes a real defect: the old solid badge's
-white-on-magenta at 11px measured 3.9:1.
-
-`Tag` is gone entirely. Neither repo has a single `<Tag>` call site, so this
-costs nothing.
-
-There is now a **status palette** — success, warning and danger — which is what
-lets `destructive` resolve to a real red instead of to magenta. If a product
-has been faking status colours with stock Tailwind hues (there are ~724
-off-palette utility usages in the engine repo), those are now replaceable with
-real tokens. That is a good second pass, not part of this migration.
-
-(Class names are written descriptively rather than literally throughout this
-file on purpose. Tailwind 4's automatic source detection scans markdown as
-well as source, so a literal utility mentioned in prose gets generated into
-the package's CSS — which is how two unused green custom properties ended up
-shipping in the first build.)
-
-## 4. rgs needs its peer dependencies
-
-rgs's `services/front/package.json` is missing `bits-ui` and
-`tailwind-variants`, which nearly every primitive imports. They are regular
-dependencies of `@engineio/ui`, so `bun add @engineio/ui` pulls them in — no
-action needed, but that is why the install is larger than it looks.
-
-The operator app's 461 hand-written `.ig-*` selectors in
-`lib/styles/integration.css` are the real prize here: most of them reimplement
-Button, Card, Pill, Field and Modal because rgs never had access to the
-primitives. Porting them is a separate, larger piece of work and should not be
-bundled into this migration.
-
-## 5. Drift warning, optional
-
-A check that tells you when a consumer has fallen behind, without failing
-anyone's build:
-
-```yaml
-- name: Design system freshness
-  continue-on-error: true
-  run: |
-    have=$(node -p "require('./front/node_modules/@engineio/ui/package.json').version")
-    want=$(gh api /orgs/engineio/packages/npm/ui/versions --jq '.[0].name' 2>/dev/null || echo "$have")
-    [ "$have" = "$want" ] || echo "::warning::@engineio/ui $have installed, $want available"
-```
-
-Warn, never fail. Nothing about this setup should be able to block a product
-release on a design system upgrade.
-
-## Suggested order
-
-Ship §1 and §2 alone first — registry access plus the token swap, no component
-changes. That is the highest-value, lowest-risk half: it puts both products on
-one set of tokens and fixes the Semibold mapping. Then migrate components at
-whatever pace suits, and treat the `.ig-*` port as its own project.
-
----
-
-## The two landings
-
-Both logged-out landings — `studio/front/apps/provider/src/routes/(marketing)/+page.svelte`
-and `rgs/services/front/apps/operator/src/routes/+page.svelte` — were built
-before the marketing kit existed, so each repo carries its own copy of the
-shell under `packages/shared/src/lib/components/marketing/`: `Tour.svelte`,
-the marquee (`ProviderMarquee` / `CreatorMarquee`), the walkthrough and bento
-consumers, `Wordmark.svelte`, `TurboIcon.svelte`, and inline class recipes on
-the page (`gutter`, `sectionHead`, `heading`, `lead`, `stripCell`, `stat`).
-The two `Tour.svelte` files differ by one padding value and the address-bar
-host. Every edit today has to be made twice.
-
-Once a release carries the kit and both fronts have bumped past it:
-
-1. Replace the page recipes with the tokens: `px-[clamp(20px,5vw,64px)]` →
-   `px-gutter`, `max-w-[1180px]` → `max-w-marketing`, the `sectionHead`,
-   `heading` and `lead` consts → `SectionHead`, the h1 classes → `text-hero`,
-   `scroll-mt-[96px] md:scroll-mt-[120px]` → `scroll-mt-anchor-sm md:scroll-mt-anchor`.
-2. Delete the local `Tour.svelte` and import `Tour` from
-   `@engineio/ui/components/marketing/index.js`, passing
-   `host="integration.engine.io"` on the operator page (the studio page's host
-   is the default).
-3. Delete the local marquee and render `Marquee` with the twelve logos.
-4. Replace the inline `.rise` / `.gauge` / `.done` / `.swap-*` / `.live`
-   `<style>` blocks in the walkthrough and bento files with the global
-   utilities: `gauge` is `sweep`, `done` is `settle`, `bar` is `climb`,
-   `type` is `type-in`, `live` / `dot` are `live-dot`. The bento's
-   `.live .rise { running }` gating becomes `BentoGrid`, and its single
-   `setInterval` becomes `onbeat`.
-5. Replace the stats band with `StatBand` (floor the live figures first — the
-   plus is a promise), the header with `SiteHeader`, the banner with
-   `SiteBanner`, the footer with `SiteFooter`, the hero with `Hero`.
-6. Delete `Wordmark.svelte` and `TurboIcon.svelte` in favour of
-   `EngineWordmark` and `EngineIcon`. The package wordmark's box is padded for
-   the g's descender, so a given `h-*` renders the word about 27% smaller than
-   the local copy did — step up one size where it matters.
-7. Delete the `BRIDGE` `@theme` block at the end of each `app.css` — the grey
-   lift it carries is already in the package.
-
-Keep the copy, the step content, the bento scenes and the real-data fetches
-where they are; the kit is the shell, not the story.
-
+- The knowledge repo's `engine-brand` and `front-conventions` skills describe
+  consuming `@engineio/ui` from `node_modules`. Point them at
+  `../engine-ui/AGENTS.md` and the copy model.
+- Products' `CLAUDE.md` files that point at `node_modules/@engineio/ui/AGENTS.md`
+  should point at `../engine-ui/AGENTS.md`.
+- On npm, mark the package deprecated once no product installs it:
+  `npm deprecate @engineio/ui "Copy from engineio/ui instead."`
