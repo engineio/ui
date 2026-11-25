@@ -27,10 +27,12 @@ jobs:
       - name: Types and Svelte check
         run: bun run check
 
-      # `svelte-package` + publint. publint is the guard that matters: it
-      # validates the exports map against what consumers actually resolve, so
-      # a broken subpath or a missing `svelte` condition fails here rather
-      # than in engine or rgs after a release.
+      - name: Themes complete and readable
+        run: bun run check:themes
+
+      # `svelte-package` + publint. Nothing installs the package any more
+      # (products copy src/lib), but packaging is still the quickest proof
+      # that src/lib compiles on its own, with no help from the gallery.
       - name: Build package
         run: bun run build
 

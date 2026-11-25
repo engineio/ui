@@ -10,9 +10,15 @@
     #FFFFFF  Pure White  — text
     #FF006A  Magenta     — the primary, and the only accent
 
-  Everything else is a neutral step between the outer two. There is no light
-  theme and no `dark` variant — this is the whole palette, so it lives at the
-  root.
+  Everything else is a neutral step between the outer two.
+
+  THE VALUES BELOW ARE THE ENGINE MAGENTA THEME, and they are the default: an
+  app that never sets `data-theme` renders exactly these. Other themes —
+  Engine Magenta Light, and whatever a product or an experiment adds — live
+  in themes/ and override these same names under a `[data-theme~="…"]`
+  selector. There are still no `dark:` variants: a component names a role
+  (`bg-card`, `text-foreground`, `border-grey-600`) and the theme decides what
+  the role is. See themes/README.md for the contract.
 
   Token names follow Tailwind 4's `@theme` namespaces rather than the design
   document's bare names (`--color-primary`, not `--magenta`). That is
@@ -76,9 +82,9 @@
   --color-grey-700: #242424;
   --color-grey-600: #2e2e2e;
   --color-grey-500: #3d3d3d;
-  --color-grey-400: #808080;
-  --color-grey-300: #9a9a9a;
-  --color-grey-200: #b4b4b4;
+  --color-grey-400: #9a9a9a;
+  --color-grey-300: #b0b0b0;
+  --color-grey-200: #c4c4c4;
   --color-grey-100: #d9d9d9;
   --color-grey-050: #f2f2f2;
 
@@ -86,7 +92,7 @@
   --color-secondary: #232323;
   --color-secondary-foreground: #ffffff;
   --color-muted: #232323;
-  --color-muted-foreground: #a1a1a1;
+  --color-muted-foreground: #b8b8b8;
   --color-accent: #2a2a2a;
   --color-accent-foreground: #ffffff;
 
@@ -167,8 +173,13 @@
   /* ── Depth ────────────────────────────────────────────────────────── */
   /* Depth comes from rules and nested panels, not shadow. These two exist
      for product chrome and modals only — never on a brand surface. */
-  --shadow-panel: 0 12px 32px rgb(0 0 0 / 0.55);
-  --shadow-modal: 0 24px 64px rgb(0 0 0 / 0.7);
+  --shadow-panel: 0 12px 32px var(--shadow-panel-color, rgb(0 0 0 / 0.55));
+  --shadow-modal: 0 24px 64px var(--shadow-modal-color, rgb(0 0 0 / 0.7));
+
+  /* The dim behind a modal or a sheet. Its own role because a light theme
+     dims with a lighter hand than a dark one, and both overlays used to
+     spell the dark value out inline. */
+  --color-scrim: rgb(10 10 10 / 0.72);
 
   /* ── Motion ───────────────────────────────────────────────────────── */
   /* Fast and mechanical: 140ms control states, 220ms surfaces, 360–640ms
@@ -356,8 +367,9 @@
      TYPE. Four sizes plus a standfirst. Every heading is `text-balance` and
      capped in `ch`, never px, so line length survives the clamp. Weight and
      tracking ride on the token: `text-hero` is the whole spec, not a size.
-     Small text is 13px and WHITE — grey is reserved for meaning (an inactive
-     state, a unit beside a figure), never used as a default body colour.
+     Captions, labels and footer links are `text-body` (16px; see "Reading
+     size" below) and WHITE. Grey is reserved for meaning (an inactive state,
+     a unit beside a figure) and is never a default body colour.
 
        hero        clamp(38px, 5vw, 64px)   1.02  −0.02em  700   h1, max 18ch
        section     clamp(28px, 3.2vw, 44px) 1.06  −0.02em  700   h2, max 26ch
@@ -365,7 +377,9 @@
        lead        clamp(17px, 1.4vw, 20px) 1.5                  under an h2, max 52ch
        card-title  17px                     1.35           600   one sentence per bento card
        stat        42px                     0.94           900   32px below `md`, tabular
-       small       13px                     1.5                  labels, captions, footer
+       body        16px                     1.5                  captions, labels, sub text
+       nav         16px                     1.25                 every navigation item
+       small       13px                     1.5                  chips and mock screens only
 
      GLASS. The one sanctioned blur is the sticky header (and the modal
      scrim). 65% page colour over 20px of blur, always on, so the hero art
@@ -401,6 +415,26 @@
 
   --blur-glass: 20px;
 
+  /* ── Reading size ──────────────────────────────────────────────────────
+     NOTHING PEOPLE READ IS SET BELOW 16PX. Body copy, secondary text,
+     descriptions, captions, labels, field values, table cells, tooltips and
+     menu items all use `text-body`. Every navigation item (header links,
+     tabs, segmented rails, footer links, tour steps) uses `text-nav` or
+     something larger. Two roles with one value, so navigation can grow
+     without moving body copy.
+
+     The exceptions are places where text is not being read as text: badge
+     chips, a button's label (a control at 15px bold), and the inside of a
+     mock product screen, which is a picture of a product and keeps its
+     10-13px scale. `text-small` (13px) remains for those and nothing else.
+
+     `text-nav` sets line-height 1.25 rather than 1.5. A pill tab or a segment
+     sits in a 32px rail and needs a 20px line box to fit. */
+  --text-body: 16px;
+  --text-body--line-height: 1.5;
+  --text-nav: 16px;
+  --text-nav--line-height: 1.25;
+
   /* ── Sidebar ──────────────────────────────────────────────────────── */
   /* Left-nav hover and active states: magenta at very low lightness, so the
      wash reads as brand-tinted rather than plain grey. */
@@ -412,6 +446,36 @@
   --color-sidebar-accent-foreground: #ffffff;
   --color-sidebar-border: #2a2a2a;
   --color-sidebar-ring: #ff006a;
+}
+
+/*
+  DERIVED ROLES, RE-RESOLVED INSIDE EVERY THEME.
+
+  A custom property that reads another (`--color-ring: var(--color-primary)`)
+  is resolved where it is declared and inherited as a value, so a theme set on
+  a subtree would otherwise keep the root's ring, tints and aliases. Restating
+  them on `[data-theme]` resolves them against that element's own palette, so
+  a theme only has to set the inputs.
+
+  Scoped to `[data-theme]` and not `:root` on purpose: an app that sets no
+  theme keeps the literal values above, including any it overrides in its own
+  `@theme` (the casino's token bridge does). A theme may still override any of
+  these — the theme files load after this one.
+*/
+@layer base {
+  [data-theme] {
+    --color-primary-tint-12: color-mix(in srgb, var(--color-primary) 12%, transparent);
+    --color-primary-tint-24: color-mix(in srgb, var(--color-primary) 24%, transparent);
+    --color-partner-yellow-tint-12: color-mix(in srgb, var(--color-partner-yellow) 12%, transparent);
+    --color-success-tint-12: color-mix(in srgb, var(--color-success) 12%, transparent);
+    --color-warning-tint-12: color-mix(in srgb, var(--color-warning) 12%, transparent);
+    --color-danger-tint-12: color-mix(in srgb, var(--color-danger) 12%, transparent);
+    --color-destructive: var(--color-danger);
+    --color-destructive-foreground: var(--color-danger-foreground);
+    --color-ring: var(--color-primary);
+    --color-sidebar-primary: var(--color-primary);
+    --color-sidebar-ring: var(--color-ring);
+  }
 }
 
 /*

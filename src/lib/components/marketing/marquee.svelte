@@ -3,7 +3,7 @@
 </script>
 
 <script lang="ts">
-  import { cn } from "$lib/utils.js"
+  import { cn } from "../../utils.js"
   import type { Snippet } from "svelte"
 
   // The logo slider under a hero: a row of partner marks drifting left on a

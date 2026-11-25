@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { cn } from "$lib/utils.js"
+  import { cn } from "../../utils.js"
   import type { Snippet } from "svelte"
 
   // A section's heading and lead, with the section rhythm above it.
@@ -31,7 +31,7 @@
 </script>
 
 <div class={cn("mt-section mb-12 max-md:mt-20 max-md:mb-8", className)}>
-  <h2 class="max-w-[26ch] text-section text-balance text-white">{title}</h2>
+  <h2 class="max-w-[26ch] text-section text-balance text-foreground">{title}</h2>
   {#if lead}
     <p class="mt-5 max-w-[52ch] text-lead text-foreground">{lead}</p>
   {/if}

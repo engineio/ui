@@ -1,6 +1,6 @@
 <script lang="ts">
-  import type { WithElementRef } from "$lib/utils.js"
-  import { cn } from "$lib/utils.js"
+  import type { WithElementRef } from "../../../utils.js"
+  import { cn } from "../../../utils.js"
   import type { HTMLAttributes } from "svelte/elements"
 
   // A hairline underneath and nothing else. The row paints its own hover and
@@ -22,7 +22,7 @@
   bind:this={ref}
   class={cn(
     "border-b border-border transition-colors duration-140 ease-brand",
-    "hover:bg-white/6",
+    "hover:bg-foreground/6",
     "data-[state=selected]:bg-primary-tint-12",
     className,
   )}

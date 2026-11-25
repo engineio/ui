@@ -1,9 +1,9 @@
 <script lang="ts">
-  import type { WithElementRef } from "$lib/utils.js"
-  import { cn } from "$lib/utils.js"
+  import type { WithElementRef } from "../../../utils.js"
+  import { cn } from "../../../utils.js"
   import type { HTMLAttributes } from "svelte/elements"
 
-  // Bold 15px Pure White. The title carries the message — the bar only says
+  // Bold 16px Pure White, the same size as the description so the weight carries the step. The title carries the message — the bar only says
   // which kind of message it is, so the words have to work with the colour
   // ignored entirely. "Upload failed." not "Error."
   let {
@@ -22,7 +22,7 @@
   aria-level={level}
   bind:this={ref}
   class={cn(
-    "text-[15px] leading-[1.2] font-bold tracking-[-0.01em] text-foreground",
+    "text-body leading-[1.25] font-bold tracking-[-0.01em] text-foreground",
     className,
   )}
   {...restProps}

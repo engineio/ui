@@ -1,6 +1,6 @@
 <script lang="ts">
-  import type { WithElementRef } from "$lib/utils.js"
-  import { cn } from "$lib/utils.js"
+  import type { WithElementRef } from "../../../utils.js"
+  import { cn } from "../../../utils.js"
   import type {
     HTMLInputAttributes,
     HTMLInputTypeAttribute,
@@ -30,7 +30,7 @@
   <input
     bind:this={ref}
     class={cn(
-      "field flex h-10 w-full px-3 py-2 text-[15px] file:border-0 file:bg-transparent file:text-sm file:font-medium",
+      "field flex h-10 w-full px-3 py-2 text-body file:border-0 file:bg-transparent file:text-body file:font-medium",
       className,
     )}
     type="file"
@@ -42,7 +42,7 @@
   <input
     bind:this={ref}
     class={cn(
-      "field flex h-10 w-full px-3 py-2 text-[15px] file:border-0 file:bg-transparent file:text-sm file:font-medium",
+      "field flex h-10 w-full px-3 py-2 text-body file:border-0 file:bg-transparent file:text-body file:font-medium",
       className,
     )}
     {type}

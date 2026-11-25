@@ -1,9 +1,9 @@
 <script lang="ts">
-  import type { WithElementRef } from "$lib/utils.js"
-  import { cn } from "$lib/utils.js"
+  import type { WithElementRef } from "../../../utils.js"
+  import { cn } from "../../../utils.js"
   import type { HTMLAttributes } from "svelte/elements"
 
-  // Sits outside the frame, below it — caption at 13px on the grey ramp.
+  // Sits outside the frame, below it — caption at 16px (`text-body`) on the grey ramp.
   let {
     ref = $bindable(null),
     class: className,
@@ -14,7 +14,7 @@
 
 <caption
   bind:this={ref}
-  class={cn("mt-4 text-[13px] leading-[1.2] text-grey-300", className)}
+  class={cn("mt-4 text-body text-grey-300", className)}
   {...restProps}
 >
   {@render children?.()}

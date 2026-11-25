@@ -10,18 +10,17 @@
   // transitions, a 0.98 press and a magenta focus ring.
   //
   // THIS IS THE EXTENSION SEAM. `buttonVariants` is exported so a product can
-  // add its own variants without forking the component or waiting on a
-  // release here:
+  // add its own variants beside its copy without editing the component:
   //
   //     // $lib/components/ui/button-variants.ts
-  //     import { buttonVariants } from "@engineio/ui/components/ui/button"
+  //     import { buttonVariants } from "$lib/engine-ui/components/ui/button/index.js"
   //     import { tv } from "tailwind-variants"
   //
   //     export const appButtonVariants = tv({
   //       extend: buttonVariants,
   //       variants: {
   //         variant: {
-  //           tab: "bg-transparent text-grey-300 hover:bg-white/6 hover:text-foreground",
+  //           tab: "bg-transparent text-grey-300 hover:bg-foreground/6 hover:text-foreground",
   //           play: "bg-primary text-primary-foreground hover:bg-primary-press",
   //         },
   //       },
@@ -47,14 +46,14 @@
       variant: {
         // The system's four: primary, inverse, secondary, ghost.
         default: "bg-primary text-primary-foreground hover:bg-primary-press",
-        inverse: "bg-white text-background hover:bg-grey-100",
+        inverse: "bg-foreground text-background hover:bg-grey-100",
         outline:
-          "border-[1.5px] border-grey-500 bg-transparent text-foreground hover:bg-white/6",
-        ghost: "bg-transparent text-foreground hover:bg-white/6",
+          "border-[1.5px] border-grey-500 bg-transparent text-foreground hover:bg-foreground/6",
+        ghost: "bg-transparent text-foreground hover:bg-foreground/6",
 
         secondary: "bg-grey-800 text-foreground hover:bg-grey-700",
         link: "text-primary underline-offset-4 hover:underline",
-        icon: "bg-transparent text-foreground hover:bg-white/6",
+        icon: "bg-transparent text-foreground hover:bg-foreground/6",
 
         // Status. Ink is Off Black on every status fill — white fails AA on
         // all three. These are the only non-magenta fills in the button, and
@@ -92,7 +91,7 @@
 </script>
 
 <script lang="ts">
-  import { cn } from "$lib/utils.js"
+  import { cn } from "../../../utils.js"
   import LoaderCircle from "@lucide/svelte/icons/loader-circle"
 
   let {

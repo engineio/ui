@@ -19,7 +19,7 @@ const twMerge = extendTailwindMerge({
     theme: {
       spacing: ["gutter", "section", "header", "header-sm", "anchor", "anchor-sm"],
       container: ["marketing"],
-      text: ["hero", "section", "standfirst", "lead", "card-title", "stat", "small"],
+      text: ["hero", "section", "standfirst", "lead", "card-title", "stat", "small", "body", "nav"],
       radius: ["tag", "field", "card-inner", "media", "card", "frame", "control"],
       blur: ["glass"],
       shadow: ["panel", "modal"],

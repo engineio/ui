@@ -1,0 +1,73 @@
+/*
+  Engine Magenta — the house theme, dark.
+
+  These are the same values tokens.css declares as the defaults, restated
+  under a selector so a subtree can be pinned to them inside a page running
+  another theme: a landing on a light product, a dark hero band, a mock of
+  the dark product on a light docs page. `bun run check:themes` fails if the
+  two copies drift.
+
+      <html data-theme="engine-magenta">
+      <section data-theme="engine-magenta">…</section>
+*/
+
+@layer base {
+  [data-theme~="engine-magenta"] {
+    color-scheme: dark;
+
+    --color-background: #0e0e0e;
+    --color-foreground: #ffffff;
+    --color-card: #161616;
+    --color-card-foreground: #ffffff;
+    --color-popover: #1c1c1c;
+    --color-popover-foreground: #ffffff;
+
+    --color-primary: #ff006a;
+    --color-primary-foreground: #ffffff;
+    --color-primary-press: #d60059;
+    --color-primary-300: #ff5c9b;
+
+    --color-partner-yellow: #ffdd00;
+    --color-partner-yellow-press: #e0c200;
+
+    --color-grey-950: #0a0a0a;
+    --color-grey-900: #0e0e0e;
+    --color-grey-850: #141414;
+    --color-grey-800: #1a1a1a;
+    --color-grey-700: #242424;
+    --color-grey-600: #2e2e2e;
+    --color-grey-500: #3d3d3d;
+    --color-grey-400: #9a9a9a;
+    --color-grey-300: #b0b0b0;
+    --color-grey-200: #c4c4c4;
+    --color-grey-100: #d9d9d9;
+    --color-grey-050: #f2f2f2;
+
+    --color-secondary: #232323;
+    --color-secondary-foreground: #ffffff;
+    --color-muted: #232323;
+    --color-muted-foreground: #b8b8b8;
+    --color-accent: #2a2a2a;
+    --color-accent-foreground: #ffffff;
+    --color-border: #2a2a2a;
+    --color-input: #2a2a2a;
+
+    --color-success: #00c46a;
+    --color-success-foreground: #0e0e0e;
+    --color-warning: #ffb020;
+    --color-warning-foreground: #0e0e0e;
+    --color-danger: #ff3b30;
+    --color-danger-foreground: #0e0e0e;
+
+    --color-sidebar-background: #131313;
+    --color-sidebar-foreground: #ffffff;
+    --color-sidebar-primary-foreground: #ffffff;
+    --color-sidebar-accent: #291319;
+    --color-sidebar-accent-foreground: #ffffff;
+    --color-sidebar-border: #2a2a2a;
+
+    --color-scrim: rgb(10 10 10 / 0.72);
+    --shadow-panel-color: rgb(0 0 0 / 0.55);
+    --shadow-modal-color: rgb(0 0 0 / 0.7);
+  }
+}

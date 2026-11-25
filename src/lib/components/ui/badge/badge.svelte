@@ -45,7 +45,7 @@
         // Brand. The default, because an unqualified chip is an Engine chip.
         default: "bg-primary-tint-12 text-primary-300 hover:bg-primary-tint-24",
         // Neutral. The workhorse — a label with no state attached.
-        secondary: "bg-white/8 text-grey-200 hover:bg-white/12",
+        secondary: "bg-foreground/8 text-grey-200 hover:bg-foreground/12",
         // No fill at all, for a chip on an already-busy surface.
         outline:
           "border-[1.5px] border-grey-600 text-foreground hover:border-grey-500",
@@ -69,8 +69,8 @@
 </script>
 
 <script lang="ts">
-  import type { WithElementRef } from "$lib/utils.js"
-  import { cn } from "$lib/utils.js"
+  import type { WithElementRef } from "../../../utils.js"
+  import { cn } from "../../../utils.js"
   import type { HTMLAnchorAttributes } from "svelte/elements"
 
   let {

@@ -1,6 +1,6 @@
 <script lang="ts">
-  import type { WithElementRef } from "$lib/utils.js"
-  import { cn } from "$lib/utils.js"
+  import type { WithElementRef } from "../../../utils.js"
+  import { cn } from "../../../utils.js"
   import type { HTMLAttributes } from "svelte/elements"
 
   // Totals: no fill, a stronger rule above to close the grid, and Bold to

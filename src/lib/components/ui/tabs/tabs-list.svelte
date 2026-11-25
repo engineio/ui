@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Tabs as TabsPrimitive } from "bits-ui";
-	import { cn } from "$lib/utils.js";
+	import { cn } from "../../../utils.js";
 
 	// The system ships tabs in two flavours. `pill` is the default because it
 	// is what every existing call site already renders; `underline` is the

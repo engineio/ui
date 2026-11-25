@@ -10,6 +10,7 @@
     background-color: var(--color-background);
     color: var(--color-foreground);
     font-family: var(--font-brand);
+    font-size: var(--text-body);
     font-weight: 400;
     /* DM Sans carries an optical-size axis (9-40). `auto` is the initial
        value; it is written down so the looser cut at body sizes and the tight

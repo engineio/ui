@@ -3,7 +3,13 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="color-scheme" content="dark" />
+    <meta name="color-scheme" content="dark light" />
+    <script>
+      try {
+        const theme = localStorage.getItem("engine-ui-theme")
+        if (theme) document.documentElement.dataset.theme = theme
+      } catch {}
+    </script>
     <title>Engine design system</title>
     <!-- The brand face, exactly as a consumer loads it: see src/lib/styles/fonts.css. -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />

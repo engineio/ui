@@ -3,7 +3,7 @@
 </script>
 
 <script lang="ts">
-  import { cn } from "$lib/utils.js"
+  import { cn } from "../../utils.js"
   import ArrowUpRight from "@lucide/svelte/icons/arrow-up-right"
   import Menu from "@lucide/svelte/icons/menu"
   import X from "@lucide/svelte/icons/x"
@@ -59,7 +59,7 @@
   let open = $state(false)
 
   const cell =
-    "relative flex h-full items-center justify-center gap-1.5 px-5 text-[15px] font-medium whitespace-nowrap text-white transition-colors duration-220 ease-brand hover:bg-grey-850 max-md:px-4"
+    "relative flex h-full items-center justify-center gap-1.5 px-5 text-nav font-medium whitespace-nowrap text-foreground transition-colors duration-220 ease-brand hover:bg-grey-850 max-md:px-4"
 </script>
 
 <header class={cn("glass sticky top-0 z-20", className)}>
@@ -99,14 +99,14 @@
         href={action.href}
         target={action.external ? "_blank" : undefined}
         rel={action.external ? "noopener" : undefined}
-        class="ml-auto flex items-center gap-1 self-center rounded-control border border-grey-500 px-3.5 py-1.5 text-small font-semibold whitespace-nowrap text-white md:hidden"
+        class="ml-auto flex items-center gap-1 self-center rounded-control border border-grey-500 px-3.5 py-1.5 text-nav font-semibold whitespace-nowrap text-foreground md:hidden"
       >
         {action.name} <ArrowUpRight class="size-3.5" aria-hidden="true" />
       </a>
     {/if}
     <button
       type="button"
-      class={cn("flex h-full w-14 items-center justify-center text-white md:hidden", !action && "ml-auto")}
+      class={cn("flex h-full w-14 items-center justify-center text-foreground md:hidden", !action && "ml-auto")}
       aria-label={open ? "Close menu" : "Open menu"}
       aria-expanded={open}
       aria-controls="site-menu"
@@ -132,7 +132,7 @@
           href={link.href}
           target={link.external ? "_blank" : undefined}
           rel={link.external ? "noopener" : undefined}
-          class="flex items-center justify-between py-3.5 text-[17px] font-semibold text-white"
+          class="flex items-center justify-between py-3.5 text-[17px] font-semibold text-foreground"
           onclick={() => (open = false)}
         >
           {link.name}

@@ -16,8 +16,8 @@
 </script>
 
 <script lang="ts">
-  import { EngineWordmark } from "$lib/components/brand/index.js"
-  import { cn } from "$lib/utils.js"
+  import { EngineWordmark } from "../brand/index.js"
+  import { cn } from "../../utils.js"
   import ChevronRight from "@lucide/svelte/icons/chevron-right"
   import Lock from "@lucide/svelte/icons/lock"
   import type { Snippet } from "svelte"
@@ -127,7 +127,7 @@
   class={cn("grid gap-6 lg:grid-cols-[minmax(280px,5fr)_minmax(0,8fr)] lg:items-start lg:gap-12", className)}
 >
   <div class="min-w-0">
-    <p class="mb-3 text-small text-foreground max-lg:hidden">{hint}</p>
+    <p class="mb-3 text-body text-foreground max-lg:hidden">{hint}</p>
     <ol
       bind:this={strip}
       class="relative flex flex-col max-lg:flex-row max-lg:gap-2 max-lg:overflow-x-auto max-lg:pb-1 max-lg:[scrollbar-width:none]"
@@ -144,24 +144,24 @@
               : 'max-lg:bg-card lg:hover:bg-grey-850/60'}"
           >
             <span class="flex items-center gap-3">
-              <span class="text-[11px] {i === index ? 'text-white' : 'text-grey-400'}">0{i + 1}</span>
+              <span class="text-nav tabular-nums {i === index ? 'text-foreground' : 'text-grey-400'}">0{i + 1}</span>
               <span
-                class="text-[15px] leading-[1.3] font-semibold transition-colors duration-140 ease-brand {i === index
-                  ? 'text-white'
-                  : 'text-grey-300 group-hover:text-white'}"
+                class="text-nav font-semibold transition-colors duration-140 ease-brand {i === index
+                  ? 'text-foreground'
+                  : 'text-grey-300 group-hover:text-foreground'}"
               >
                 {s.title}
               </span>
               <ChevronRight
                 class="ml-auto size-4 shrink-0 transition-colors duration-140 ease-brand max-lg:hidden {i === index
-                  ? 'text-white'
-                  : 'text-grey-500 group-hover:text-white'}"
+                  ? 'text-foreground'
+                  : 'text-grey-500 group-hover:text-foreground'}"
                 aria-hidden="true"
               />
             </span>
             {#if i === index}
               <span class="block pl-[30px]" transition:slide={{ duration: reduced ? 0 : 320 }}>
-                <span class="mt-1.5 block text-small leading-[1.45] text-foreground max-lg:hidden">{s.body}</span>
+                <span class="mt-1.5 block text-body text-foreground max-lg:hidden">{s.body}</span>
               </span>
               <span
                 class="mt-3 block h-px w-full overflow-hidden bg-grey-700 lg:ml-[30px] lg:w-[calc(100%-30px)]"
@@ -206,7 +206,7 @@
         <div class="flex min-h-0 flex-1">
           <aside class="w-37.5 shrink-0 bg-grey-850 p-3 max-md:hidden">
             <EngineWordmark class="mx-1 h-4" title={undefined} />
-            <div class="mt-3 rounded-tag bg-grey-800 px-2 py-1.5 text-[11px] font-semibold text-white">
+            <div class="mt-3 rounded-tag bg-grey-800 px-2 py-1.5 text-[11px] font-semibold text-foreground">
               {org}
             </div>
             <ul class="mt-3 space-y-0.5">
@@ -214,7 +214,7 @@
                 <li
                   class="flex items-center justify-between rounded-tag px-2 py-1.5 text-[11px] transition-colors duration-220 ease-brand {item ===
                   step.nav
-                    ? 'bg-grey-800 text-white'
+                    ? 'bg-grey-800 text-foreground'
                     : 'text-grey-400'}"
                 >
                   {item}
@@ -252,10 +252,10 @@
         >
           <div class="flex items-center gap-2">
             <span class="size-1.5 shrink-0 rounded-full bg-primary" aria-hidden="true"></span>
-            <p class="text-[15px] font-semibold text-white">{s.callout.title}</p>
+            <p class="text-body font-semibold text-foreground">{s.callout.title}</p>
           </div>
-          <p class="mt-1.5 text-small leading-[1.45] text-grey-300">{s.callout.body}</p>
-          <p class="mt-3 text-[11px] text-foreground">{s.callout.path}</p>
+          <p class="mt-1.5 text-body text-grey-300">{s.callout.body}</p>
+          <p class="mt-3 text-body text-foreground">{s.callout.path}</p>
         </div>
       {/if}
     {/each}

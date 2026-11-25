@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Switch as SwitchPrimitive, type WithoutChildrenOrChild } from "bits-ui";
-	import { cn } from "$lib/utils.js";
+	import { cn } from "../../../utils.js";
 
 	let {
 		ref = $bindable(null),
@@ -21,7 +21,7 @@
 >
 	<SwitchPrimitive.Thumb
 		class={cn(
-			"pointer-events-none block size-5 rounded-full bg-white ring-0 transition-transform duration-140 ease-brand data-[state=checked]:translate-x-5 data-[state=unchecked]:translate-x-0"
+			"pointer-events-none block size-5 rounded-full bg-white shadow-[0_1px_3px_var(--shadow-modal-color,transparent)] ring-0 transition-transform duration-140 ease-brand data-[state=checked]:translate-x-5 data-[state=unchecked]:translate-x-0"
 		)}
 	/>
 </SwitchPrimitive.Root>

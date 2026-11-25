@@ -1,27 +1,21 @@
 /*
-  Engine design system — the single stylesheet a consumer imports.
+  Engine design system — the single stylesheet a product imports, from its
+  copy of this folder:
 
       @import "tailwindcss";
-      @import "@engineio/ui/styles";
-      @source "../node_modules/@engineio/ui/dist";
+      @import "./lib/engine-ui/styles/index.css";
 
-  That third line is not optional. Tailwind 4 does not scan `node_modules`, so
-  without an explicit `@source` pointing at this package the utility classes
-  the primitives are written against never get generated. It resolves relative
-  to the CSS file declaring it, so adjust the path to wherever your
-  `node_modules` sits.
-
-  Expect a HALF-styled page rather than an obviously broken one: the tokens
-  below still apply (they are plain declarations), and any class that also
-  appears in your own source still works. Measured on a test consumer, leaving
-  the line out took the built stylesheet from 30KB to 6KB and raised no error.
+  No `@source` line. The copy sits inside the product's source tree, so
+  Tailwind scans the components like any other file. (The npm package needed
+  one, because Tailwind does not scan node_modules.)
 
   Import the parts individually if you need finer control:
 
-      @import "@engineio/ui/styles/fonts";
-      @import "@engineio/ui/styles/tokens";
-      @import "@engineio/ui/styles/utilities";
-      @import "@engineio/ui/styles/marketing";
+      @import "./lib/engine-ui/styles/fonts.css";
+      @import "./lib/engine-ui/styles/tokens.css";
+      @import "./lib/engine-ui/styles/utilities.css";
+      @import "./lib/engine-ui/styles/marketing.css";
+      @import "./lib/engine-ui/styles/themes/index.css";
 
   THE BRAND FACE IS DM SANS, loaded by the consumer from Google Fonts with a
   stylesheet link in app.html — no binary ships here. tokens.css names it in
@@ -34,3 +28,4 @@
 @import "./tokens.css";
 @import "./utilities.css";
 @import "./marketing.css";
+@import "./themes/index.css";

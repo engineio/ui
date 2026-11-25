@@ -1,9 +1,9 @@
 <script lang="ts">
-  import type { WithElementRef } from "$lib/utils.js"
-  import { cn } from "$lib/utils.js"
+  import type { WithElementRef } from "../../../utils.js"
+  import { cn } from "../../../utils.js"
   import type { HTMLAttributes } from "svelte/elements"
 
-  // 13px on the grey ramp, one step under the title. Never tinted to match the
+  // 16px (`text-body`) on the grey ramp, one step under the title. Never tinted to match the
   // bar — the panel stays neutral so the bar is the only signal.
   let {
     ref = $bindable(null),
@@ -15,7 +15,7 @@
 
 <div
   bind:this={ref}
-  class={cn("mt-1 text-[13px] leading-[1.45] text-grey-300", className)}
+  class={cn("mt-1 text-body text-grey-300", className)}
   {...restProps}
 >
   {@render children?.()}

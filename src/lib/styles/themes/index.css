@@ -1,0 +1,11 @@
+/*
+  Every theme the package ships. A theme is selected with `data-theme` on any
+  element — usually <html> — and with none set the page is Engine Magenta.
+
+  Import one file instead of this index to ship only the theme a product uses:
+
+      @import "./engine-magenta-light.css";
+*/
+
+@import "./engine-magenta.css";
+@import "./engine-magenta-light.css";

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { cn } from "$lib/utils.js"
+  import { cn } from "../../utils.js"
   import type { Snippet } from "svelte"
 
   // One cell of a BentoGrid: a cropped product mock on top, one sentence
@@ -59,7 +59,7 @@
   </div>
   <div class="p-4 md:p-6">
     {#if title}
-      <h3 class="max-w-[40ch] text-card-title text-white">{title}</h3>
+      <h3 class="max-w-[40ch] text-card-title text-foreground">{title}</h3>
     {/if}
     {@render children?.()}
   </div>

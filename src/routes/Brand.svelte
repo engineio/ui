@@ -60,8 +60,9 @@
     { role: "H2", cls: "text-[30px] leading-[1.2] tracking-[-0.01em] font-bold" },
     { role: "H3", cls: "text-[24px] leading-[1.2] font-bold" },
     { role: "Subtitle", cls: "text-[20px] leading-[1.2] font-semibold" },
-    { role: "Body", cls: "text-[15px] leading-[1.45]" },
-    { role: "Caption", cls: "text-[13px] leading-[1.2] text-grey-300" },
+    { role: "Body", cls: "text-body" },
+    { role: "Sub text", cls: "text-body text-grey-300" },
+    { role: "Navigation", cls: "text-nav font-medium" },
   ]
 
   const rhythm = [56, 72, 96, 128]
@@ -159,8 +160,8 @@
     >
       <EngineWordmark class="h-10" />
       <span class="h-8 w-px bg-grey-700"></span>
-      <p class="max-w-[560px] text-[15px] leading-[1.45] text-grey-300">
-        <span class="font-mono text-[13px] text-foreground">engine.io</span>
+      <p class="max-w-[560px] text-body text-grey-300">
+        <span class="font-mono text-body text-foreground">engine.io</span>
         owns everything above the two products: marketing, the corporate
         story, recruitment, stationery. Master-brand surfaces carry the
         wordmark, never a sub-brand lockup.
@@ -181,19 +182,19 @@
         <dl class="flex flex-col gap-3 border-t border-grey-700 pt-5">
           <div class="flex gap-5">
             <dt
-              class="w-[84px] shrink-0 text-small text-grey-300"
+              class="w-[84px] shrink-0 text-body text-grey-300"
             >
               Home
             </dt>
-            <dd class="font-mono text-[13px]">studio.engine.io</dd>
+            <dd class="font-mono text-body">studio.engine.io</dd>
           </div>
           <div class="flex gap-5">
             <dt
-              class="w-[84px] shrink-0 text-small text-grey-300"
+              class="w-[84px] shrink-0 text-body text-grey-300"
             >
               Subject
             </dt>
-            <dd class="text-[15px] text-grey-300">
+            <dd class="text-body text-grey-300">
               The machined and constructed. Rigs, keycaps, tooling.
             </dd>
           </div>
@@ -214,19 +215,19 @@
         <dl class="flex flex-col gap-3 border-t border-grey-700 pt-5">
           <div class="flex gap-5">
             <dt
-              class="w-[84px] shrink-0 text-small text-grey-300"
+              class="w-[84px] shrink-0 text-body text-grey-300"
             >
               Home
             </dt>
-            <dd class="font-mono text-[13px]">integration.engine.io</dd>
+            <dd class="font-mono text-body">integration.engine.io</dd>
           </div>
           <div class="flex gap-5">
             <dt
-              class="w-[84px] shrink-0 text-small text-grey-300"
+              class="w-[84px] shrink-0 text-body text-grey-300"
             >
               Subject
             </dt>
-            <dd class="text-[15px] text-grey-300">
+            <dd class="text-body text-grey-300">
               The connective. Pipework, manifolds, junctions.
             </dd>
           </div>
@@ -235,12 +236,12 @@
     </Card>
   </div>
 
-  <p class="max-w-[920px] text-[15px] leading-[1.5] text-foreground">
+  <p class="max-w-[920px] text-body text-foreground">
     Magenta is the accent on both. One accent per surface, never two.
   </p>
 
   <Row label="Naming">
-    <p class="max-w-[920px] text-[15px] leading-[1.5] text-foreground">
+    <p class="max-w-[920px] text-body text-foreground">
       Write sub-brands in full on first use. Engine Studio, Engine
       Integration. Never abbreviate to ES or EI. Once a lockup has
       established which product is speaking, later references on the same
@@ -277,12 +278,12 @@
       <EngineIcon class="h-16" />
     </div>
   </Row>
-  <p class="max-w-[920px] text-[15px] leading-[1.5] text-foreground">
-    Colour is a two-value <span class="font-mono text-[13px]">variant</span>
-    and not <span class="font-mono text-[13px]">currentColor</span>. With
+  <p class="max-w-[920px] text-body text-foreground">
+    Colour is a two-value <span class="font-mono text-body">variant</span>
+    and not <span class="font-mono text-body">currentColor</span>. With
     currentColor, any ancestor's text colour silently becomes brand colour,
     and a magenta wordmark is one careless
-    <span class="font-mono text-[13px]">text-primary</span> away. Size by
+    <span class="font-mono text-body">text-primary</span> away. Size by
     height alone. The brand forbids distortion, and neither the turbo's
     1001:1000 — square to the eye, not to the box — nor the wordmark's
     2001:732.5 is a ratio anybody reproduces by hand.
@@ -291,18 +292,18 @@
 
 <Section
   title="Colour."
-  note="The brand is three colours. Everything else is a neutral step between the outer two. One accent per surface, never two. No gradients, no coloured borders, no light theme."
+  note="The brand is three colours. Everything else is a neutral step between the outer two. One accent per surface, never two. No gradients, no coloured borders. Light is a theme, not a variant: the switch in the corner swaps every role at once."
 >
   <Row label="Brand">
     {#each swatches as s (s.token)}
-      <div class="w-[168px]">
+      <div class="w-[208px]">
         <div
           class="h-24 rounded-media border border-grey-700"
           style="background-color: {s.hex}"
         ></div>
-        <p class="mt-2 text-[15px] font-semibold">{s.name}</p>
-        <p class="font-mono text-[13px] text-grey-400">{s.hex}</p>
-        <p class="font-mono text-[11px] text-grey-500">--color-{s.token}</p>
+        <p class="mt-2 text-body font-semibold">{s.name}</p>
+        <p class="font-mono text-body text-grey-400">{s.hex}</p>
+        <p class="font-mono text-body text-grey-400">--color-{s.token}</p>
       </div>
     {/each}
   </Row>
@@ -320,14 +321,14 @@
           class="h-16 rounded-field border border-grey-700"
           style="background-color: var(--color-grey-{g})"
         ></div>
-        <p class="mt-2 font-mono text-[11px] text-grey-400">grey-{g}</p>
+        <p class="mt-2 font-mono text-body text-grey-400">grey-{g}</p>
       </div>
     {/each}
   </Row>
 
   <Row label="Status, functional only">
     {#each statusSwatches as s (s.token)}
-      <div class="w-[168px]">
+      <div class="w-[208px]">
         <div
           class="flex h-24 items-end rounded-media p-3"
           style="background-color: {s.hex}"
@@ -336,18 +337,19 @@
             {s.ink}
           </span>
         </div>
-        <p class="mt-2 text-[15px] font-semibold">{s.name}</p>
-        <p class="font-mono text-[13px] text-grey-400">{s.hex}</p>
-        <p class="font-mono text-[11px] text-grey-500">--color-{s.token}</p>
+        <p class="mt-2 text-body font-semibold">{s.name}</p>
+        <p class="font-mono text-body text-grey-400">{s.hex}</p>
+        <p class="font-mono text-body text-grey-400">--color-{s.token}</p>
       </div>
     {/each}
   </Row>
-  <p class="max-w-[920px] text-[15px] leading-[1.5] text-foreground">
+  <p class="max-w-[920px] text-body text-foreground">
     Status is functional colour. It reports state and nothing else. It is
     never decoration, never a second accent, and never a stand-in for
-    magenta. Ink on a status fill is always Off Black, because white fails
-    AA on all three. There is no
-    <span class="font-mono text-[13px]">info</span> colour. Use the neutral
+    magenta. Ink on a status fill is its foreground token: Off Black on
+    Engine Magenta, where white fails AA on all three, and white on the
+    light theme's deeper steps. There is no
+    <span class="font-mono text-body">info</span> colour. Use the neutral
     ramp for informational states.
   </p>
 </Section>
@@ -360,7 +362,7 @@
     {#each type as t (t.role)}
       <div class="flex min-w-max items-baseline gap-8 border-b border-grey-800 pb-6">
         <p
-          class="w-[120px] shrink-0 text-small text-grey-300"
+          class="w-[120px] shrink-0 text-body text-grey-300"
         >
           {t.role}
         </p>
@@ -369,17 +371,17 @@
     {/each}
     <div class="flex min-w-max items-baseline gap-8 border-b border-grey-800 pb-6">
       <p
-        class="w-[120px] shrink-0 text-small text-grey-300"
+        class="w-[120px] shrink-0 text-body text-grey-300"
       >
         Mono
       </p>
-      <p class="font-mono text-[15px]">
+      <p class="font-mono text-body">
         GAME_ID 7f3a91c2 · RTP 96.42% · 2300 live games
       </p>
     </div>
     <div class="flex min-w-max items-baseline gap-8">
       <p
-        class="w-[120px] shrink-0 text-small text-grey-300"
+        class="w-[120px] shrink-0 text-body text-grey-300"
       >
         Condensed roles
       </p>
@@ -388,24 +390,24 @@
       </p>
     </div>
   </div>
-  <p class="max-w-[920px] text-[15px] leading-[1.5] text-foreground">
+  <p class="max-w-[920px] text-body text-foreground">
     DM Sans has no condensed cut.
-    <span class="font-mono text-[13px]">--font-condensed</span> and
-    <span class="font-mono text-[13px]">--font-extra-condensed</span> remain
+    <span class="font-mono text-body">--font-condensed</span> and
+    <span class="font-mono text-body">--font-extra-condensed</span> remain
     as roles and resolve to the brand face, so big numbers and poster-scale
     words are set in DM Sans Black until the brand team assigns a condensed
     face. Display type is large: 92 to 104px on a 1480px page. Scaling
     Display 1 down to 48px does not produce a smaller display size. It
     produces an H1.
   </p>
-  <p class="max-w-[920px] text-[15px] leading-[1.5] text-foreground">
+  <p class="max-w-[920px] text-body text-foreground">
     DM Sans is a variable Google Font under the Open Font Licence: weight 100
     to 1000, and an optical-size axis from 9 to 40, so body sizes get the
     looser cut and display sizes the tight one. There is no substitute face.
     A machine that cannot reach Google renders a size-adjusted Helvetica Neue
     or Arial matched to DM Sans's width, which the package ships as
-    <span class="font-mono text-[13px]">"DM Sans Fallback"</span>.
-    <span class="font-mono text-[13px]">--font-mono</span> resolves to the
+    <span class="font-mono text-body">"DM Sans Fallback"</span>.
+    <span class="font-mono text-body">--font-mono</span> resolves to the
     brand face; JetBrains Mono is retired, and a product that needs
     character-cell alignment binds its own monospace.
   </p>
@@ -419,8 +421,8 @@
     {#each radii as r (r.name)}
       <div class="w-[128px]">
         <div class="h-20 border-[1.5px] border-grey-600 bg-grey-850 {r.cls}"></div>
-        <p class="mt-2 text-[15px] font-semibold">{r.name}</p>
-        <p class="font-mono text-[13px] text-grey-400">{r.value}</p>
+        <p class="mt-2 text-body font-semibold">{r.name}</p>
+        <p class="font-mono text-body text-grey-400">{r.value}</p>
       </div>
     {/each}
   </Row>
@@ -428,13 +430,13 @@
   <Row label="Border weights">
     <div class="w-[280px]">
       <div class="h-20 rounded-field border border-grey-700 bg-grey-850"></div>
-      <p class="mt-2 text-[15px] font-semibold">Hairline</p>
-      <p class="font-mono text-[13px] text-grey-400">1px · structure</p>
+      <p class="mt-2 text-body font-semibold">Hairline</p>
+      <p class="font-mono text-body text-grey-400">1px · structure</p>
     </div>
     <div class="w-[280px]">
       <div class="h-20 rounded-card border-[1.5px] border-grey-600 bg-grey-850"></div>
-      <p class="mt-2 text-[15px] font-semibold">Container rule</p>
-      <p class="font-mono text-[13px] text-grey-400">1.5px · cards and panels</p>
+      <p class="mt-2 text-body font-semibold">Container rule</p>
+      <p class="font-mono text-body text-grey-400">1.5px · cards and panels</p>
     </div>
   </Row>
 
@@ -442,10 +444,10 @@
     <div class="rounded-frame border-[1.5px] border-grey-600 p-5">
       <div class="rounded-card border border-grey-700 p-5">
         <div
-          class="flex h-24 w-[280px] items-center justify-center rounded-field bg-black"
+          class="flex h-24 w-[280px] items-center justify-center rounded-field bg-background"
         >
           <span
-            class="text-small text-grey-400"
+            class="text-body text-grey-400"
           >
             26 → 18 → 10
           </span>
@@ -454,11 +456,11 @@
     </div>
   </Row>
 
-  <p class="max-w-[920px] text-[15px] leading-[1.5] text-foreground">
+  <p class="max-w-[920px] text-body text-foreground">
     Depth comes from rules and nested panels, not shadow. The package holds
     two shadow tokens,
-    <span class="font-mono text-[13px]">--shadow-panel</span> and
-    <span class="font-mono text-[13px]">--shadow-modal</span>, and both are
+    <span class="font-mono text-body">--shadow-panel</span> and
+    <span class="font-mono text-body">--shadow-modal</span>, and both are
     for product chrome and modals. Neither belongs on a brand surface.
     Neither is a substitute for the rule that should have been there.
   </p>
@@ -472,11 +474,11 @@
     <div class="flex w-full flex-col gap-5">
       <div class="flex flex-col gap-1 sm:flex-row sm:gap-6">
         <p
-          class="w-[120px] shrink-0 text-small text-grey-300"
+          class="w-[120px] shrink-0 text-body text-grey-300"
         >
           Page
         </p>
-        <p class="max-w-[920px] text-[15px] leading-[1.5] text-foreground">
+        <p class="max-w-[920px] text-body text-foreground">
           1480px maximum, 40px gutters, 72px on large brand pages, for
           product surfaces. This page is not one: it sits on the 1180px
           marketing column described under Marketing.
@@ -484,32 +486,32 @@
       </div>
       <div class="flex flex-col gap-1 sm:flex-row sm:gap-6">
         <p
-          class="w-[120px] shrink-0 text-small text-grey-300"
+          class="w-[120px] shrink-0 text-body text-grey-300"
         >
           Reading
         </p>
-        <p class="max-w-[920px] text-[15px] leading-[1.5] text-foreground">
+        <p class="max-w-[920px] text-body text-foreground">
           920px, and this paragraph stops there. Body copy that runs the
           full 1480px is unreadable however correct the type scale is.
         </p>
       </div>
       <div class="flex flex-col gap-1 sm:flex-row sm:gap-6">
         <p
-          class="w-[120px] shrink-0 text-small text-grey-300"
+          class="w-[120px] shrink-0 text-body text-grey-300"
         >
           Brand page
         </p>
-        <p class="max-w-[920px] text-[15px] leading-[1.5] text-foreground">
+        <p class="max-w-[920px] text-body text-foreground">
           1480 × 836. Slides and statement pages are drawn at that ratio.
         </p>
       </div>
       <div class="flex flex-col gap-1 sm:flex-row sm:gap-6">
         <p
-          class="w-[120px] shrink-0 text-small text-grey-300"
+          class="w-[120px] shrink-0 text-body text-grey-300"
         >
           Card
         </p>
-        <p class="max-w-[920px] text-[15px] leading-[1.5] text-foreground">
+        <p class="max-w-[920px] text-body text-foreground">
           20px padding, 28px on the large variant.
         </p>
       </div>
@@ -520,7 +522,7 @@
     <div class="flex w-full flex-col gap-3">
       {#each rhythm as sp (sp)}
         <div class="flex items-center gap-5">
-          <p class="w-[56px] shrink-0 font-mono text-[13px] text-grey-400">
+          <p class="w-[56px] shrink-0 font-mono text-body text-grey-400">
             {sp}px
           </p>
           <div class="h-3 bg-primary" style="width: {sp}px"></div>
@@ -533,7 +535,7 @@
     {#each groupSpace as sp (sp)}
       <div class="flex min-w-[32px] flex-col items-center gap-2">
         <div class="h-12 bg-primary" style="width: {sp}px"></div>
-        <p class="font-mono text-[11px] text-grey-400">{sp}</p>
+        <p class="font-mono text-body text-grey-400">{sp}</p>
       </div>
     {/each}
   </Row>
@@ -551,7 +553,7 @@
     </div>
   </Row>
 
-  <p class="max-w-[920px] text-[15px] leading-[1.5] text-foreground">
+  <p class="max-w-[920px] text-body text-foreground">
     The hairline sits 14px from the top, inset 24px each side, and the type
     is set flush to the bottom-left instead of centred. That is the deck's
     signature composition. Centring it is the most common way a page stops
@@ -569,12 +571,12 @@
       {#each durations as d (d.ms)}
         <div class="flex flex-wrap items-baseline gap-x-6 gap-y-1 border-b border-grey-800 py-4">
           <p
-            class="w-[120px] shrink-0 text-small text-grey-300"
+            class="w-[120px] shrink-0 text-body text-grey-300"
           >
             {d.name}
           </p>
-          <p class="w-[72px] shrink-0 font-mono text-[15px]">{d.ms}</p>
-          <p class="text-[15px] text-grey-300">{d.use}</p>
+          <p class="w-[72px] shrink-0 font-mono text-body">{d.ms}</p>
+          <p class="text-body text-grey-300">{d.use}</p>
         </div>
       {/each}
     </div>
@@ -590,7 +592,7 @@
     >
       Run
     </Button>
-    <span class="text-[15px] text-grey-300">
+    <span class="text-body text-grey-300">
       Same distance, same 640ms, three curves.
     </span>
   </Row>
@@ -599,8 +601,8 @@
     {#each easings as e (e.token)}
       <div class="flex flex-wrap items-center gap-5">
         <div class="w-[200px] shrink-0">
-          <p class="font-mono text-[13px]">{e.token}</p>
-          <p class="font-mono text-[11px] text-grey-500">{e.curve}</p>
+          <p class="font-mono text-body">{e.token}</p>
+          <p class="font-mono text-body text-grey-400">{e.curve}</p>
         </div>
         <div
           class="relative h-10 min-w-[280px] flex-1 rounded-field border border-grey-800 bg-grey-850"
@@ -610,7 +612,7 @@
             style="left: {motionRun ? 'calc(100% - 36px)' : '4px'}"
           ></div>
         </div>
-        <p class="w-[220px] shrink-0 text-[15px] text-grey-300">{e.use}</p>
+        <p class="w-[220px] shrink-0 text-body text-grey-300">{e.use}</p>
       </div>
     {/each}
   </div>
@@ -625,12 +627,12 @@
     </div>
   </Row>
 
-  <p class="max-w-[920px] text-[15px] leading-[1.5] text-foreground">
+  <p class="max-w-[920px] text-body text-foreground">
     Motion is fast, but it is never mandatory.
-    <span class="font-mono text-[13px]">prefers-reduced-motion</span> drops
+    <span class="font-mono text-body">prefers-reduced-motion</span> drops
     everything to fades, and the package's base layer already does that
     globally. A product importing
-    <span class="font-mono text-[13px]">@engineio/ui/styles</span> gets it
+    <span class="font-mono text-body">styles/index.css</span> gets it
     without writing a line. Turn the setting on and press Run again. The
     blocks jump, and nothing on this page breaks.
   </p>
@@ -647,7 +649,7 @@
       >
         <div class="absolute inset-0 flex items-center justify-center">
           <p
-            class="text-small text-grey-500"
+            class="text-body text-grey-500"
           >
             Rigs · Keycaps · Tooling
           </p>
@@ -672,7 +674,7 @@
       >
         <div class="absolute inset-0 flex items-center justify-center">
           <p
-            class="text-small text-grey-500"
+            class="text-body text-grey-500"
           >
             Pipework · Manifolds · Junctions
           </p>
@@ -693,7 +695,7 @@
     </div>
   </Row>
 
-  <p class="max-w-[920px] text-[15px] leading-[1.5] text-foreground">
+  <p class="max-w-[920px] text-body text-foreground">
     Never people. Never warm tones. Never stock-office imagery. No
     handshakes, no laptops, no meeting rooms. Always cropped into a rounded
     rectangle at the media radius or bled to the page edge, with the
@@ -703,7 +705,7 @@
     Integration the connective, both monochrome.
   </p>
 
-  <p class="max-w-[920px] text-[15px] leading-[1.5] text-foreground">
+  <p class="max-w-[920px] text-body text-foreground">
     The two frames hold no photography. None ships in this package, and
     filling them with a stand-in would put an image into the design system
     that the brand never approved. The scrim under the type is the only
@@ -723,7 +725,7 @@
       {#each sentences as v (v.shape)}
         <div class="flex flex-col gap-2 border-b border-grey-800 py-5">
           <p
-            class="text-small text-grey-300"
+            class="text-body text-grey-300"
           >
             {v.shape}
           </p>
@@ -737,36 +739,36 @@
     <div class="flex w-full flex-col">
       <div class="flex flex-col gap-2 border-b border-grey-700 pb-3 md:flex-row md:gap-8">
         <p
-          class="md:w-[220px] lg:w-[300px] shrink-0 text-small text-grey-300"
+          class="md:w-[220px] lg:w-[300px] shrink-0 text-body text-grey-300"
         >
           Written
         </p>
         <p
-          class="md:w-[220px] lg:w-[300px] shrink-0 text-small text-grey-300"
+          class="md:w-[220px] lg:w-[300px] shrink-0 text-body text-grey-300"
         >
           Not written
         </p>
         <p
-          class="text-small text-grey-300"
+          class="text-body text-grey-300"
         >
           Why
         </p>
       </div>
       {#each voicePairs as v (v.written)}
         <div class="flex flex-col gap-2 border-b border-grey-800 py-4 md:flex-row md:gap-8">
-          <p class="md:w-[220px] lg:w-[300px] shrink-0 text-[15px] leading-[1.45]">
+          <p class="md:w-[220px] lg:w-[300px] shrink-0 text-body">
             {v.written}
           </p>
-          <p class="md:w-[220px] lg:w-[300px] shrink-0 text-[15px] leading-[1.45] text-grey-500">
+          <p class="md:w-[220px] lg:w-[300px] shrink-0 text-body text-grey-500">
             {v.avoid}
           </p>
-          <p class="text-[15px] leading-[1.45] text-grey-300">{v.why}</p>
+          <p class="text-body text-grey-300">{v.why}</p>
         </div>
       {/each}
     </div>
   </Row>
 
-  <p class="max-w-[920px] text-[15px] leading-[1.5] text-foreground">
+  <p class="max-w-[920px] text-body text-foreground">
     No emoji. Anywhere. Not in brand material, not in product UI, not in
     copy, and not in a commit message that ends up in release notes. The
     only non-alphanumeric glyphs the brand sanctions are the multiplication
