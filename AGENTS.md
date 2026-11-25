@@ -11,7 +11,7 @@ disagree, **they win and this is a bug**.
 ## Setup
 
 The components are a reference, not a dependency. Nothing is published to npm;
-`@engineio/ui@0.10.0` is the last release and only the products that haven't
+`@engineio/ui@0.11.0` is the last release (the products, pinned to `^0.10.0`, run 0.10.0), and only the products that haven't
 switched yet still install it. A product copies `src/lib` into its own tree
 and owns the copy:
 

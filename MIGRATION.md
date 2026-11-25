@@ -1,8 +1,8 @@
 # Switching a product from the npm package to a copy
 
-engine-ui is a reference now, not a dependency. `@engineio/ui@0.10.0` is the
-last npm release, and it stays installable, so nothing breaks before a product
-switches. This is the plan for switching. **Nothing here has been applied to
+engine-ui is a reference now, not a dependency. `@engineio/ui@0.11.0` is the
+last npm release. The products pin `^0.10.0`, so they run 0.10.0. Both stay
+installable, so nothing breaks before a product switches. This is the plan for switching. **Nothing here has been applied to
 any repo yet.**
 
 | | Imports of `@engineio/ui` | Mode |

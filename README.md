@@ -241,7 +241,8 @@ and `AGENTS.md` redeploy, and the next product to port picks the change up.
 Commit messages still follow conventional commits so a product porting a range
 can read what changed from `git log`.
 
-The npm package `@engineio/ui` stops at 0.10.0. It stays installable for the
+The npm package `@engineio/ui` stops at 0.11.0, and the products, pinned to
+`^0.10.0`, run 0.10.0. Both stay installable for the
 products still on it until they switch to copies (see `MIGRATION.md`), but no
 newer version will be published.
 
