@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { cn } from "$lib/utils.js"
+  import { cn } from "../../utils.js"
   import ArrowUpRight from "@lucide/svelte/icons/arrow-up-right"
   import type { Snippet } from "svelte"
 
@@ -7,7 +7,7 @@
   // product: "Are you a creator? Games are built and published on Engine
   // Studio. Go to Engine Studio."
   //
-  // It is the press shade of magenta with WHITE 13px text, and that is a
+  // It is the press shade of magenta with WHITE 16px text, and that is a
   // measured exception to the system's "ink on an accent fill is Off Black"
   // rule: white on `primary-press` is 5.25:1, Off Black on it 3.67:1, so
   // here white is the legal ink and Off Black is not. On `primary` itself
@@ -37,7 +37,7 @@
   } = $props()
 </script>
 
-<div class={cn("bg-primary-press px-gutter py-2.5 text-center text-small font-medium text-white", className)}>
+<div class={cn("bg-primary-press px-gutter py-2.5 text-center text-body font-medium text-primary-foreground", className)}>
   {@render children()}
   {#if href && cta}
     <a

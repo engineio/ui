@@ -1,6 +1,6 @@
 <script lang="ts">
-  import type { WithElementRef } from "$lib/utils.js"
-  import { cn } from "$lib/utils.js"
+  import type { WithElementRef } from "../../../utils.js"
+  import { cn } from "../../../utils.js"
   import type { HTMLTdAttributes } from "svelte/elements"
 
   // Transparent, 44px tall, 16px sides. The row owns the background, so a cell
@@ -24,7 +24,7 @@
 <td
   bind:this={ref}
   class={cn(
-    "h-11 px-4 align-middle text-[13px] [&:has([role=checkbox])]:pr-0",
+    "h-11 px-4 align-middle text-body [&:has([role=checkbox])]:pr-0",
     className,
   )}
   {...restProps}

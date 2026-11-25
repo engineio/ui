@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { WithElementRef, WithoutChildren } from "bits-ui";
 	import type { HTMLTextareaAttributes } from "svelte/elements";
-	import { cn } from "$lib/utils.js";
+	import { cn } from "../../../utils.js";
 
 	let {
 		ref = $bindable(null),
@@ -14,7 +14,7 @@
 <textarea
 	bind:this={ref}
 	class={cn(
-		"field flex min-h-20 w-full px-3 py-2 text-[15px]",
+		"field flex min-h-20 w-full px-3 py-2 text-body",
 		className
 	)}
 	bind:value

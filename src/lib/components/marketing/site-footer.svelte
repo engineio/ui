@@ -3,7 +3,7 @@
 </script>
 
 <script lang="ts">
-  import { cn } from "$lib/utils.js"
+  import { cn } from "../../utils.js"
   import ArrowUpRight from "@lucide/svelte/icons/arrow-up-right"
   import type { Snippet } from "svelte"
 
@@ -43,7 +43,7 @@
 
   const external = (href: string) => href.startsWith("http")
   const link =
-    "inline-flex items-center gap-1 text-small text-grey-300 transition-colors duration-140 ease-brand hover:text-white"
+    "inline-flex items-center gap-1 text-nav text-grey-300 transition-colors duration-140 ease-brand hover:text-foreground"
 </script>
 
 <footer class={cn("mx-auto max-w-marketing px-gutter pb-10", className)}>
@@ -54,12 +54,12 @@
     <div class="flex flex-col gap-4">
       {@render brand()}
       {#if tagline}
-        <p class="max-w-[30ch] text-small text-foreground">{tagline}</p>
+        <p class="max-w-[30ch] text-body text-foreground">{tagline}</p>
       {/if}
     </div>
     {#each columns as column (column.heading)}
       <nav aria-label={column.heading} class="flex flex-col gap-3">
-        <span class="text-small font-semibold text-white">{column.heading}</span>
+        <span class="text-nav font-semibold text-foreground">{column.heading}</span>
         <ul class="flex flex-col gap-2">
           {#each column.links as entry (entry.name)}
             <li>
@@ -80,12 +80,12 @@
       </nav>
     {/each}
   </div>
-  <div class="mt-12 flex flex-wrap items-center justify-between gap-x-6 gap-y-2 text-[12px] text-grey-300">
+  <div class="mt-12 flex flex-wrap items-center justify-between gap-x-6 gap-y-2 text-body text-grey-300">
     <span>© {new Date().getFullYear()} {name}.</span>
     {#if legal.length > 0}
       <span class="flex flex-wrap gap-x-5 gap-y-2">
         {#each legal as entry (entry.name)}
-          <a href={entry.href} class="transition-colors duration-140 ease-brand hover:text-white">{entry.name}</a>
+          <a href={entry.href} class="transition-colors duration-140 ease-brand hover:text-foreground">{entry.name}</a>
         {/each}
       </span>
     {/if}

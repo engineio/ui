@@ -13,7 +13,7 @@
 </script>
 
 <script lang="ts">
-  import { cn } from "$lib/utils.js"
+  import { cn } from "../../utils.js"
   import type { SVGAttributes } from "svelte/elements"
 
   // The Engine figure mark: the turbo, from the brand team's artwork

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { cn } from "$lib/utils.js"
+  import { cn } from "../../../utils.js"
   import { Dialog as DialogPrimitive } from "bits-ui"
   import { getResponsiveDialogContext } from "./context.js"
 
@@ -11,7 +11,7 @@
   }: DialogPrimitive.DescriptionProps = $props()
 
   const context = getResponsiveDialogContext()
-  const classes = $derived(cn("text-muted-foreground text-sm", className))
+  const classes = $derived(cn("text-muted-foreground text-body", className))
 </script>
 
 {#if context.primitive === "popover"}

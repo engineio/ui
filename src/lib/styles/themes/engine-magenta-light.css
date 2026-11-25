@@ -1,0 +1,98 @@
+/*
+  Engine Magenta Light — the house theme on a white page.
+
+  Off Black ink on Pure White, the same magenta. Every role keeps its job and
+  its contrast; only the direction flips.
+
+  THE GREY RAMP IS RELATIVE TO THE PAGE, NOT TO BLACK. In both themes grey-900
+  is the page and the numbers fall toward the ink: grey-850 is a field a step
+  off the page, grey-600 a hairline, grey-300 secondary text, grey-050 nearly
+  the ink. Each light step was chosen to match its dark twin's contrast
+  against its own page (grey-400 ≈ 6.9:1, grey-300 ≈ 8.9:1, …), so a
+  component written against the ramp reads the same in either theme. It is
+  why no component needs a `dark:` variant.
+
+  WHAT CHANGES MEANING, AND WHY.
+
+  primary-300 is "ink on a magenta tint". On the dark page that ink has to be
+  lighter than magenta; on a white page it has to be darker, so the role
+  holds a deep magenta here (#C2004F, ≥ 4.5:1 on its own 12% tint).
+
+  Status steps are deeper and carry WHITE ink. The dark theme's #00C46A /
+  #FFB020 / #FF3B30 fall to 2–3:1 as text on white; these clear 4.5:1 as text
+  on the page, as text on their own 12% tint, and under white ink. "Ink on a
+  status fill is Off Black" is the dark theme's answer to the same rule:
+  the ink is whatever clears AA on the fill.
+
+  Popovers are white, not a step darker: a lifted surface on a light page is
+  lighter or level, and the popover's hairline carries the edge. Cards stay a
+  step off the page so the two-tone rule (card over page, page inside) holds.
+
+  NOT FOR MARKETING PAGES YET. The hero render is blended with
+  `mix-blend-screen` so its black becomes the page; on white that blend shows
+  the render's black as a black box. Pin landings to `data-theme="engine-magenta"`
+  until there is light artwork.
+
+      <html data-theme="engine-magenta-light">
+*/
+
+@layer base {
+  [data-theme~="engine-magenta-light"] {
+    color-scheme: light;
+
+    --color-background: #ffffff;
+    --color-foreground: #0e0e0e;
+    --color-card: #f4f4f4;
+    --color-card-foreground: #0e0e0e;
+    --color-popover: #ffffff;
+    --color-popover-foreground: #0e0e0e;
+
+    --color-primary: #ff006a;
+    --color-primary-foreground: #ffffff;
+    --color-primary-press: #d60059;
+    --color-primary-300: #c2004f;
+
+    --color-partner-yellow: #ffdd00;
+    --color-partner-yellow-press: #e0c200;
+
+    --color-grey-950: #ffffff;
+    --color-grey-900: #ffffff;
+    --color-grey-850: #f7f7f7;
+    --color-grey-800: #f0f0f0;
+    --color-grey-700: #e6e6e6;
+    --color-grey-600: #dcdcdc;
+    --color-grey-500: #c7c7c7;
+    --color-grey-400: #5a5a5a;
+    --color-grey-300: #4a4a4a;
+    --color-grey-200: #3c3c3c;
+    --color-grey-100: #2a2a2a;
+    --color-grey-050: #161616;
+
+    --color-secondary: #ebebeb;
+    --color-secondary-foreground: #0e0e0e;
+    --color-muted: #ebebeb;
+    --color-muted-foreground: #444444;
+    --color-accent: #e3e3e3;
+    --color-accent-foreground: #0e0e0e;
+    --color-border: #e3e3e3;
+    --color-input: #e3e3e3;
+
+    --color-success: #007a43;
+    --color-success-foreground: #ffffff;
+    --color-warning: #a35300;
+    --color-warning-foreground: #ffffff;
+    --color-danger: #c4251a;
+    --color-danger-foreground: #ffffff;
+
+    --color-sidebar-background: #fafafa;
+    --color-sidebar-foreground: #0e0e0e;
+    --color-sidebar-primary-foreground: #ffffff;
+    --color-sidebar-accent: #ffe6f0;
+    --color-sidebar-accent-foreground: #0e0e0e;
+    --color-sidebar-border: #e3e3e3;
+
+    --color-scrim: rgb(14 14 14 / 0.32);
+    --shadow-panel-color: rgb(14 14 14 / 0.1);
+    --shadow-modal-color: rgb(14 14 14 / 0.18);
+  }
+}

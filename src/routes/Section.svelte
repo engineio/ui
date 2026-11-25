@@ -24,11 +24,11 @@
 </script>
 
 <section {id} class="scroll-mt-anchor-sm md:scroll-mt-anchor [&+&]:mt-20">
-  <h3 class="text-[24px] leading-[1.2] font-bold tracking-[-0.01em] text-white">
+  <h3 class="text-[24px] leading-[1.2] font-bold tracking-[-0.01em] text-foreground">
     {title}
   </h3>
   {#if note}
-    <p class="mt-3 max-w-[920px] text-[15px] leading-[1.5] text-foreground">
+    <p class="mt-3 max-w-[920px] text-body text-foreground">
       {note}
     </p>
   {/if}

@@ -10,7 +10,7 @@
 </script>
 
 <script lang="ts">
-  import { cn } from "$lib/utils.js"
+  import { cn } from "../../utils.js"
   import { untrack } from "svelte"
   import { cubicOut } from "svelte/easing"
   import { Tween } from "svelte/motion"
@@ -33,7 +33,7 @@
   //
   // Reduced motion shows the targets and never zeroes them.
   //
-  // Labels are 13px WHITE. The caption under the band says where the numbers
+  // Labels are 16px (`text-body`) WHITE. The caption under the band says where the numbers
   // come from and when — "Platform-wide totals, live from engine.io." — and
   // the landings learned to add what the numbers do NOT mean when a reader
   // took "3,800 games" as a catalogue they would receive.
@@ -90,16 +90,16 @@
   <div class="grid grid-cols-4 gap-x-6 gap-y-10 max-md:grid-cols-2">
     {#each stats as s, i (s.label)}
       <div class="flex min-w-0 flex-col gap-2">
-        <span class="text-[32px] leading-[0.94] font-black tabular-nums text-white md:text-stat">
+        <span class="text-[32px] leading-[0.94] font-black tabular-nums text-foreground md:text-stat">
           {s.prefix ?? ""}{format(counters[i]?.current ?? s.target, s.decimals)}{s.suffix ?? ""}{#if plus}<span
               class="text-primary">+</span
             >{/if}
         </span>
-        <span class="text-small text-foreground">{s.label}</span>
+        <span class="text-body text-foreground">{s.label}</span>
       </div>
     {/each}
   </div>
   {#if caption}
-    <p class={cn("mt-10 text-small text-foreground")}>{caption}</p>
+    <p class={cn("mt-10 text-body text-foreground")}>{caption}</p>
   {/if}
 </div>

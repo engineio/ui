@@ -1,28 +1,28 @@
 /**
- * @engineio/ui — the Engine design system.
+ * The Engine design system. Products copy this folder into their own tree
+ * (scripts/copy-into.ts) and import from wherever it landed:
  *
- *     import { Button, Card, CardHeader } from "@engineio/ui"
+ *     import { Button, Card, CardHeader } from "$lib/engine-ui/index.js"
  *
- * Every component is also reachable by subpath, which is what you want when
- * you only need one and would rather not pull the barrel:
+ * Every component is also reachable by its own module, which is what you want
+ * when you only need one and would rather not pull the barrel:
  *
- *     import { Button } from "@engineio/ui/components/ui/button"
+ *     import { Button } from "$lib/engine-ui/components/ui/button/index.js"
  *
  * The flat prefixed names below (`CardHeader`, `DialogTitle`) are the same
  * objects the subpath modules export as `Header` / `Title`. Both spellings
  * work; the prefixed ones are re-exported here because `Root`, `Content` and
  * `Title` would collide across twenty components in one namespace.
  *
- * Styles are NOT imported by this module — CSS in a package entry point would
- * force it on every consumer and break tree-shaking. Import the stylesheet
- * yourself, once, and add the `@source` line:
+ * Styles are NOT imported by this module. Import the stylesheet yourself,
+ * once, from app.css:
  *
  *     @import "tailwindcss";
- *     @import "@engineio/ui/styles";
- *     @source "../node_modules/@engineio/ui/dist";
+ *     @import "./lib/engine-ui/styles/index.css";
  */
 
 export { cn } from "./utils.js"
+export { themes, type ThemeName } from "./themes.js"
 export type {
   WithElementRef,
   WithoutChild,
@@ -157,6 +157,12 @@ export {
   TableHeader,
   TableRow,
 } from "./components/ui/table/index.js"
+
+export {
+  Segmented,
+  segmentVariants,
+  type SegmentVariants,
+} from "./components/ui/segmented/index.js"
 
 export {
   Tabs,

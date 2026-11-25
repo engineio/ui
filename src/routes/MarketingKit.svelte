@@ -42,7 +42,8 @@
     { cls: "text-lead", spec: "clamp(17px, 1.4vw, 20px) · 1.5", sample: "You just need to pay the invoice, and we will settle with the creators.", cap: "max-w-[52ch]" },
     { cls: "text-card-title", spec: "17px · 1.35 · 600", sample: "Near real-time analytics, see exactly how the integration is performing.", cap: "max-w-[40ch]" },
     { cls: "text-stat", spec: "42px · 0.94 · 900 · tabular", sample: "9.7B", cap: "" },
-    { cls: "text-small", spec: "13px · 1.5", sample: "Platform-wide totals, live from engine.io.", cap: "" },
+    { cls: "text-body", spec: "16px · 1.5 · every caption, label and line of sub text", sample: "Platform-wide totals, live from engine.io.", cap: "" },
+    { cls: "text-nav", spec: "16px · 1.25 · every navigation item, or larger", sample: "How it works", cap: "" },
   ]
 
   const motionTimings = [
@@ -144,46 +145,46 @@
 {#snippet screen(s: TourStep)}
   {#if s.id === "apply"}
     <div class="mx-auto flex h-full max-w-[400px] flex-col md:justify-center">
-      <p class="text-[15px] font-bold tracking-[-0.01em] text-white">Apply for access.</p>
+      <p class="text-[15px] font-bold tracking-[-0.01em] text-foreground">Apply for access.</p>
       <p class="mt-1 text-[11px] leading-[1.45] text-grey-300">Tell us who you are. The Engine team reviews every application.</p>
       <div class="mt-4 flex flex-col gap-3">
         <div class="rise flex flex-col gap-1" style="--i: 1">
           <span class="text-[11px] text-foreground">Your name</span>
-          <span class="flex min-h-8 items-center rounded-field bg-grey-850 px-2.5 text-[11px] text-white">Jane Doe</span>
+          <span class="flex min-h-8 items-center rounded-field bg-grey-850 px-2.5 text-[11px] text-foreground">Jane Doe</span>
         </div>
         <div class="rise flex flex-col gap-1" style="--i: 2">
           <span class="text-[11px] text-foreground">Company website</span>
-          <span class="flex min-h-8 items-center rounded-field bg-grey-850 px-2.5 text-[11px] text-white">https://northwind.example</span>
+          <span class="flex min-h-8 items-center rounded-field bg-grey-850 px-2.5 text-[11px] text-foreground">https://northwind.example</span>
         </div>
       </div>
       <div class="mt-4 flex flex-wrap items-center gap-3">
-        <span class="rise inline-flex h-8 items-center rounded-control bg-white px-3.5 text-[12px] font-semibold text-background" style="--i: 4">Submit application</span>
-        <span class="settle flex items-center gap-1.5 text-[11px] text-grey-300"><Check class="size-3 text-white" />Received. Under review.</span>
+        <span class="rise inline-flex h-8 items-center rounded-control bg-foreground px-3.5 text-[12px] font-semibold text-background" style="--i: 4">Submit application</span>
+        <span class="settle flex items-center gap-1.5 text-[11px] text-grey-300"><Check class="size-3 text-foreground" />Received. Under review.</span>
       </div>
     </div>
   {:else if s.id === "limits"}
     <div class="flex h-full flex-col">
-      <p class="text-[15px] font-bold tracking-[-0.01em] text-white">Exposure limits.</p>
+      <p class="text-[15px] font-bold tracking-[-0.01em] text-foreground">Exposure limits.</p>
       <p class="mt-1 text-[11px] leading-[1.45] text-grey-300">Caps for every game you run. Save and they apply immediately.</p>
       <div class="mt-4 grid grid-cols-2 gap-3 max-md:grid-cols-1">
         <div class="rise rounded-card-inner bg-card p-4" style="--i: 1">
           <span class="text-[11px] text-foreground">Maximum exposure</span>
-          <p class="mt-2 text-[18px] leading-none tabular-nums text-white">100,000.00 <span class="text-[11px] text-grey-400">USD</span></p>
+          <p class="mt-2 text-[18px] leading-none tabular-nums text-foreground">100,000.00 <span class="text-[11px] text-grey-400">USD</span></p>
           <span class="mt-3 block h-1 w-full overflow-hidden rounded-full bg-grey-700">
             <span class="sweep block h-full w-[72%] rounded-full bg-primary" style="--i: 2"></span>
           </span>
         </div>
         <div class="rise rounded-card-inner bg-card p-4" style="--i: 2">
           <span class="text-[11px] text-foreground">Maximum bet cost</span>
-          <p class="mt-2 text-[18px] leading-none tabular-nums text-white">500.00 <span class="text-[11px] text-grey-400">USD</span></p>
+          <p class="mt-2 text-[18px] leading-none tabular-nums text-foreground">500.00 <span class="text-[11px] text-grey-400">USD</span></p>
           <span class="mt-3 block h-1 w-full overflow-hidden rounded-full bg-grey-700">
             <span class="sweep block h-full w-[38%] rounded-full bg-primary" style="--i: 3"></span>
           </span>
         </div>
       </div>
       <div class="mt-4 flex flex-wrap items-center gap-3">
-        <span class="rise inline-flex h-8 items-center rounded-control bg-white px-3.5 text-[12px] font-semibold text-background" style="--i: 4">Save exposure limits</span>
-        <span class="settle flex items-center gap-1.5 text-[11px] text-grey-300"><Check class="size-3 text-white" />Saved.</span>
+        <span class="rise inline-flex h-8 items-center rounded-control bg-foreground px-3.5 text-[12px] font-semibold text-background" style="--i: 4">Save exposure limits</span>
+        <span class="settle flex items-center gap-1.5 text-[11px] text-grey-300"><Check class="size-3 text-foreground" />Saved.</span>
       </div>
     </div>
   {:else}
@@ -192,7 +193,7 @@
         <div class="flex items-start justify-between gap-3">
           <div>
             <span class="text-[11px] text-foreground">Invoice</span>
-            <p class="mt-0.5 text-[13px] text-white">INV-2026-09</p>
+            <p class="mt-0.5 text-[13px] text-foreground">INV-2026-09</p>
           </div>
           <span class="rounded-tag bg-primary-tint-12 px-2 py-1 text-[10px] text-primary-300">Due in 20 days</span>
         </div>
@@ -200,17 +201,17 @@
           {#each [["Turbine Rush", "905.13"], ["Keycap Clash", "658.85"], ["Pipework", "504.41"]] as [name, amount], j (name)}
             <li class="rise flex justify-between py-1.5" style="--i: {j + 2}">
               <span class="text-[11px] text-grey-300">{name}</span>
-              <span class="tabular-nums text-white">{amount}</span>
+              <span class="tabular-nums text-foreground">{amount}</span>
             </li>
           {/each}
         </ul>
         <div class="mt-3 flex items-baseline justify-between">
           <span class="text-[11px] text-foreground">Total due</span>
-          <span class="text-[16px] tabular-nums text-white">2,068.39 <span class="text-[10px] text-grey-400">USD</span></span>
+          <span class="text-[16px] tabular-nums text-foreground">2,068.39 <span class="text-[10px] text-grey-400">USD</span></span>
         </div>
         <div class="mt-4 flex flex-wrap items-center gap-3">
-          <span class="rise inline-flex h-8 items-center rounded-control bg-white px-3.5 text-[12px] font-semibold text-background" style="--i: 6">Pay invoice</span>
-          <span class="settle flex items-center gap-1.5 text-[11px] text-grey-300"><Check class="size-3 text-white" />Paid.</span>
+          <span class="rise inline-flex h-8 items-center rounded-control bg-foreground px-3.5 text-[12px] font-semibold text-background" style="--i: 6">Pay invoice</span>
+          <span class="settle flex items-center gap-1.5 text-[11px] text-grey-300"><Check class="size-3 text-foreground" />Paid.</span>
         </div>
       </div>
     </div>
@@ -225,9 +226,9 @@
     <div class="flex w-full flex-col">
       {#each marketingColumn as t (t.token)}
         <div class="flex flex-wrap items-baseline gap-x-6 gap-y-1 border-b border-grey-800 py-4">
-          <p class="w-[240px] shrink-0 font-mono text-[13px]">{t.token}</p>
-          <p class="w-[220px] shrink-0 font-mono text-[13px] text-grey-300">{t.value}</p>
-          <p class="text-[15px] text-grey-300">{t.use}</p>
+          <p class="w-[240px] shrink-0 font-mono text-body">{t.token}</p>
+          <p class="w-[220px] shrink-0 font-mono text-body text-grey-300">{t.value}</p>
+          <p class="text-body text-grey-300">{t.use}</p>
         </div>
       {/each}
     </div>
@@ -270,7 +271,7 @@
     </div>
   </Row>
 
-  <p class="max-w-[920px] text-[15px] leading-[1.5] text-foreground">
+  <p class="max-w-[920px] text-body text-foreground">
     The header is `static` here only so the gallery can scroll past it. On
     a page it is sticky and the hero's art layer starts at its top edge, so
     the render shows through the glass at rest. The marquee takes real
@@ -287,10 +288,10 @@
     {#each marketingType as t (t.cls)}
       <div class="flex flex-col gap-3 border-b border-grey-800 py-6 lg:flex-row lg:gap-8">
         <div class="w-[260px] shrink-0">
-          <p class="font-mono text-[13px]">{t.cls}</p>
-          <p class="mt-1 font-mono text-[11px] text-grey-500">{t.spec}</p>
+          <p class="font-mono text-body">{t.cls}</p>
+          <p class="mt-1 font-mono text-body text-grey-500">{t.spec}</p>
           {#if t.cap}
-            <p class="mt-1 font-mono text-[11px] text-grey-500">{t.cap}</p>
+            <p class="mt-1 font-mono text-body text-grey-500">{t.cap}</p>
           {/if}
         </div>
         <p class="{t.cls} {t.cap} text-balance {t.cls === 'text-stat' ? 'tabular-nums' : ''}">
@@ -299,7 +300,7 @@
       </div>
     {/each}
   </div>
-  <p class="max-w-[920px] text-[15px] leading-[1.5] text-foreground">
+  <p class="max-w-[920px] text-body text-foreground">
     No uppercase, no mono and no eyebrows on a landing. The page has four
     sizes of type; a tracked label is a fifth. Inside a mock screen the
     scale drops again — 15px bold titles, 11 to 13px text, 10px tags —
@@ -315,9 +316,9 @@
     <div class="flex w-full flex-col">
       {#each motionTimings as t (t.name)}
         <div class="flex flex-wrap items-baseline gap-x-6 gap-y-1 border-b border-grey-800 py-4">
-          <p class="w-[200px] shrink-0 font-mono text-[13px]">{t.name}</p>
-          <p class="w-[72px] shrink-0 font-mono text-[15px]">{t.ms}</p>
-          <p class="text-[15px] text-grey-300">{t.use}</p>
+          <p class="w-[200px] shrink-0 font-mono text-body">{t.name}</p>
+          <p class="w-[72px] shrink-0 font-mono text-body">{t.ms}</p>
+          <p class="text-body text-grey-300">{t.use}</p>
         </div>
       {/each}
     </div>
@@ -325,17 +326,17 @@
 
   <Row label="The scene, replayed">
     <Button variant="outline" onclick={() => (grammarRuns += 1)}>Run</Button>
-    <span class="text-[15px] text-grey-300">Fields rise, the gauge sweeps, the tag swaps at three seconds.</span>
+    <span class="text-body text-grey-300">Fields rise, the gauge sweeps, the tag swaps at three seconds.</span>
   </Row>
 
   {#key grammarRuns}
     <div class="w-full max-w-[560px] rounded-card bg-card p-4 md:p-6">
       <div class="flex flex-col rounded-card-inner bg-background p-4">
         <div class="flex items-center justify-between">
-          <p class="text-[15px] font-bold tracking-[-0.01em] text-white">Exposure limits.</p>
+          <p class="text-[15px] font-bold tracking-[-0.01em] text-foreground">Exposure limits.</p>
           <span class="grid [&>*]:col-start-1 [&>*]:row-start-1">
             <span class="swap-out rounded-tag bg-primary-tint-12 px-2 py-1 text-[10px] whitespace-nowrap text-primary-300">Unsaved</span>
-            <span class="swap-in flex items-center justify-center gap-1 rounded-tag bg-grey-850 px-2 py-1 text-[10px] text-white">
+            <span class="swap-in flex items-center justify-center gap-1 rounded-tag bg-grey-850 px-2 py-1 text-[10px] text-foreground">
               <Check class="size-3" />Saved
             </span>
           </span>
@@ -343,7 +344,7 @@
         <div class="mt-4 grid grid-cols-2 gap-3">
           <div class="rise rounded-card-inner bg-card p-3" style="--i: 1">
             <span class="text-[11px] text-foreground">Maximum exposure</span>
-            <p class="mt-2 text-[18px] leading-none tabular-nums text-white">
+            <p class="mt-2 text-[18px] leading-none tabular-nums text-foreground">
               100,000.00 <span class="text-[11px] text-grey-400">USD</span>
             </p>
             <span class="mt-3 block h-1 w-full overflow-hidden rounded-full bg-grey-700">
@@ -352,7 +353,7 @@
           </div>
           <div class="rise rounded-card-inner bg-card p-3" style="--i: 2">
             <span class="text-[11px] text-foreground">Maximum bet cost</span>
-            <p class="mt-2 text-[18px] leading-none tabular-nums text-white">
+            <p class="mt-2 text-[18px] leading-none tabular-nums text-foreground">
               500.00 <span class="text-[11px] text-grey-400">USD</span>
             </p>
             <span class="mt-3 block h-1 w-full overflow-hidden rounded-full bg-grey-700">
@@ -361,11 +362,11 @@
           </div>
         </div>
         <div class="mt-4 flex flex-wrap items-center gap-3">
-          <span class="rise inline-flex h-8 items-center rounded-control bg-white px-3.5 text-[12px] font-semibold text-background" style="--i: 4">
+          <span class="rise inline-flex h-8 items-center rounded-control bg-foreground px-3.5 text-[12px] font-semibold text-background" style="--i: 4">
             Save exposure limits
           </span>
           <span class="settle flex items-center gap-1.5 text-[11px] text-grey-300">
-            <Check class="size-3 text-white" />Saved.
+            <Check class="size-3 text-foreground" />Saved.
           </span>
           <span class="ml-auto flex items-center gap-1.5 text-[11px] text-grey-300">
             <span class="live-dot size-1.5 rounded-full bg-primary"></span>Live
@@ -375,11 +376,11 @@
     </div>
   {/key}
 
-  <p class="max-w-[920px] text-[15px] leading-[1.5] text-foreground">
+  <p class="max-w-[920px] text-body text-foreground">
     Rules learned the expensive way. Nothing plays until it is on screen.
-    Rotating rows never use <span class="font-mono text-[13px]">rise</span>
+    Rotating rows never use <span class="font-mono text-body">rise</span>
     — the stagger leaves a hole — they use Svelte fly, flip and fade. A
-    <span class="font-mono text-[13px]">reveal</span> is opacity only,
+    <span class="font-mono text-body">reveal</span> is opacity only,
     because a translate on it makes every anchor scroll land short. And
     when several things on a page rotate they share one beat and take
     turns, so only one thing is ever moving.
@@ -391,7 +392,7 @@
   note="The Stripe-style product walkthrough. A numbered step list beside a browser-frame mock, one screen per step, one callout hanging off the frame's corner, advancing on the progress bar's own animationend every eight seconds and paused while off screen. The shell is the component; the screens are yours, built from the motion grammar."
 >
   <Tour steps={tourSteps} navItems={tourNav} org="Northwind" host="integration.engine.io" bind:index={tourIndex} {screen} />
-  <p class="max-w-[920px] text-[15px] leading-[1.5] text-foreground">
+  <p class="max-w-[920px] text-body text-foreground">
     Clicking a step is the only control — no hover pause, no pause button,
     both tried and removed. The mock is decorative; the step list and the
     callout carry everything it shows. Under reduced motion the timer is
@@ -415,15 +416,15 @@
           <div class="grid grid-cols-3 gap-3">
             <div class="rise" style="--i: 1">
               <span class="text-[12px] text-foreground">You keep</span>
-              <p class="mt-1.5 text-[26px] leading-none tabular-nums text-white md:text-[32px]">93%</p>
+              <p class="mt-1.5 text-[26px] leading-none tabular-nums text-foreground md:text-[32px]">93%</p>
             </div>
             <div class="rise" style="--i: 2">
               <span class="text-[12px] text-foreground">Creators</span>
-              <p class="mt-1.5 text-[26px] leading-none tabular-nums text-white md:text-[32px]">5%</p>
+              <p class="mt-1.5 text-[26px] leading-none tabular-nums text-foreground md:text-[32px]">5%</p>
             </div>
             <div class="rise" style="--i: 3">
               <span class="text-[12px] text-foreground">Engine</span>
-              <p class="mt-1.5 text-[26px] leading-none tabular-nums text-white md:text-[32px]">2%</p>
+              <p class="mt-1.5 text-[26px] leading-none tabular-nums text-foreground md:text-[32px]">2%</p>
             </div>
           </div>
           <span class="mt-6 flex h-2 w-full gap-px overflow-hidden rounded-full" aria-hidden="true">
@@ -446,10 +447,10 @@
               in:fly={{ y: 8, duration: 600, easing: cubicOut }}
               out:fade={{ duration: 300 }}
             >
-              <span class="min-w-0 flex-1 truncate text-[12px] text-white">
+              <span class="min-w-0 flex-1 truncate text-[12px] text-foreground">
                 {row.name} <span class="text-[11px] text-grey-400">by {row.by}</span>
               </span>
-              <span class="text-[11px] tabular-nums text-white">{row.value}</span>
+              <span class="text-[11px] tabular-nums text-foreground">{row.value}</span>
             </li>
           {/each}
         </ul>
@@ -461,21 +462,21 @@
         {#key invoiceCycle}
           <div class="flex h-full flex-col" in:fade={{ duration: 600 }}>
             <div class="flex items-center justify-between gap-3">
-              <p class="text-[13px] text-white">INV-2026-{String(7 + (invoiceCycle % 3)).padStart(2, "0")}</p>
+              <p class="text-[13px] text-foreground">INV-2026-{String(7 + (invoiceCycle % 3)).padStart(2, "0")}</p>
               <span class="grid [&>*]:col-start-1 [&>*]:row-start-1">
                 <span class="swap-out rounded-tag bg-primary-tint-12 px-2 py-1 text-[10px] whitespace-nowrap text-primary-300">Due in 20 days</span>
-                <span class="swap-in flex items-center justify-center gap-1 rounded-tag bg-grey-850 px-2 py-1 text-[10px] text-white"><Check class="size-3" />Paid</span>
+                <span class="swap-in flex items-center justify-center gap-1 rounded-tag bg-grey-850 px-2 py-1 text-[10px] text-foreground"><Check class="size-3" />Paid</span>
               </span>
             </div>
             <div class="rise mt-6 flex flex-col gap-1.5" style="--i: 1">
               <span class="text-[12px] text-foreground">Total due, 7% of GGR</span>
-              <span class="text-[26px] leading-none tabular-nums text-white md:text-[32px]">
+              <span class="text-[26px] leading-none tabular-nums text-foreground md:text-[32px]">
                 28,845.60 <span class="text-[12px] text-grey-400">USD</span>
               </span>
             </div>
             <div class="mt-6 flex items-center gap-3">
-              <span class="rise inline-flex h-8 items-center rounded-control bg-white px-3.5 text-[12px] font-semibold whitespace-nowrap text-background" style="--i: 2">Pay invoice</span>
-              <span class="settle flex items-center gap-1.5 text-[11px] text-grey-300"><Check class="size-3 text-white" />Creators settled.</span>
+              <span class="rise inline-flex h-8 items-center rounded-control bg-foreground px-3.5 text-[12px] font-semibold whitespace-nowrap text-background" style="--i: 2">Pay invoice</span>
+              <span class="settle flex items-center gap-1.5 text-[11px] text-grey-300"><Check class="size-3 text-foreground" />Creators settled.</span>
             </div>
           </div>
         {/key}
@@ -517,7 +518,7 @@
       {/snippet}
     </BentoCard>
   </BentoGrid>
-  <p class="max-w-[920px] text-[15px] leading-[1.5] text-foreground">
+  <p class="max-w-[920px] text-body text-foreground">
     The screen runs off the card's bottom edge on purpose — design the mock
     to be cut. Two surfaces and no borders: card over page, page colour
     inside. One sentence per card, as an h3, with a full stop; the mock
@@ -535,9 +536,9 @@
     lead="Proven and reliable at scale. Engine already powers Stake, the largest casino in the world."
   />
   <StatBand stats={proofStats} caption="Platform-wide totals as of September 2026. Games are released per operator." />
-  <p class="max-w-[920px] text-[15px] leading-[1.5] text-foreground">
+  <p class="max-w-[920px] text-body text-foreground">
     SectionHead above it is the h2 and lead every section opens with, and
-    <span class="font-mono text-[13px]">mt-section</span> is the rhythm
+    <span class="font-mono text-body">mt-section</span> is the rhythm
     between blocks — here overridden to zero because the gallery section
     already spaced it. Sentence case, a full stop, 26ch, balanced. No
     eyebrow above it; the landings removed every one.

@@ -48,8 +48,8 @@
 </script>
 
 <script lang="ts">
-  import type { WithElementRef } from "$lib/utils.js"
-  import { cn } from "$lib/utils.js"
+  import type { WithElementRef } from "../../../utils.js"
+  import { cn } from "../../../utils.js"
   import X from "@lucide/svelte/icons/x"
   import type { HTMLAttributes } from "svelte/elements"
 
@@ -104,7 +104,7 @@
       class={cn(
         "absolute top-3 right-3 grid size-6 place-items-center rounded-control",
         "text-grey-400 transition-colors duration-140 ease-brand",
-        "hover:bg-white/6 hover:text-foreground",
+        "hover:bg-foreground/6 hover:text-foreground",
         "focus-visible:ring-ring focus-visible:ring-offset-background focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none",
       )}
     >

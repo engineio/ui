@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { cn } from "$lib/utils.js"
+  import { cn } from "../../../utils.js"
   import X from "@lucide/svelte/icons/x"
   import {
     Dialog as DialogPrimitive,
@@ -51,7 +51,7 @@
 
   const overlayClasses = $derived(
     cn(
-      "fixed inset-0 z-50 bg-grey-950/72 backdrop-blur-[18px] data-[state=open]:animate-overlay-in data-[state=closed]:animate-overlay-out",
+      "fixed inset-0 z-50 bg-scrim backdrop-blur-[18px] data-[state=open]:animate-overlay-in data-[state=closed]:animate-overlay-out",
       overlayClass,
     ),
   )

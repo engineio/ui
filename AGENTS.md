@@ -1,8 +1,8 @@
-# @engineio/ui — agent reference
+# Engine design system — agent reference
 
-The Engine design system. This file ships inside the package, so it arrives in
-`node_modules/@engineio/ui/AGENTS.md` and versions with the code — point at it
-rather than copying its contents into a repo, or the copy goes stale.
+The Engine design system (engineio/ui). Read this file in the sibling checkout
+(`../engine-ui/AGENTS.md`) or at https://engineio.github.io/ui/AGENTS.md. Point
+at it rather than copying its contents into a repo, or the copy goes stale.
 
 Authoritative source: `docs/brand/ENGINE-DESIGN-SYSTEM.md` and
 `ENGINE-BRAND.md` in the `engineio/engine` repo. Where this file and those
@@ -10,36 +10,49 @@ disagree, **they win and this is a bug**.
 
 ## Setup
 
-```css
-@import "tailwindcss";
-@import "@engineio/ui/styles";
-@source "../../../node_modules/@engineio/ui/dist";
+The components are a reference, not a dependency. Nothing is published to npm;
+`@engineio/ui@0.11.0` is the last release (the products, pinned to `^0.10.0`, run 0.10.0), and only the products that haven't
+switched yet still install it. A product copies `src/lib` into its own tree
+and owns the copy:
+
+```bash
+bun ../engine-ui/scripts/copy-into.ts packages/shared/src/lib/engine-ui
+bun add bits-ui clsx tailwind-merge tailwind-variants @lucide/svelte
 ```
 
-**The `@source` line is not optional and its absence is silent.** Tailwind 4
-does not scan `node_modules`, so without it the utility classes the components
-are written against are never generated. The tokens still land and any class
-that also appears in local source still works, so you get a half-styled app
-that reads like a component bug. Path is relative to the CSS file declaring it.
+```css
+@import "tailwindcss";
+@import "./lib/engine-ui/styles/index.css";   /* relative to this CSS file */
+```
+
+No `@source` line: the copy is in the app's source tree, so Tailwind scans it.
+`ENGINE-UI.md` in the copy records the upstream commit it matches. To pick up a
+later change, diff upstream from that commit and port it:
+`git -C ../engine-ui diff <sha> HEAD -- src/lib`. Running the copy script again
+refuses to overwrite and prints that command.
+
+Every import inside `src/lib` is relative. **Keep it that way:** a `$lib/`
+import here resolves to the product's `$lib` once copied, and breaks.
 
 ## Importing
 
+From wherever the product put its copy:
+
 ```svelte
-import { Button, Card, CardHeader } from "@engineio/ui"
-import { Button } from "@engineio/ui/components/ui/button/index.js"
-import * as Card from "@engineio/ui/components/ui/card/index.js"
-import { EngineWordmark } from "@engineio/ui/components/brand/index.js"
-import { Tour, type TourStep } from "@engineio/ui/components/marketing/index.js"
+import { Button, Card, CardHeader } from "$lib/engine-ui/index.js"
+import { Button } from "$lib/engine-ui/components/ui/button/index.js"
+import * as Card from "$lib/engine-ui/components/ui/card/index.js"
+import { EngineWordmark } from "$lib/engine-ui/components/brand/index.js"
+import { Tour, type TourStep } from "$lib/engine-ui/components/marketing/index.js"
 ```
 
 Root barrel exports flat prefixed names (`CardHeader`). Subpath modules export
-`Root`/`Header`/`Content`, so `import * as Card` works. Both `/index.js` and the
-bare subpath resolve.
+`Root`/`Header`/`Content`, so `import * as Card` works.
 
 ## Components
 
 Alert, Badge, Button, Card, Checkbox, Dialog, Input, Label, Popover, Progress,
-RadioGroup, ResponsiveDialog, Select, Separator, Skeleton, Switch, Table, Tabs,
+RadioGroup, ResponsiveDialog, Segmented, Select, Separator, Skeleton, Switch, Table, Tabs,
 Textarea, Tooltip. Marks: `EngineWordmark`, `EngineIcon`. Marketing: `Hero`,
 `SectionHead`, `SiteBanner`, `SiteHeader`, `SiteFooter`, `Marquee`, `Tour`,
 `BentoGrid`, `BentoCard`, `StatBand`, plus the `inView` attachment and
@@ -54,7 +67,8 @@ not on that list because ResponsiveDialog covers what one was wanted for.
 | Button | `default` `inverse` `outline` `ghost` `secondary` `link` `icon` `destructive` `success`; sizes `sm` `default` `lg` `icon` `icon-sm` `icon-lg` |
 | Badge | `default` `secondary` `outline` `partner` `success` `warning` `danger` `destructive` |
 | Alert | `default` `success` `warning` `danger` `destructive`; optional `onDismiss` |
-| Marks | `variant="primary"` (white) or `"secondary"` (Off Black) |
+| Segmented | rail `Root` + `segmentVariants({ active })` for any trigger; `active` = white pill like the selected tab |
+| Marks | `variant="primary"` (the page's ink: white on Engine Magenta) or `"secondary"` (the page colour) |
 
 ### ResponsiveDialog
 
@@ -178,7 +192,9 @@ weight) on one utility. Cap headings in `ch`, not px, and `text-balance` them.
 | `text-lead` | clamp(17px, 1.4vw, 20px) · 1.5 | under an h2, `max-w-[52ch]` |
 | `text-card-title` | 17px · 1.35 · 600 | the one sentence under a bento mock |
 | `text-stat` | 42px · 0.94 · 900, tabular | a proof figure (32px below `md`) |
-| `text-small` | 13px · 1.5 | labels, captions, footer links |
+| `text-body` | 16px · 1.5 | every caption, label, footer line and line of sub text |
+| `text-nav` | 16px · 1.25 | every navigation item: header links, footer links, tabs, segments, tour steps |
+| `text-small` | 13px · 1.5 | badge chips and mock screens only |
 
 Inside a mock screen the scale is smaller again — 15px bold titles, 11–13px
 text, 10px tags — because a mock is a picture of a product, not the page.
@@ -266,7 +282,7 @@ Rules, each learned the expensive way:
   The Tour frame keeps its one `grey-600` border because it is a device.
 - A `SiteBanner` is the press shade with white text — a measured exception
   to "ink on accent is Off Black" (5.25:1 vs 3.67:1 on that shade). It is the
-  one place a brand fill carries 13px text.
+  one place a brand fill carries 16px regular-weight text.
 - Announce nothing above the h1. Announcement pills, eyebrows and "How it
   works" labels were all removed; the h1 starts the page.
 
@@ -278,9 +294,43 @@ grey text against any tinted backdrop — `grey-400` on a magenta wash drops
 under AA and has to be lifted a step. Anchor targets must land with the
 heading fully below the glass.
 
+## Themes
+
+Two ship: **Engine Magenta** (dark, the default) and **Engine Magenta Light**.
+Select one with `data-theme` on `<html>` or on any subtree:
+
+```html
+<html data-theme="engine-magenta-light">
+<section data-theme="engine-magenta">…</section>   <!-- a dark band in a light page -->
+```
+
+With no `data-theme`, the page is Engine Magenta, which is the token values below.
+Existing apps change nothing.
+
+- **Name a role, never a colour.** `text-foreground`, not `text-white`;
+  `bg-foreground/6` for a hover wash, not `bg-white/6`; `bg-scrim` behind a
+  modal. A literal `white` or `black` is a light-theme bug.
+- **The grey ramp is relative to the page.** `grey-900` is the page in every
+  theme and the steps fall toward the ink, so `bg-grey-850` field /
+  `border-grey-600` hairline / `text-grey-300` secondary text are correct in
+  both themes. Don't pick a grey step for its absolute lightness.
+- **Ink on a fill is the fill's `-foreground`.** Engine Magenta's status fills
+  take Off Black; the light theme's deeper status steps take white.
+  `primary-300` is "ink on a magenta tint": lighter magenta on dark, deeper
+  magenta (#C2004F) on light.
+- **Landings stay dark.** The hero render's `mix-blend-screen` needs a dark
+  page. Pin marketing pages to `data-theme="engine-magenta"`.
+- **New themes.** Copy a file in `styles/themes/`, change the selector and
+  values, and run `bun run check:themes`. It checks the full contract,
+  dark/default parity, and AA contrast on every text pair. An overlay theme
+  (no `color-scheme`) changes a few roles and stacks:
+  `data-theme="engine-magenta volt"`. The contract and the worked overlay
+  example are in `styles/themes/README.md`, which ships in `dist`.
+- `themes` (name, label, scheme) is exported for pickers.
+
 ## Tokens
 
-Use these names; never a literal.
+Use these names; never a literal. Values shown are Engine Magenta.
 
 ```
 colour     --color-background #0E0E0E   --color-foreground #FFFFFF
@@ -296,8 +346,10 @@ status     --color-success #00C46A  --color-warning #FFB020  --color-danger #FF3
 layout     --container-marketing 1180px   --spacing-gutter clamp(20px,5vw,64px)
            --spacing-section clamp(88px,12vw,160px)   --spacing-header 72 / -sm 64
            --spacing-anchor 120 / -sm 96   --blur-glass 20px
-type sizes --text-hero --text-section --text-standfirst --text-lead
-           --text-card-title --text-stat --text-small   (marketing pages only)
+type sizes --text-body 16px (all reading text)  --text-nav 16px (navigation)
+           --text-hero --text-section --text-standfirst --text-lead
+           --text-card-title --text-stat   (marketing pages only)
+           --text-small 13px   (badge chips and mock screens only)
 radii      --radius-tag 6  --radius-field 10  --radius-card-inner 10
            --radius-media 14  --radius-card 18  --radius-frame 26
            --radius-control 999
@@ -310,11 +362,21 @@ motion     --ease-brand  --ease-brand-out  --ease-brand-accelerate
 type       --font-brand = DM Sans, from Google Fonts — you add the link
            (see below); --font-condensed --font-extra-condensed --font-mono
            are roles that resolve to the brand face
-depth      --shadow-panel  --shadow-modal   (product chrome and modals only)
+depth      --shadow-panel  --shadow-modal   (product chrome and modals only;
+           a theme tints them via --shadow-panel-color / --shadow-modal-color)
+           --color-scrim rgb(10 10 10 / 0.72)   (behind a modal or sheet)
 utility    `field` — the shared input skin, incl. the focus ring
 ```
 
 ## Rules
+
+- **Nothing people read is under 16px.** Body copy, sub text, descriptions,
+  captions, labels, field values, table cells, tooltips and menu items are
+  `text-body` (16px). Every navigation item is `text-nav` (16px) or larger.
+  The only things under 16px are badge chips, button labels (15px bold, or
+  13px on `sm`), and the inside of a mock screen. Don't reach for
+  `text-[13px]`, `text-small`, `text-xs` or `text-sm` for sub text: make it
+  grey, not smaller.
 
 - **Three brand colours**: Off Black, Pure White, Magenta. One accent per
   surface, never two.
@@ -325,10 +387,10 @@ utility    `field` — the shared input skin, incl. the focus ring
   fails on both.
 - **Retired and unavailable**: Originals Orange `#FF6200`, Sportsbook Blue
   `#00CCFF`. No accents, no charts, no status.
-- **Ink on any status or accent fill is Off Black.** White fails AA on all three.
+- **Ink on any status or accent fill is its `-foreground` token.** On Engine Magenta that is Off Black, because white fails AA on all three status fills there.
 - **Magenta text**: never below 15px bold. Use `--color-primary-300` on a tint.
-- No gradients. No light theme. No `dark:` variants — the dark palette is the
-  only palette. No drop shadows on brand surfaces. No coloured borders, and no
+- No gradients. No `dark:` variants: light is a theme, and a component that
+  names roles needs none. No drop shadows on brand surfaces. No coloured borders, and no
   coloured left-edge accent to signal category or ownership.
 - Radii by role, and the outer frame is always larger than the inner panel.
 - Borders are 1px hairline or 1.5px container rule. Nothing else.
@@ -338,11 +400,12 @@ utility    `field` — the shared input skin, incl. the focus ring
 
 ## Extending
 
-Do not fork a component to add a variant, and do not upstream a product-only
-variant. Every variant map is exported:
+The copy is the product's to edit, but prefer extending a variant map beside
+it. That keeps the copy diffable against upstream for the next port. Don't
+upstream a product-only variant. Every variant map is exported:
 
 ```ts
-import { buttonVariants } from "@engineio/ui"
+import { buttonVariants } from "$lib/engine-ui/index.js"
 import { tv } from "tailwind-variants"
 
 export const appButtonVariants = tv({
@@ -351,12 +414,12 @@ export const appButtonVariants = tv({
 })
 ```
 
-Brand rules stay in the package; product variants stay in the product. Every
+Brand rules stay in the copy; product variants stay beside it. Every
 primitive also passes `class` through `cn`, so `<Button class="w-full" />` works
 without `!important`. `cn` knows the system's own scales — `rounded-card`
 against `rounded-lg`, `mt-section` against `mt-0`, `text-small` against
 `text-[13px]` — so a named token overrides and is overridden like any stock
-value. Use the package's `cn`, not a fresh `twMerge`, or those conflicts fall
+value. Use the copy's `cn`, not a fresh `twMerge`, or those conflicts fall
 back to stylesheet order.
 
 ## Known gaps

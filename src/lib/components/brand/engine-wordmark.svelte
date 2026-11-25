@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { cn } from "$lib/utils.js"
+  import { cn } from "../../utils.js"
   import type { SVGAttributes } from "svelte/elements"
   import type { EngineMarkVariant } from "./engine-icon.svelte"
 

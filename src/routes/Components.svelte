@@ -112,13 +112,13 @@
       <Badge variant="danger">blocked</Badge>
     </div>
   </Row>
-  <p class="max-w-[920px] text-[15px] leading-[1.5] text-foreground">
+  <p class="max-w-[920px] text-body text-foreground">
     There is no solid variant. An opaque fill can only be right on one
     surface, and these chips have to read on the page, on a card and in a
     table cell. The status variants are functional, not categorical. Reach
-    for <span class="font-mono text-[13px]">success</span> when something
+    for <span class="font-mono text-body">success</span> when something
     has succeeded, never because green suited the row. The brand chip's ink
-    is <span class="font-mono text-[13px]">primary-300</span> and not pure
+    is <span class="font-mono text-body">primary-300</span> and not pure
     magenta, because magenta on its own tint is 4.37:1 and the brand forbids
     magenta text below 15px bold.
   </p>
@@ -150,12 +150,12 @@
       </AlertDescription>
     </Alert>
   </div>
-  <p class="max-w-[920px] text-[15px] leading-[1.5] text-foreground">
-    The bar is <span class="font-mono text-[13px]">aria-hidden</span>, so
+  <p class="max-w-[920px] text-body text-foreground">
+    The bar is <span class="font-mono text-body">aria-hidden</span>, so
     the title has to carry the message with the colour ignored entirely.
     "Upload failed." beats "Error." The neutral variant takes a grey bar
     instead of none, so a mixed stack keeps its left edge. Pass
-    <span class="font-mono text-[13px]">onDismiss</span> to get the close
+    <span class="font-mono text-body">onDismiss</span> to get the close
     control, and omit it for a static alert.
   </p>
 </Section>
@@ -194,7 +194,7 @@
 >
   <Row label="Switch">
     <Switch bind:checked={switchOn} />
-    <span class="text-[15px] text-grey-300">
+    <span class="text-body text-grey-300">
       {switchOn ? "Enabled" : "Disabled"}
     </span>
     <Switch checked={false} disabled />
@@ -227,7 +227,7 @@
   </Row>
   <Row label="Progress">
     <div class="w-[320px]"><Progress value={64} /></div>
-    <span class="font-mono text-[13px] text-grey-400">64%</span>
+    <span class="font-mono text-body text-grey-400">64%</span>
   </Row>
 </Section>
 
@@ -246,9 +246,9 @@
         </CardHeader>
         <CardContent>
           <div
-            class="flex h-40 items-center justify-center rounded-card-inner bg-black"
+            class="flex h-40 items-center justify-center rounded-card-inner bg-background"
           >
-            <span class="text-small text-grey-400">
+            <span class="text-body text-grey-400">
               Inner panel · 10px
             </span>
           </div>
@@ -271,13 +271,13 @@
       <TabsTrigger value="bets">Bets</TabsTrigger>
       <TabsTrigger value="issues">Issues</TabsTrigger>
     </TabsList>
-    <TabsContent value="math" class="pt-4 text-[15px] text-grey-300">
+    <TabsContent value="math" class="pt-4 text-body text-grey-300">
       Pill tabs, for switching a panel's contents.
     </TabsContent>
-    <TabsContent value="bets" class="pt-4 text-[15px] text-grey-300">
+    <TabsContent value="bets" class="pt-4 text-body text-grey-300">
       Bets.
     </TabsContent>
-    <TabsContent value="issues" class="pt-4 text-[15px] text-grey-300">
+    <TabsContent value="issues" class="pt-4 text-body text-grey-300">
       Issues.
     </TabsContent>
   </Tabs>
@@ -288,13 +288,13 @@
       <TabsTrigger variant="underline" value="catalogue">Catalogue</TabsTrigger>
       <TabsTrigger variant="underline" value="settings">Settings</TabsTrigger>
     </TabsList>
-    <TabsContent value="overview" class="pt-4 text-[15px] text-grey-300">
+    <TabsContent value="overview" class="pt-4 text-body text-grey-300">
       Underline tabs, for navigating a page's sections.
     </TabsContent>
-    <TabsContent value="catalogue" class="pt-4 text-[15px] text-grey-300">
+    <TabsContent value="catalogue" class="pt-4 text-body text-grey-300">
       Catalogue.
     </TabsContent>
-    <TabsContent value="settings" class="pt-4 text-[15px] text-grey-300">
+    <TabsContent value="settings" class="pt-4 text-body text-grey-300">
       Settings.
     </TabsContent>
   </Tabs>
@@ -335,7 +335,7 @@
         {/snippet}
       </PopoverTrigger>
       <PopoverContent class="w-80">
-        <p class="text-[15px] leading-[1.45]">
+        <p class="text-body">
           Popovers sit on the raised surface at 10px radius, with the panel
           shadow reserved for product chrome.
         </p>
@@ -430,7 +430,7 @@
 
 <Section
   title="Table."
-  note="Ruled, not tiled. No frame, no fills, no gaps. The surface behind shows through, and a hairline under each row does all the structural work. Headings are Bold 13px in Pure White, Title Case, separated from the body by a rule one step stronger than the dividers."
+  note="Ruled, not tiled. No frame, no fills, no gaps. The surface behind shows through, and a hairline under each row does all the structural work. Headings are Bold 16px in Pure White, Title Case, separated from the body by a rule one step stronger than the dividers."
 >
   <Table>
     <TableHeader>
@@ -466,9 +466,9 @@
       </TableRow>
     </TableFooter>
   </Table>
-  <p class="max-w-[920px] text-[15px] leading-[1.5] text-foreground">
+  <p class="max-w-[920px] text-body text-foreground">
     Hover a row for the 6% white wash. The second row is
-    <span class="font-mono text-[13px]">data-state="selected"</span>, which
+    <span class="font-mono text-body">data-state="selected"</span>, which
     takes the magenta tint. Never a coloured border or an edge accent, both
     of which the brand rules out. Because the cells carry no fill there are
     no fill collisions. A Badge, a Separator or an unchecked Switch reads
@@ -487,5 +487,5 @@
     <Skeleton class="h-4 w-4/5" />
   </div>
   <Separator />
-  <p class="text-[15px] text-grey-300">Below the rule.</p>
+  <p class="text-body text-grey-300">Below the rule.</p>
 </Section>

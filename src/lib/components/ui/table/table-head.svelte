@@ -1,9 +1,9 @@
 <script lang="ts">
-  import type { WithElementRef } from "$lib/utils.js"
-  import { cn } from "$lib/utils.js"
+  import type { WithElementRef } from "../../../utils.js"
+  import { cn } from "../../../utils.js"
   import type { HTMLThAttributes } from "svelte/elements"
 
-  // Column headings are Bold 13px in Pure White, Title Case, tracking normal.
+  // Column headings are Bold 16px (`text-body`) in Pure White, Title Case, tracking normal.
   //
   // NOT the system's 11px uppercase label spec, which is what these carried
   // until now. Two reasons: at 11px with +0.08em on a dense grid the headings
@@ -26,7 +26,7 @@
   bind:this={ref}
   class={cn(
     "h-11 px-4 text-left align-middle whitespace-nowrap",
-    "text-[13px] font-bold text-foreground",
+    "text-body font-bold text-foreground",
     "[&:has([role=checkbox])]:pr-0",
     className,
   )}

@@ -6,10 +6,12 @@
   // hydration. The engine repo imports app.css from +layout.ts, which is
   // survivable there because nothing is prerendered.
   import "../app.css"
+  import ThemeSwitcher from "./ThemeSwitcher.svelte"
 
   let { children } = $props()
 </script>
 
 <div class="min-h-screen bg-background text-foreground">
   {@render children?.()}
+  <ThemeSwitcher />
 </div>

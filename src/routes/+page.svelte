@@ -63,7 +63,6 @@
         { name: "engine.io", href: "https://engine.io" },
         { name: "Engine Integration", href: "https://integration.engine.io" },
         { name: "GitHub", href: repo },
-        { name: "npm", href: "https://www.npmjs.com/package/@engineio/ui" },
       ],
     },
   ]
@@ -75,7 +74,7 @@
   <title>Engine design system.</title>
   <meta
     name="description"
-    content="Tokens, components and the landing page formula for every Engine surface, published as @engineio/ui. The rules ship with the package as AGENTS.md so the tools that build Engine surfaces read the same ones."
+    content="Tokens, components and the landing page formula for every Engine surface, kept in engineio/ui as a reference to copy from. The rules ship with the package as AGENTS.md so the tools that build Engine surfaces read the same ones."
   />
 </svelte:head>
 
@@ -88,7 +87,7 @@
 {/snippet}
 
 <TooltipProvider>
-  <div class="min-h-dvh bg-background text-white antialiased">
+  <div class="min-h-dvh bg-background text-foreground antialiased">
     <SiteHeader
       label="Engine design system"
       home="{base}/"
@@ -109,7 +108,7 @@
     <main class="mx-auto min-w-0 max-w-marketing">
       <Hero
         title="The Engine Design System."
-        standfirst="Tokens, components and the landing page formula for every Engine surface, published as @engineio/ui. Everything on this page is the shipped component. The rules ship with it as AGENTS.md, so the tools that build Engine surfaces read the same ones."
+        standfirst="Tokens, components and the landing page formula for every Engine surface, kept in engineio/ui as a reference to copy from. Everything on this page is the shipped component. The rules ship with it as AGENTS.md, so the tools that build Engine surfaces read the same ones."
       >
         {#snippet actions()}
           <Button variant="inverse" size="lg" href={agentsFile} class="max-sm:w-full">Read AGENTS.md</Button>

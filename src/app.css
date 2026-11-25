@@ -1,13 +1,9 @@
 /*
-  The gallery's stylesheet. A consumer's version of this file is three lines:
+  The gallery's stylesheet, and the same two lines a product's app.css has
+  after copying this repo's src/lib into its tree:
 
       @import "tailwindcss";
-      @import "@engineio/ui/styles";
-      @source "../node_modules/@engineio/ui/dist";
-
-  Here the package is the local `src/lib`, which Tailwind already scans, so no
-  `@source` is needed — that line exists purely to reach across a package
-  boundary into node_modules.
+      @import "./lib/engine-ui/styles/index.css";
 */
 
 @import "tailwindcss";

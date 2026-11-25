@@ -1,6 +1,6 @@
 <script lang="ts">
-  import type { WithElementRef } from "$lib/utils.js"
-  import { cn } from "$lib/utils.js"
+  import type { WithElementRef } from "../../../utils.js"
+  import { cn } from "../../../utils.js"
   import type { HTMLAttributes } from "svelte/elements"
 
   // Suppresses the last row's hairline, so a table with no footer ends on its

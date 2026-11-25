@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { cn } from "$lib/utils.js"
+  import { cn } from "../../utils.js"
   import type { Snippet } from "svelte"
 
   // The landing page hero: a left-aligned headline, a standfirst, a row of
@@ -73,7 +73,7 @@
       className,
     )}
   >
-    <svelte:element this={`h${level}`} class="max-w-[18ch] text-hero text-balance text-white">
+    <svelte:element this={`h${level}`} class="max-w-[18ch] text-hero text-balance text-foreground">
       {#if heading}
         {@render heading()}
       {:else}
